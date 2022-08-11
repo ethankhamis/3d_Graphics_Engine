@@ -1,8 +1,9 @@
 #pragma once
+#define _WIN32_WINNT 1532
 
 /* ASSURES WINDOWS 7+ AS TARGET */
-#include <sdkddkver.h>
-#define _WIN32_WINNT 1532
+
+#include <sdkddkver.h> //sdk version
 
 
 /* THIS CODE IS IMPLEMENTED TO SPEED UP BUILD-TIME */
