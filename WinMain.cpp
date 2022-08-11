@@ -4,11 +4,15 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
 	{
-	case WM_CLOSE:
-		PostQuitMessage(0);
+	case WM_CLOSE: // close window
+		PostQuitMessage(0); // exit code
 		break;
-	}
+	case WM_KEYDOWN:
+		break;
+	case WM_LBUTTONDOWN:
+		POINTS pt = MAKEPOINTS(lParam);
 
+	}
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
