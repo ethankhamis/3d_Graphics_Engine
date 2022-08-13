@@ -52,8 +52,8 @@ Wnd::Wnd(int width, int height, const wchar_t* name) noexcept
 		WS_SYSMENU |
 		WS_MAXIMIZEBOX,
 		FALSE);
-
-	//initialise window
+	 
+	//initialise window CreateWindowExW
 
 	hWnd = CreateWindowExW( CS_OWNDC,
 		WndClass::FetchName(), name,
@@ -94,7 +94,7 @@ LRESULT Wnd::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) n
 		// set the WinAPI-managed user data to store a pointer to the window class
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWnd));
 		// set WndProc to normal (non-setup) handler since setup is now complete
-		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Wnd::HandleMsgThunk));
+		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Wnd::HandleMsgBypass));
 		//send message to to wndClass MsgHandler
 		return pWnd->MsgHandler(hWnd, msg, wParam, lParam);
 	}
@@ -102,7 +102,7 @@ LRESULT Wnd::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) n
 	return DefWindowProc(hWnd, msg, wParam, lParam);
 }
 
-LRESULT Wnd::HandleMsgThunk(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
+LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
 	// retrieve ptr to window class
 	Wnd* const pWnd = reinterpret_cast<Wnd*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
