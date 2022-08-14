@@ -1,5 +1,6 @@
 #include "Win.h"
 #include <sstream>
+#include "resource.h"
 
 Wnd::WndClass Wnd::WndClass::wndClass;
 
@@ -14,12 +15,12 @@ Wnd::WndClass::WndClass() noexcept
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = FetchInstance();
-	wc.hIcon = nullptr;
+	wc.hIcon = static_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON,16,16,0 ));
 	wc.hCursor = nullptr;
 	wc.hbrBackground = nullptr;
 	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = FetchName();
-	wc.hIconSm = nullptr;
+	wc.hIconSm = static_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 16, 16, 0));
 	RegisterClassExW(&wc);
 }
 

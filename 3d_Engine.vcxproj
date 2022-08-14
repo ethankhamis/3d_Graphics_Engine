@@ -153,7 +153,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ExceptionHandler.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Win.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3d_Engine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="3d\pieck.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
