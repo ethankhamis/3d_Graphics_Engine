@@ -25,7 +25,7 @@ private:
 		static HINSTANCE FetchInstance() noexcept; //getter for HInstance
 	};
 public:
-	Wnd(int width, int height, const wchar_t* name) noexcept;
+	Wnd(int width, int height, const wchar_t* name);
 	~Wnd() noexcept;
 	Wnd(const Wnd&) = delete;
 	Wnd& operator=(const Wnd&) = delete;
@@ -48,4 +48,5 @@ public:
 	};
 };
 
-#define CHWND_EXCEPT( hr ) Window::Exception( __LINE__,__FILE__,hr )
+#define CHWND_EXCEPT( hr ) Wnd::Exception( __LINE__,__FILE__,hr )
+#define CHWND_LAST_EXCEPT() Wnd::Exception( __LINE__,__FILE__,GetLastError() )

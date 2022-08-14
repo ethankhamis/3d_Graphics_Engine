@@ -2,7 +2,7 @@
 #include <sstream>
 #include <algorithm>
 
-ExceptionHandler::ExceptionHandler(const char* fName, unsigned int curLine) noexcept
+ExceptionHandler::ExceptionHandler( unsigned int curLine, const char* fName) noexcept
 	:
 	curLine(curLine),
 	fName(fName) {}

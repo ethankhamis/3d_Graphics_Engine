@@ -38,7 +38,7 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 	return wndClass.hInstance;
 }
 
-Wnd::Wnd(int width, int height, const wchar_t* name) noexcept
+Wnd::Wnd(int width, int height, const wchar_t* name)
 {
 	//get window size using region size of user
 	RECT wr;
@@ -47,12 +47,15 @@ Wnd::Wnd(int width, int height, const wchar_t* name) noexcept
 	wr.top = 100;
 	wr.bottom = height + wr.top;
 	
-	AdjustWindowRect(&wr,
+	if ( FAILED(AdjustWindowRect(&wr,
 		WS_CAPTION |
 		WS_MINIMIZEBOX |
 		WS_SYSMENU |
 		WS_MAXIMIZEBOX,
-		FALSE);
+		FALSE)))
+	{
+		throw CHWND_LAST_EXCEPT();
+	};
 	 
 	//initialise window CreateWindowExW
 
@@ -62,6 +65,8 @@ Wnd::Wnd(int width, int height, const wchar_t* name) noexcept
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WndClass::FetchInstance(), this
 	);
+	if (hWnd == nullptr) { throw CHWND_LAST_EXCEPT(); }
+
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
 
@@ -113,7 +118,7 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 
 Wnd::Exception::Exception(unsigned int curLine, const char* fName, HRESULT hResult) noexcept
 	:
-	ExceptionHandler(fName,curLine),
+	ExceptionHandler(curLine, fName),
 	hResult(hResult)
 {
 }
@@ -154,12 +159,15 @@ HRESULT Wnd::Exception::FetchErrorCode() const noexcept
 std::string Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
 {
 	char* pMsgBuffer = nullptr;
+	// for windows to allocate memory for error string
+	// also make pointer point to it
 	DWORD nMsgLen = FormatMessageW(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hResult,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&pMsgBuffer),
 		0, nullptr);
 	if (nMsgLen == NULL) { return "Unknown/Undefined error code"; }
-	std::string errorString = pMsgBuffer; LocalFree(pMsgBuffer);
+	std::string errorString = pMsgBuffer;//copy the error string to std::string from windows buffer
+	LocalFree(pMsgBuffer); //free windows buffer previously used
 	return errorString;
 }
