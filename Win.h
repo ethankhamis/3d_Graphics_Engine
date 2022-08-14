@@ -1,5 +1,6 @@
 #pragma once
 #include "WinDef.h"
+#include "ExceptionHandler.h"
 
 class Wnd
 {
@@ -32,4 +33,17 @@ private:
 	LRESULT MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
 	static LRESULT CALLBACK HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
+public:
+	class Exception : public ExceptionHandler
+	{
+	public:
+		Exception(unsigned int curLine, const char* fName, HRESULT hResult) noexcept;
+		const char* what() const noexcept override; //override std::ExceptionHandler's 'what()' func
+		std::string FetchErrorString() const noexcept;
+		virtual const char* FetchErrorType() const noexcept;
+		HRESULT FetchErrorCode() const noexcept;
+		static std::string ConvertErrorCode(HRESULT hResult) noexcept;
+	private:
+		HRESULT hResult;
+	};
 };
