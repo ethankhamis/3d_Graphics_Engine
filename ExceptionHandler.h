@@ -14,6 +14,7 @@ public:
 	const  std::string& FetchFileName() const noexcept;
 	unsigned int FetchLine() const noexcept;
 	std::string FetchStartString() const noexcept;
+
 protected:
 	mutable std::string buffer_w;
 };

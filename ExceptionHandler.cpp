@@ -1,5 +1,6 @@
 #include "ExceptionHandler.h"
 #include <sstream>
+#include <algorithm>
 
 ExceptionHandler::ExceptionHandler(const char* fName, unsigned int curLine) noexcept
 	:
@@ -10,11 +11,13 @@ const char* ExceptionHandler::what() const noexcept
 {
 	std::ostringstream oss;
 
+
 	oss 
 		<< FetchErrorType()
 		<< std::endl <<
 		FetchStartString();
-	buffer_w = oss.str().c_str(); 
+	buffer_w = oss.str().c_str();
+
 	return oss.str().c_str(); /*as 'return buffer_t' doesnt work*/
 }
 
