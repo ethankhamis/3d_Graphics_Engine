@@ -14,7 +14,7 @@ const char* ExceptionHandler::what() const noexcept
 		<< FetchErrorType()
 		<< std::endl <<
 		FetchStartString();
-	buffer_t = oss.str().c_str(); 
+	buffer_w = oss.str().c_str(); 
 	return oss.str().c_str(); /*as 'return buffer_t' doesnt work*/
 }
 
@@ -40,7 +40,7 @@ std::string ExceptionHandler::FetchStartString() const noexcept
 	oss
 		<< "{File: " << fName << " }" 
 		<< std::endl
-		<< "{Line: " << curLine;
+		<< "{Line: " << curLine << " }";
 	return oss.str();
 
 }

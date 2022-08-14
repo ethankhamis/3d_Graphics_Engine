@@ -2,7 +2,7 @@
 #include <string>
 #include <exception>
 
-class ExceptionHandler : protected std::exception
+class ExceptionHandler : public std::exception
 {
 private:
 	unsigned int curLine;
@@ -15,5 +15,5 @@ public:
 	unsigned int FetchLine() const noexcept;
 	std::string FetchStartString() const noexcept;
 protected:
-	mutable std::string buffer_t;
+	mutable std::string buffer_w;
 };

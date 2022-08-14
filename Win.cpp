@@ -1,4 +1,5 @@
 #include "Win.h"
+#include <sstream>
 
 Wnd::WndClass Wnd::WndClass::wndClass;
 
@@ -91,7 +92,7 @@ LRESULT Wnd::HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) n
 		// acquire pointer to window class from Non-Client creation data
 		const CREATESTRUCTW* const pCreate = reinterpret_cast<CREATESTRUCTW*>(lParam);
 		Wnd* const pWnd = static_cast<Wnd*>(pCreate->lpCreateParams);
-		// set the WinAPI-managed user data to store a pointer to the window class
+		// store ptr to a window class with WinApi
 		SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pWnd));
 		// set WndProc to normal (non-setup) handler since setup is now complete
 		SetWindowLongPtr(hWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>(&Wnd::HandleMsgBypass));
@@ -108,4 +109,57 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	Wnd* const pWnd = reinterpret_cast<Wnd*>(GetWindowLongPtr(hWnd, GWLP_USERDATA));
 	// forward message to window class handler
 	return pWnd->MsgHandler(hWnd, msg, wParam, lParam);
+}
+
+Wnd::Exception::Exception(unsigned int curLine, const char* fName, HRESULT hResult) noexcept
+	:
+	ExceptionHandler(fName,curLine),
+	hResult(hResult)
+{
+}
+
+const char* Wnd::Exception::what() const noexcept
+{
+	std::ostringstream oss;
+
+	oss
+		<< FetchErrorType()
+		<< std::endl
+		<< "{Error Code of: " <<
+		FetchErrorCode() <<   " }"
+		<< "{Error Description: " <<
+		FetchErrorString() << " }"
+		<< FetchStartString();
+
+	buffer_w = oss.str().c_str();
+	return oss.str().c_str();
+
+}
+
+std::string Wnd::Exception::FetchErrorString() const noexcept
+{
+	return ConvertErrorCode(hResult);
+}
+
+const char* Wnd::Exception::FetchErrorType() const noexcept
+{
+	return "Window Exception";
+}
+
+HRESULT Wnd::Exception::FetchErrorCode() const noexcept
+{
+	return hResult;
+}
+
+std::string Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
+{
+	char* pMsgBuffer = nullptr;
+	DWORD nMsgLen = FormatMessageW(
+		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
+		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hResult,
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&pMsgBuffer),
+		0, nullptr);
+	if (nMsgLen == NULL) { return "Unknown/Undefined error code"; }
+	std::string errorString = pMsgBuffer; LocalFree(pMsgBuffer);
+	return errorString;
 }
