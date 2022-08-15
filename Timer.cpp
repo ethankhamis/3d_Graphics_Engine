@@ -13,12 +13,12 @@ float Timer::MarkTime()
 	fin = std::chrono::steady_clock::now();
 	const std::chrono::duration<float>
 		delta = fin - initial;
-	return delta.count(); //find difference in time
+	return delta.count(); //find difference in time from initial to final
 
 }
 
-float Timer::Peek() const
+float Timer::Duration() const
 {
 	return std::chrono::duration<float>(std::chrono::steady_clock::
-		now() - fin).count();
+		now() - fin).count(); // returns current time in program
 }
