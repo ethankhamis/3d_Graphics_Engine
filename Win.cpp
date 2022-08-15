@@ -85,6 +85,21 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+		//Start of Windows Kbd Messages
+
+	case WM_CHAR:
+		kbd.Char_OnPress(static_cast<unsigned char>(wParam));
+		break;
+
+	case WM_KEYUP:
+		kbd.Key_OnRelease(static_cast<unsigned char>(wParam));
+		break;
+	case WM_KEYDOWN:
+		kbd.Key_onPress(static_cast<unsigned char>(wParam));
+		break;
+
+
+		//End of Windows Kbd Messages
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);

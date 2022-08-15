@@ -5,6 +5,8 @@
 
 class Wnd
 {
+public:
+	Keyboard kbd;
 private:
 	unsigned int width;
 	unsigned int height;
