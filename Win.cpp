@@ -85,6 +85,11 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	case WM_CLOSE:
 		PostQuitMessage(0);
 		return 0;
+
+	case WM_KILLFOCUS:
+		kbd.State_Clear();
+		break;
+
 		//Start of Windows Kbd Messages
 
 	case WM_CHAR:
@@ -101,6 +106,8 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 
 		//End of Windows Kbd Messages
+
+
 	}
 
 	return DefWindowProc(hWnd, msg, wParam, lParam);
