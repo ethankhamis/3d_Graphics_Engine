@@ -2,11 +2,13 @@
 #include "WinDef.h"
 #include "ExceptionHandler.h"
 #include "Keyboard.h"
+#include "Mouse.h"
 
 class Wnd
 {
 public:
 	Keyboard kbd;
+	Mouse mouse;
 private:
 	unsigned int width;
 	unsigned int height;

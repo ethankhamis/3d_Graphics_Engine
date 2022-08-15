@@ -1,5 +1,6 @@
 #include "Win.h"
 #include <sstream>
+#include "Mouse.h"
 #include "resource.h"
 
 Wnd::WndClass Wnd::WndClass::wndClass;
@@ -110,6 +111,68 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 
 		//End of Windows Kbd Messages
+
+		//Start of Windows Mouse Messages
+
+	case WM_MOUSEMOVE:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Mouse_Pos_Change(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Left_Pressed(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Right_Pressed(pt.x, pt.y);
+		break;
+	}
+
+	case WM_MBUTTONDOWN:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Middle_Mouse_Pressed(pt.x, pt.y);
+		break;
+	}
+	case WM_LBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Left_Released(pt.x, pt.y);
+		break;
+	}
+	case WM_RBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Right_Released(pt.x, pt.y);
+		break;
+	}
+
+	case WM_MBUTTONUP:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		mouse.Middle_Mouse_Released(pt.x, pt.y);
+		break;
+	}
+
+	case WM_MOUSEWHEEL:
+	{
+		const POINTS pt = MAKEPOINTS(lParam);
+		if (GET_WHEEL_DELTA_WPARAM(wParam) > 0)
+		{
+			mouse.Wheel_Up(pt.x, pt.y);
+		}
+		else if (GET_WHEEL_DELTA_WPARAM(wParam) < 0)
+		{
+			mouse.Wheel_Down(pt.x, pt.y);
+		}
+		break;
+	}
+	//End of Windows Mouse Messages
 
 
 	}
