@@ -131,10 +131,11 @@ const wchar_t* Wnd::Exception::whatw() const noexcept
 	wss
 		<< FetchErrorType()
 		<< std::endl
-		<< L"{Error Code of: " <<
-		FetchErrorCode() <<   L" }"
-		<< L"{Error Description: " <<
-		FetchErrorString() << L" }"
+		<< L"{Error Code of: "
+		<< FetchErrorCode() <<   L" }"
+		<< std::endl
+		<< L"{Error Description: "
+		<< FetchErrorString() << L" }"
 		<< FetchStartString();
 
 	buffer_w = wss.str().c_str();
