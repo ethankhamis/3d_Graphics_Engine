@@ -1,5 +1,5 @@
 #include "Mouse.h"
-#include "Win.h"
+#include "WinDef.h"
 
 std::pair<int, int> Mouse::Position() const noexcept
 {
