@@ -34,6 +34,8 @@ public:
 	~Wnd() noexcept;
 	Wnd(const Wnd&) = delete;
 	Wnd& operator=(const Wnd&) = delete;
+public:
+	void ApplyTitle(const std::wstring& t);
 private:
 	LRESULT MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
 	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
@@ -57,5 +59,5 @@ public:
 #define WIDE1(x) WIDE2(x)
 #define WFILE WIDE1(__FILE__)
 
-#define CHWND_EXCEPT( hr ) Wnd::Exception( __LINE__,WFILE,hr )
-#define CHWND_LAST_EXCEPT() Wnd::Exception( __LINE__,WFILE,GetLastError() )
+#define EHWND_EXCEPT( hr ) Wnd::Exception( __LINE__,WFILE,hr )
+#define EHWND_LAST_EXCEPT() Wnd::Exception( __LINE__,WFILE,GetLastError() )

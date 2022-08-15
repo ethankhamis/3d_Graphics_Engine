@@ -49,14 +49,14 @@ Wnd::Wnd(int width, int height, const wchar_t* name)
 	wr.top = 100;
 	wr.bottom = height + wr.top;
 	
-	if ( FAILED(AdjustWindowRect(&wr,
+	if ( (AdjustWindowRect(&wr,
 		WS_CAPTION |
 		WS_MINIMIZEBOX |
 		WS_SYSMENU |
 		WS_MAXIMIZEBOX,
 		FALSE)))
 	{
-		throw CHWND_LAST_EXCEPT();
+		throw EHWND_LAST_EXCEPT();
 	};
 	 
 	//initialise window CreateWindowExW
@@ -67,7 +67,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name)
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WndClass::FetchInstance(), this
 	);
-	if (hWnd == nullptr) { throw CHWND_LAST_EXCEPT(); }
+	if (hWnd == nullptr) { throw EHWND_LAST_EXCEPT(); }
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -77,6 +77,14 @@ Wnd::Wnd(int width, int height, const wchar_t* name)
 Wnd::~Wnd() noexcept
 {
 	DestroyWindow(hWnd);
+}
+
+void Wnd::ApplyTitle(const std::wstring& t)
+{
+	if(SetWindowTextW(hWnd, t.c_str()) == NULL)
+	{
+		throw EHWND_LAST_EXCEPT();
+	}
 }
 
 LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
