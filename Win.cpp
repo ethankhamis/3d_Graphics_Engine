@@ -40,7 +40,7 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 	return wndClass.hInstance;
 }
 
-Wnd::Wnd(int width, int height, const wchar_t* name)
+Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 {
 	//get window size using region size of user
 	RECT wr;
