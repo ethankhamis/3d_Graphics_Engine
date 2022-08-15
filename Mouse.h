@@ -22,6 +22,8 @@ public:
 			WheelUp,
 			WheelDown,
 			Move,
+			Inside,
+			Outside,
 			Unrecognised
 		};
 	public:
@@ -81,6 +83,7 @@ public:
 	std::pair<int, int> Position() const noexcept; //return type will be changed after adding vectors/matrices
 	int Position_x() const noexcept;
 	int Position_y() const noexcept;
+	bool Inside_Window() const noexcept;
 	bool Left_Pressed() const noexcept;
 	bool Right_Pressed() const noexcept;
 	Mouse::Event Read() noexcept;
@@ -101,12 +104,16 @@ public:
 	void Wheel_Up(int x, int y) noexcept;
 	void Wheel_Down(int x, int y) noexcept;
 	void Buffer_ReduceSize() noexcept;
+public:
+	void Mouse_Inside() noexcept;
+	void Mouse_Outside() noexcept;
 private:
 	int x;
 	int y;
 	bool left_Pressed = false;
 	bool right_Pressed = false;
 	bool middle_mouse_Pressed = false;
+	bool inside_window = false;
 	static constexpr unsigned int bufferSize = 16u;
 	std::queue<Event> buffer;
 };

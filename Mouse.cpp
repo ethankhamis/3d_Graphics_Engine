@@ -15,6 +15,11 @@ int Mouse::Position_y() const noexcept
 	return y;
 }
 
+bool Mouse::Inside_Window() const noexcept
+{
+	return inside_window;
+}
+
 bool Mouse::Left_Pressed() const noexcept
 {
 	return left_Pressed;
@@ -110,4 +115,18 @@ void Mouse::Wheel_Down(int x, int y) noexcept
 void Mouse::Buffer_ReduceSize() noexcept
 {
 	while (buffer.size() > bufferSize){buffer.pop();}
+}
+
+void Mouse::Mouse_Inside() noexcept
+{
+	inside_window = true;
+	buffer.push(Mouse::Event(Mouse::Event::TypeName::Inside, *this));
+	Buffer_ReduceSize();
+}
+
+void Mouse::Mouse_Outside() noexcept
+{
+	inside_window = false;
+	buffer.push(Mouse::Event(Mouse::Event::TypeName::Inside, *this));
+	Buffer_ReduceSize();
 }
