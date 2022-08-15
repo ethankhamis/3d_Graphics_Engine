@@ -11,6 +11,13 @@ Application::Application()
 
 int Application::Start()
 {
+	while (1)
+	{
+		if (const std::optional<int>(exceptionCode) = Wnd::Messages())
+		{
+			return *exceptionCode;
+		}
 
 		ExecFrame();
+	}
 }
