@@ -8,4 +8,5 @@ private:
 	void ExecFrame();
 public:
 	Application();
+	int Start();
 };
