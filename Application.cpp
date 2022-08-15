@@ -1,4 +1,6 @@
 #include "Application.h"
+#include <sstream>
+#include <iomanip>
 
 void Application::ExecFrame()
 {
@@ -10,8 +12,6 @@ Application::Application()
 int Application::Start()
 {
 
-	// create window instance
-	Wnd wnd(800, 500, L"6~3D");
 	//message handling
 	MSG msg;
 	BOOL getResult;
@@ -19,6 +19,7 @@ int Application::Start()
 	{
 		TranslateMessage(&msg); // turn WM_KEYBOARD messages into WM_CHAR (if necessary)
 		DispatchMessage(&msg);
+		ExecFrame();
 	}
 	switch (getResult) // incase new return cases are implemented
 	{

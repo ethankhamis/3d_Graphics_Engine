@@ -4,12 +4,11 @@
 
 struct Application
 {
+	Application();
+	int Start();
 private:
 	Wnd window;
 	Timer timer;
 private:
 	void ExecFrame();
-public:
-	Application();
-	int Start();
 };
