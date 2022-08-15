@@ -1,6 +1,7 @@
 #pragma once
 #include "WinDef.h"
 #include "ExceptionHandler.h"
+#include "Keyboard.h"
 
 class Wnd
 {
