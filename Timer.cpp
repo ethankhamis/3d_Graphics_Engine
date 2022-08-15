@@ -19,6 +19,6 @@ float Timer::MarkTime()
 
 float Timer::Peek() const
 {
-	return std::chrono::duration<float>(std::chrono::steady_clock::now() - fin)
-		.count();
+	return std::chrono::duration<float>(std::chrono::steady_clock::
+		now() - fin).count();
 }
