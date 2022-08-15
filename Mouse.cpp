@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include "Win.h"
 
 std::pair<int, int> Mouse::Position() const noexcept
 {
@@ -108,8 +109,24 @@ void Mouse::Wheel_Up(int x, int y) noexcept
 
 void Mouse::Wheel_Down(int x, int y) noexcept
 {
-	buffer.push(Mouse::Event(Mouse::Event::TypeName::WheelUp, *this));
+	buffer.push(Mouse::Event(Mouse::Event::TypeName::WheelDown, *this));
 	Buffer_ReduceSize();
+}
+
+void Mouse::Wheel_Delta(int x, int y, int delta) noexcept
+{
+	wheelDelta += delta;
+	//per 120 generate events (WHEEL_DELTA DEF AS 120)
+	while (WHEEL_DELTA <= wheelDelta) //upwards scrolling
+	{
+		wheelDelta -= WHEEL_DELTA;
+		Wheel_Up(x, y);
+	}
+	while (-WHEEL_DELTA >= wheelDelta) //account for downwards scrolling
+	{
+		wheelDelta += WHEEL_DELTA;
+		Wheel_Down(x, y);
+	}
 }
 
 void Mouse::Buffer_ReduceSize() noexcept

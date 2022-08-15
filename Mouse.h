@@ -103,6 +103,7 @@ public:
 public:
 	void Wheel_Up(int x, int y) noexcept;
 	void Wheel_Down(int x, int y) noexcept;
+	void Wheel_Delta(int x, int y, int delta) noexcept;
 	void Buffer_ReduceSize() noexcept;
 public:
 	void Mouse_Inside() noexcept;
@@ -116,4 +117,7 @@ private:
 	bool inside_window = false;
 	static constexpr unsigned int bufferSize = 16u;
 	std::queue<Event> buffer;
+private:
+	int wheelDelta = 0;
+
 };
