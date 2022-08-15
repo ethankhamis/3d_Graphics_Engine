@@ -1,6 +1,7 @@
 #pragma once
 #include "WinDef.h"
 #include "ExceptionHandler.h"
+#include <optional>
 #include "Keyboard.h"
 #include "Mouse.h"
 
@@ -38,8 +39,10 @@ public:
 	void ApplyTitle(const std::wstring& t);
 private:
 	LRESULT MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept;
-	static LRESULT CALLBACK HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
-	static LRESULT CALLBACK HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
+	static LRESULT __stdcall HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
+	static LRESULT __stdcall HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
+public:
+	static std::optional<int> Messages();
 public:
 	class Exception : public ExceptionHandler
 	{
@@ -58,6 +61,5 @@ public:
 #define WIDE2(x) L##x
 #define WIDE1(x) WIDE2(x)
 #define WFILE WIDE1(__FILE__)
-
 #define EHWND_EXCEPT( hr ) Wnd::Exception( __LINE__,WFILE,hr )
 #define EHWND_LAST_EXCEPT() Wnd::Exception( __LINE__,WFILE,GetLastError() )

@@ -248,6 +248,30 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	return pWnd->MsgHandler(hWnd, msg, wParam, lParam);
 }
 
+std::optional<int> Wnd::Messages()
+{
+	MSG msg;
+	while ((GetMessage(&msg, nullptr, 0, 0)) > 0)
+	{
+		if (msg.message == WM_QUIT)
+		{
+			switch (msg.message) // switch incase new return cases are implemented
+			{
+			case WM_QUIT:
+				return msg.wParam;
+				break;
+			default:
+				break;
+			}
+		}
+
+		TranslateMessage(&msg); // turn WM_KEYBOARD messages into WM_CHAR (if necessary)
+		DispatchMessage(&msg);
+
+	}
+	return std::optional<int>();
+}
+
 Wnd::Exception::Exception(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept
 	:
 	ExceptionHandler(curLine, fName),
