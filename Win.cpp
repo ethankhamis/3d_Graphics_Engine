@@ -94,6 +94,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	case WM_KEYUP:
 		kbd.Key_OnRelease(static_cast<unsigned char>(wParam));
 		break;
+
 	case WM_KEYDOWN:
 		kbd.Key_onPress(static_cast<unsigned char>(wParam));
 		break;

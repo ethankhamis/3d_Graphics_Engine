@@ -60,7 +60,7 @@ void Keyboard::Key_Flush() noexcept
 
 void Keyboard::Key_onPress(unsigned char keycode) noexcept
 {
-	keyStates[keycode] = false;
+	keyStates[keycode] = true;
 	KeyBuffer.push(Keyboard::Event(Keyboard::Event::TypeName::Press, keycode));
 	Buffer_ReduceSize(KeyBuffer);
 }

@@ -19,6 +19,10 @@ int CALLBACK WinMain(
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
+			if (wnd.kbd.Key_Pressed(VK_SPACE))
+			{
+				MessageBoxW(nullptr, L"spacebar was pressed", L"peak", MB_OK | MB_ICONEXCLAMATION);
+			}
 		}
 		switch (getResult) // incase new return cases are implemented
 		{
