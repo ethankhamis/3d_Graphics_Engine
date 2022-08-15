@@ -54,7 +54,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		WS_MINIMIZEBOX |
 		WS_SYSMENU |
 		WS_MAXIMIZEBOX,
-		FALSE)))
+		FALSE)) == NULL)
 	{
 		throw EHWND_LAST_EXCEPT();
 	};
@@ -128,7 +128,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 		if(pt.y<height && pt.y >=0 && pt.x>=0 && pt.x < width)
 		{
 			mouse.Mouse_Pos_Change(pt.x, pt.y);
-			if (mouse.Inside_Window_Check())
+			if (!mouse.Inside_Window_Check())
 			{
 				SetCapture(hWnd);
 				mouse.Mouse_Inside();

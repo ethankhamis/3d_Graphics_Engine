@@ -127,6 +127,6 @@ void Mouse::Mouse_Inside() noexcept
 void Mouse::Mouse_Outside() noexcept
 {
 	inside_window = false;
-	buffer.push(Mouse::Event(Mouse::Event::TypeName::Inside, *this));
+	buffer.push(Mouse::Event(Mouse::Event::TypeName::Outside, *this));
 	Buffer_ReduceSize();
 }

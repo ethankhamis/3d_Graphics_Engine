@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iterator>
 #include "Win.h"
+#include <sstream>
 
 
 int CALLBACK WinMain(
