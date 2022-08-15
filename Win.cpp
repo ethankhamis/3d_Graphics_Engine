@@ -101,7 +101,9 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 		break;
 
 	case WM_KEYDOWN:
-		kbd.Key_onPress(static_cast<unsigned char>(wParam));
+		if (!(kbd.AutoRepeat_State || lParam & 0x40000000)) {
+			kbd.Key_onPress(static_cast<unsigned char>(wParam));
+		}
 		break;
 
 
