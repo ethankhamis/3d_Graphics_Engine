@@ -2,31 +2,31 @@
 #include <sstream>
 #include <algorithm>
 
-ExceptionHandler::ExceptionHandler( unsigned int curLine, const char* fName) noexcept
+ExceptionHandler::ExceptionHandler( unsigned int curLine, const wchar_t* fName) noexcept
 	:
 	curLine(curLine),
 	fName(fName) {}
 
-const char* ExceptionHandler::what() const noexcept
+const wchar_t* ExceptionHandler::whatw() const noexcept
 {
-	std::ostringstream oss;
+	std::wstringstream wss;
 
 
-	oss 
+	wss 
 		<< FetchErrorType()
 		<< std::endl <<
 		FetchStartString();
-	buffer_w = oss.str().c_str();
+	buffer_w = wss.str().c_str();
 
-	return oss.str().c_str(); /*as 'return buffer_t' doesnt work*/
+	return buffer_w.c_str(); /*as 'return buffer_t' doesnt work*/
 }
 
-const char* ExceptionHandler::FetchErrorType() const noexcept
+const wchar_t* ExceptionHandler::FetchErrorType() const noexcept
 {
-	return "Exception Caught";
+	return L"Exception Caught";
 }
 
-const std::string& ExceptionHandler::FetchFileName() const noexcept
+const std::wstring& ExceptionHandler::FetchFileName() const noexcept
 {
 	return fName;
 }
@@ -36,14 +36,14 @@ unsigned int ExceptionHandler::FetchLine() const noexcept
 	return curLine;
 }
 
-std::string ExceptionHandler::FetchStartString() const noexcept
+std::wstring ExceptionHandler::FetchStartString() const noexcept
 {
-	std::ostringstream oss;
+	std::wstringstream wss;
 
-	oss
-		<< "{File: " << fName << " }" 
+	wss
+		<< L"{File: " << fName << L" }" 
 		<< std::endl
-		<< "{Line: " << curLine << " }";
-	return oss.str();
+		<< L"{Line: " << curLine << L" }";
+	return wss.str();
 
 }

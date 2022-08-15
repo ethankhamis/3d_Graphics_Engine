@@ -1,4 +1,5 @@
-
+#include <algorithm>
+#include <iterator>
 #include "Win.h"
 
 
@@ -31,15 +32,21 @@ int CALLBACK WinMain(
 	}
 	catch (const ExceptionHandler& exception)
 	{
-		MessageBoxA(nullptr, exception.what(), exception.FetchErrorType(), MB_OK | MB_ICONEXCLAMATION);
+		MessageBoxW(nullptr, exception.whatw(), exception.FetchErrorType(), MB_OK | MB_ICONEXCLAMATION);
 	}
-	catch (const std::exception& e)
+	catch (const std::exception& exception)
 	{
-		MessageBoxA(nullptr, e.what(), "std Exception", MB_OK | MB_ICONEXCLAMATION);
+		// Convert e.what() to a wide string
+		std::string  cs(exception.what());
+		std::wstring ws;
+		copy(cs.begin(), cs.end(), back_inserter(ws));
+
+		MessageBoxW(nullptr, ws.c_str()
+			, L"std Exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	catch (...)
 	{
-		MessageBoxA(nullptr, "No details", "Unknown exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBoxW(nullptr, L"No details", L"Unknown exception", MB_OK | MB_ICONEXCLAMATION);
 	}
 	return -1;
 }

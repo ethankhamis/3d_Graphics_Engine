@@ -61,7 +61,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name)
 	//initialise window CreateWindowExW
 
 	hWnd = CreateWindowExW( CS_OWNDC,
-		WndClass::FetchName(), name,
+		WndClass::FetchName() , name,
 		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WndClass::FetchInstance(), this
@@ -117,39 +117,39 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	return pWnd->MsgHandler(hWnd, msg, wParam, lParam);
 }
 
-Wnd::Exception::Exception(unsigned int curLine, const char* fName, HRESULT hResult) noexcept
+Wnd::Exception::Exception(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept
 	:
 	ExceptionHandler(curLine, fName),
 	hResult(hResult)
 {
 }
 
-const char* Wnd::Exception::what() const noexcept
+const wchar_t* Wnd::Exception::whatw() const noexcept
 {
-	std::ostringstream oss;
+	std::wstringstream wss;
 
-	oss
+	wss
 		<< FetchErrorType()
 		<< std::endl
-		<< "{Error Code of: " <<
-		FetchErrorCode() <<   " }"
-		<< "{Error Description: " <<
-		FetchErrorString() << " }"
+		<< L"{Error Code of: " <<
+		FetchErrorCode() <<   L" }"
+		<< L"{Error Description: " <<
+		FetchErrorString() << L" }"
 		<< FetchStartString();
 
-	buffer_w = oss.str().c_str();
-	return oss.str().c_str();
+	buffer_w = wss.str().c_str();
+	return buffer_w.c_str();
 
 }
 
-std::string Wnd::Exception::FetchErrorString() const noexcept
+std::wstring Wnd::Exception::FetchErrorString() const noexcept
 {
 	return ConvertErrorCode(hResult);
 }
 
-const char* Wnd::Exception::FetchErrorType() const noexcept
+const wchar_t* Wnd::Exception::FetchErrorType() const noexcept
 {
-	return "Window Exception";
+	return L"Window Exception";
 }
 
 HRESULT Wnd::Exception::FetchErrorCode() const noexcept
@@ -157,9 +157,9 @@ HRESULT Wnd::Exception::FetchErrorCode() const noexcept
 	return hResult;
 }
 
-std::string Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
+std::wstring Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
 {
-	char* pMsgBuffer = nullptr;
+	wchar_t* pMsgBuffer = nullptr;
 	// for windows to allocate memory for error string
 	// also make pointer point to it
 	DWORD nMsgLen = FormatMessageW(
@@ -167,8 +167,8 @@ std::string Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
 		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hResult,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&pMsgBuffer),
 		0, nullptr);
-	if (nMsgLen == NULL) { return "Unknown/Undefined error code"; }
-	std::string errorString = pMsgBuffer;//copy the error string to std::string from windows buffer
+	if (nMsgLen == NULL) { return L"Unknown/Undefined error code"; }
+	std::wstring errorString = pMsgBuffer;//copy the error string to std::wstring from windows buffer
 	LocalFree(pMsgBuffer); //free windows buffer previously used
 	return errorString;
 }

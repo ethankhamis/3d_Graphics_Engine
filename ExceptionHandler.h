@@ -6,15 +6,15 @@ class ExceptionHandler : public std::exception
 {
 private:
 	unsigned int curLine;
-	std::string fName; 
+	std::wstring fName; 
 public:
-	ExceptionHandler( unsigned int curLine, const char* fName) noexcept;
-	const char* what() const noexcept override; //override std::exception's 'what()' func
-	virtual const char* FetchErrorType() const noexcept;
-	const  std::string& FetchFileName() const noexcept;
+	ExceptionHandler( unsigned int curLine, const wchar_t* fName) noexcept;
+	virtual const wchar_t* whatw() const noexcept; //override std::exception's 'what()' func
+	virtual const wchar_t* FetchErrorType() const noexcept;
+	const  std::wstring& FetchFileName() const noexcept;
 	unsigned int FetchLine() const noexcept;
-	std::string FetchStartString() const noexcept;
+	std::wstring FetchStartString() const noexcept;
 
 protected:
-	mutable std::string buffer_w;
+	mutable std::wstring buffer_w;
 };
