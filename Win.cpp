@@ -86,8 +86,8 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 		PostQuitMessage(0);
 		return 0;
 
-	case WM_KILLFOCUS:
-		kbd.State_Clear();
+	case WM_KILLFOCUS: // if current window loses focus (i.e., new window pops up)
+		kbd.State_Clear(); // clear current keystate
 		break;
 
 		//Start of Windows Kbd Messages
