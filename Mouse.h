@@ -83,7 +83,7 @@ public:
 	std::pair<int, int> Position() const noexcept; //return type will be changed after adding vectors/matrices
 	int Position_x() const noexcept;
 	int Position_y() const noexcept;
-	bool Inside_Window() const noexcept;
+	bool Inside_Window_Check() const noexcept;
 	bool Left_Pressed() const noexcept;
 	bool Right_Pressed() const noexcept;
 	Mouse::Event Read() noexcept;

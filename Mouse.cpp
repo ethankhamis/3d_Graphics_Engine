@@ -15,7 +15,7 @@ int Mouse::Position_y() const noexcept
 	return y;
 }
 
-bool Mouse::Inside_Window() const noexcept
+bool Mouse::Inside_Window_Check() const noexcept
 {
 	return inside_window;
 }

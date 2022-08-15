@@ -125,7 +125,27 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	case WM_MOUSEMOVE:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
-		mouse.Mouse_Pos_Change(pt.x, pt.y);
+		if(pt.y<height && pt.y >=0 && pt.x>=0 && pt.x < width)
+		{
+			mouse.Mouse_Pos_Change(pt.x, pt.y);
+			if (mouse.Inside_Window_Check())
+			{
+				SetCapture(hWnd);
+				mouse.Mouse_Inside();
+			}
+		}
+		else
+		{
+			if (wParam & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON))
+			{
+				mouse.Mouse_Pos_Change(pt.x, pt.y);
+			}
+			else
+			{
+				ReleaseCapture();
+				mouse.Mouse_Outside();
+			}
+		}
 		break;
 	}
 	case WM_LBUTTONDOWN:
@@ -151,12 +171,25 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Left_Released(pt.x, pt.y);
+
+		// release when outside of window
+		if (pt.x >= width || pt.x < 0 || pt.y >= height || pt.y < 0)
+		{
+			ReleaseCapture();mouse.Mouse_Outside();
+		}
+
 		break;
 	}
 	case WM_RBUTTONUP:
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Right_Released(pt.x, pt.y);
+
+		// release when outside of window
+		if ( pt.x >= width || pt.x < 0 ||  pt.y >= height || pt.y < 0)
+		{
+			ReleaseCapture();mouse.Mouse_Outside();
+		}
 		break;
 	}
 
@@ -164,6 +197,12 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	{
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Middle_Mouse_Released(pt.x, pt.y);
+
+		// release if outside of window
+		if (pt.x >= width || pt.x < 0 || pt.y >= height || pt.y < 0)
+		{
+			ReleaseCapture();mouse.Mouse_Outside();
+		}
 		break;
 	}
 
