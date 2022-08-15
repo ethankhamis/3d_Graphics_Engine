@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <iterator>
 #include "Win.h"
-#include <sstream>
+#include "Application.h"
 
 
 int CALLBACK WinMain(
@@ -10,7 +10,9 @@ int CALLBACK WinMain(
 	LPSTR	  lpCmdLine,
 	int       nCmdShow)
 {
-	try {
+	try
+	{
+		return Application{}.Start();
 	}
 	catch (const ExceptionHandler& exception)
 	{
