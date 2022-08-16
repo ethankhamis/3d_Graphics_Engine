@@ -5,6 +5,8 @@
 struct Graphics
 {
 	Graphics( HWND hWnd );
+	Graphics(const Graphics&) = delete;
+	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
 private:
 	ID3D11Device* pDevice = nullptr;
