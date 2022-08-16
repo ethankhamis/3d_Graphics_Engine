@@ -1,9 +1,13 @@
 #include "Application.h"
 #include <sstream>
 #include <iomanip>
-
+#include <cmath>
+#include "Timer.h"
 void Application::ExecFrame()
 {
+	const float colour = 0.5;
+	window.grfx().ClearBuffer(1, 0.14, 0.1);
+
 	window.grfx().EndFrame();
 }
 

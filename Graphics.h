@@ -9,8 +9,12 @@ struct Graphics
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics();
 	void EndFrame();
+	void FillScreen();
+	void ClearBuffer(float R, float G, float B);
 private:
 	ID3D11Device* pDevice = nullptr;
 	IDXGISwapChain* pSwapChain = nullptr;
 	ID3D11DeviceContext* pDeviceContext = nullptr;
+	ID3D11RenderTargetView* pTargetView = nullptr;
+
 };

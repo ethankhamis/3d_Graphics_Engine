@@ -50,6 +50,8 @@ Graphics::Graphics(HWND hWnd)
 		&pDeviceContext
 		);
 
+	FillScreen();
+
 }
 
 Graphics::~Graphics()
@@ -66,9 +68,34 @@ Graphics::~Graphics()
 	{
 		pDeviceContext->Release();
 	}
+	if (!pTargetView)
+	{
+		pTargetView->Release();
+	}
 }
 
 void Graphics::EndFrame()
 {
 	pSwapChain->Present( 1, NULL );
+}
+
+void Graphics::FillScreen()
+{
+	ID3D11Resource* pBackBuffer = nullptr;
+	pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource),
+		reinterpret_cast<void**>(&pBackBuffer));
+
+	pDevice->CreateRenderTargetView
+	(
+		pBackBuffer,
+		nullptr,
+		&pTargetView
+	);
+	pBackBuffer->Release();
+}
+
+void Graphics::ClearBuffer(float R, float G, float B)
+{
+	const float colour[] = { R,G,B,1.0 };
+	pDeviceContext->ClearRenderTargetView(pTargetView, colour);
 }
