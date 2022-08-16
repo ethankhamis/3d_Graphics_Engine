@@ -4,9 +4,9 @@
 struct Timer
 {
 public:
-	Timer();
-	float MarkTime();
-	float Duration() const;
+	Timer() noexcept;
+	float MarkTime() noexcept;
+	float Duration() const noexcept;
 private:
 	std::chrono::steady_clock::time_point fin; //final time
 };

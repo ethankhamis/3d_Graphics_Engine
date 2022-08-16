@@ -1,12 +1,12 @@
 #include "Timer.h"
 
 
-Timer::Timer()
+Timer::Timer() noexcept
 {
 	fin = std::chrono::steady_clock::now(); // intiialise time to current time (most recent)
 }
 
-float Timer::MarkTime()
+float Timer::MarkTime() noexcept
 {
 	const std::chrono::steady_clock::time_point
 		initial = fin;
@@ -17,7 +17,7 @@ float Timer::MarkTime()
 
 }
 
-float Timer::Duration() const
+float Timer::Duration() const noexcept
 {
 	return std::chrono::duration<float>(std::chrono::steady_clock::
 		now() - fin).count(); // returns current time in program
