@@ -258,7 +258,7 @@ std::optional<int> Wnd::Messages()
 			switch (msg.message) // switch incase new return cases are implemented
 			{
 			case WM_QUIT:
-				return msg.wParam;
+				return static_cast<int>(msg.wParam);
 				break;
 			default:
 				break;
