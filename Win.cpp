@@ -251,7 +251,7 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 std::optional<int> Wnd::Messages()
 {
 	MSG msg;
-	while ((GetMessage(&msg, nullptr, 0, 0)) > 0)
+	while ((PeekMessageW(&msg, nullptr, 0, 0,PM_REMOVE)) > 0)
 	{
 		if (msg.message == WM_QUIT)
 		{
