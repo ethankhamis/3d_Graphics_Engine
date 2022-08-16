@@ -253,16 +253,13 @@ std::optional<int> Wnd::Messages()
 	MSG msg;
 	while ((PeekMessageW(&msg, nullptr, 0, 0,PM_REMOVE)) > 0)
 	{
-		if (msg.message == WM_QUIT)
-		{
 			switch (msg.message) // switch incase new return cases are implemented
 			{
-			case WM_QUIT:
+			case WM_QUIT: //must check if quitting as PeekMessage does not
 				return static_cast<int>(msg.wParam);
 				break;
 			default:
 				break;
-			}
 		}
 
 		TranslateMessage(&msg); // turn WM_KEYBOARD messages into WM_CHAR (if necessary)
