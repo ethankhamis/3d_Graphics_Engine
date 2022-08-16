@@ -67,3 +67,8 @@ Graphics::~Graphics()
 		pDeviceContext->Release();
 	}
 }
+
+void Graphics::EndFrame()
+{
+	pSwapChain->Present( 1, NULL );
+}

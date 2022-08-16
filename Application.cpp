@@ -4,6 +4,7 @@
 
 void Application::ExecFrame()
 {
+	window.grfx().EndFrame();
 }
 
 Application::Application()
