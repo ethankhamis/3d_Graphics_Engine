@@ -40,6 +40,11 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 	return wndClass.hInstance;
 }
 
+Graphics& Wnd::grfx()
+{
+	return *pGraphics;
+}
+
 Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 {
 	//get window size using region size of user
@@ -71,6 +76,9 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+
+	//create graphics instance
+	pGraphics = std::make_unique<Graphics>(hWnd);
 
 }
 

@@ -1,12 +1,18 @@
 #pragma once
 #include "WinDef.h"
 #include "ExceptionHandler.h"
+#include "Graphics.h"
 #include <optional>
+#include <memory>
 #include "Keyboard.h"
 #include "Mouse.h"
 
 class Wnd
 {
+public:
+	Graphics& grfx();
+private:
+	std::unique_ptr<Graphics> pGraphics;
 public:
 	Keyboard kbd;
 	Mouse mouse;
