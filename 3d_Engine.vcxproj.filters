@@ -19,6 +19,9 @@
     <Filter Include="Performance">
       <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DxError">
+      <UniqueIdentifier>{a1bfc6c9-65c0-4d07-9a83-7446e20c8c47}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -46,6 +49,9 @@
       <Filter>Exception-Based</Filter>
     </ClCompile>
     <ClCompile Include="dxerr.cpp">
+      <Filter>DxError</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectXInfoManagement.cpp">
       <Filter>Exception-Based</Filter>
     </ClCompile>
   </ItemGroup>
@@ -78,6 +84,9 @@
       <Filter>Performance</Filter>
     </ClInclude>
     <ClInclude Include="dxerr.h">
+      <Filter>DxError</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectXInfoManagement.h">
       <Filter>Exception-Based</Filter>
     </ClInclude>
   </ItemGroup>
