@@ -15,10 +15,10 @@ const wchar_t* ExceptionHandler::whatw() const noexcept
 	wss 
 		<< FetchErrorType()
 		<< std::endl <<
-		FetchStartString();
+		FetchErrorWString();
 	buffer_w = wss.str().c_str();
 
-	return buffer_w.c_str(); /*as 'return buffer_t' doesnt work*/
+	return buffer_w.c_str();
 }
 
 const wchar_t* ExceptionHandler::FetchErrorType() const noexcept
@@ -36,7 +36,7 @@ unsigned int ExceptionHandler::FetchLine() const noexcept
 	return curLine;
 }
 
-std::wstring ExceptionHandler::FetchStartString() const noexcept
+std::wstring ExceptionHandler::FetchErrorWString() const noexcept
 {
 	std::wstringstream wss;
 

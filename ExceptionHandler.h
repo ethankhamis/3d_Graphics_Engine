@@ -13,7 +13,7 @@ public:
 	virtual const wchar_t* FetchErrorType() const noexcept;
 	const  std::wstring& FetchFileName() const noexcept;
 	unsigned int FetchLine() const noexcept;
-	std::wstring FetchStartString() const noexcept;
+	std::wstring FetchErrorWString() const noexcept;
 
 protected:
 	mutable std::wstring buffer_w;

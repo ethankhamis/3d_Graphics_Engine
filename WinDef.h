@@ -4,10 +4,11 @@
 /* ASSURES WINDOWS 7+ AS TARGET */
 
 #include <sdkddkver.h> //sdk version
+#include <Windows.h>
 
 
 /* THIS CODE IS IMPLEMENTED TO SPEED UP BUILD-TIME */
-/* IT ALSO ENSURES NO NAMESPACES WITHIN C++ ARE OVERRIDDEN */
+/* IT ALSO ENSURES NO NAMESPACES WITHIN C++ ARE OVERWRITTEN */
 
 #define NODRAWTEXT
 #define NOPROFILER 
@@ -21,7 +22,7 @@
 #define NORASTEROPS
 #define NOCOLOR
 #define NOKERNEL
-#define NOMINMAX
+#define NOMINMAX 
 #define NOMENUS
 #define NOCTLMGR
 #define NOSYSMETRICS
@@ -44,4 +45,3 @@
 #define NONLS
 #define NOPROXYSTUB
 #define NOTAPE
-#include <Windows.h>

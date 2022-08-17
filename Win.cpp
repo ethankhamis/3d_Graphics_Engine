@@ -42,6 +42,8 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 
 Graphics& Wnd::grfx()
 {
+	if (!pGraphics) { throw EHWND_NOGFX_EXCEPT(); }
+
 	return *pGraphics;
 }
 
@@ -256,7 +258,7 @@ LRESULT Wnd::HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) 
 	return pWnd->MsgHandler(hWnd, msg, wParam, lParam);
 }
 
-std::optional<int> Wnd::Messages()
+std::optional<int> Wnd::Messages() noexcept
 {
 	MSG msg;
 	while ((PeekMessageW(&msg, nullptr, 0, 0,PM_REMOVE)) > 0)
@@ -277,43 +279,17 @@ std::optional<int> Wnd::Messages()
 	return std::optional<int>();
 }
 
-Wnd::Exception::Exception(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept
-	:
-	ExceptionHandler(curLine, fName),
-	hResult(hResult)
+std::wstring Wnd::HResultException::FetchErrorDescription() const noexcept
 {
+	return Exception::ConvertErrorCode(hResult);
 }
 
-const wchar_t* Wnd::Exception::whatw() const noexcept
-{
-	std::wstringstream wss;
-
-	wss
-		<< FetchErrorType()
-		<< std::endl
-		<< L"{Error Code of: "
-		<< FetchErrorCode() <<   L" }"
-		<< std::endl
-		<< L"{Error Description: "
-		<< FetchErrorString() << L" }"
-		<< FetchStartString();
-
-	buffer_w = wss.str().c_str();
-	return buffer_w.c_str();
-
-}
-
-std::wstring Wnd::Exception::FetchErrorString() const noexcept
-{
-	return ConvertErrorCode(hResult);
-}
-
-const wchar_t* Wnd::Exception::FetchErrorType() const noexcept
+const wchar_t* Wnd::HResultException::FetchErrorType() const noexcept
 {
 	return L"Window Exception";
 }
 
-HRESULT Wnd::Exception::FetchErrorCode() const noexcept
+HRESULT Wnd::HResultException::FetchErrorCode() const noexcept
 {
 	return hResult;
 }
@@ -323,7 +299,7 @@ std::wstring Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
 	wchar_t* pMsgBuffer = nullptr;
 	// for windows to allocate memory for error string
 	// also make pointer point to it
-	DWORD nMsgLen = FormatMessageW(
+	const DWORD nMsgLen = FormatMessageW(
 		FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM |
 		FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, hResult,
 		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), reinterpret_cast<LPWSTR>(&pMsgBuffer),
@@ -332,4 +308,36 @@ std::wstring Wnd::Exception::ConvertErrorCode(HRESULT hResult) noexcept
 	std::wstring errorString = pMsgBuffer;//copy the error string to std::wstring from windows buffer
 	LocalFree(pMsgBuffer); //free windows buffer previously used
 	return errorString;
+}
+
+const wchar_t* Wnd::NoGfxException::FetchErrorType() const noexcept
+{
+	return L"Window Exception [No Graphics Influence]";
+}
+
+
+Wnd::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept
+	:
+	ExceptionHandler(curLine, fName),
+	hResult(hResult)
+{
+}
+
+const wchar_t* Wnd::HResultException::whatw() const noexcept
+{
+	std::wstringstream wss;
+
+	wss
+		<< FetchErrorType()
+		<< std::endl
+		<< L"{Error Code of: "
+		<< FetchErrorCode() << L" }"
+		<< std::endl
+		<< L"{Error Description: "
+		<< FetchErrorWString() << L" }"
+		<< FetchErrorWString();
+
+	buffer_w = wss.str().c_str();
+	return buffer_w.c_str();
+
 }

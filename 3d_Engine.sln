@@ -5,11 +5,6 @@ VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3d_Engine", "3d_Engine.vcxproj", "{FA868503-7BE6-42CE-B87C-D1856DC474AA}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "performance increases", "performance increases", "{7979ECD2-36DE-4758-B8D4-BB6BF8285E84}"
-	ProjectSection(SolutionItems) = preProject
-		WinDef.h = WinDef.h
-	EndProjectSection
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64

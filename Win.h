@@ -48,24 +48,36 @@ private:
 	static LRESULT __stdcall HandleMsgSetup(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
 	static LRESULT __stdcall HandleMsgBypass(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept; //CALLBACK -> stdcall
 public:
-	static std::optional<int> Messages();
+	static std::optional<int> Messages() noexcept;
 public:
-	class Exception : public ExceptionHandler
+
+
+
+
+	struct Exception : public ExceptionHandler
 	{
-	public:
-		Exception(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept;
-		const wchar_t* whatw() const noexcept override; //override std::ExceptionHandler's 'what()' func
-		std::wstring FetchErrorString() const noexcept;
-		virtual const wchar_t* FetchErrorType() const noexcept;
-		HRESULT FetchErrorCode() const noexcept;
 		static std::wstring ConvertErrorCode(HRESULT hResult) noexcept;
+	};
+	struct HResultException : public ExceptionHandler
+	{
+		HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept;
+		const wchar_t* whatw() const noexcept override; //override std::ExceptionHandler's 'what()' func
+		std::wstring FetchErrorDescription() const noexcept;
+		/*virtual*/ const wchar_t* FetchErrorType() const noexcept override;
+		HRESULT FetchErrorCode() const noexcept;
 	private:
 		HRESULT hResult;
+	};
+	struct NoGfxException : public ExceptionHandler
+	{
+		using ExceptionHandler::ExceptionHandler;
+		const wchar_t* FetchErrorType() const noexcept override;
 	};
 };
 
 #define WIDE2(x) L##x
 #define WIDE1(x) WIDE2(x)
 #define WFILE WIDE1(__FILE__)
-#define EHWND_EXCEPT( hr ) Wnd::Exception( __LINE__,WFILE,hr )
-#define EHWND_LAST_EXCEPT() Wnd::Exception( __LINE__,WFILE,GetLastError() )
+#define EHWND_EXCEPT( hr ) Wnd::HResultException( __LINE__,WFILE,(hr) )
+#define EHWND_LAST_EXCEPT() Wnd::HResultException( __LINE__,WFILE,GetLastError() )
+#define EHWND_NOGFX_EXCEPT() Wnd::NoGfxException(__LINE__, WFILE)
