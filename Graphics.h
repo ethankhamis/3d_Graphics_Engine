@@ -30,7 +30,7 @@ public:
 	class HResultException : public Exception
 	{
 	public:   
-		HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::wstring> infoMsg = {})  noexcept;
+		HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::string> infoMsg = {})  noexcept;
 		const wchar_t* whatw() const noexcept; //override;
 		const wchar_t* FetchErrorType() const noexcept override;
 		HRESULT FetchErrorCode() const noexcept;
@@ -39,7 +39,7 @@ public:
 		std::wstring FetchErrorInfo() const noexcept;
 	private:
 		HRESULT hr;
-		std::wstring info;
+		std::string info;
 	};
 	class DeviceRemovedException : public HResultException
 	{

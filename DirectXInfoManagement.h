@@ -11,7 +11,7 @@ struct DxGfxInfoMng
 	DxGfxInfoMng(const DxGfxInfoMng&) = delete;
 	DxGfxInfoMng& operator=(const DxGfxInfoMng&) = delete;
 public:
-	std::vector<std::wstring> FetchMessages() const;
+	std::vector<std::string> FetchMessages() const;
 	void Apply() noexcept;
 private:
 	unsigned long long nextMsg = NULLUNSIGNED;

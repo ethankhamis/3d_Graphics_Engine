@@ -54,9 +54,9 @@ void DxGfxInfoMng::Apply() noexcept
 	nextMsg = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
-std::vector<std::wstring> DxGfxInfoMng::FetchMessages() const
+std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 {
-	std::vector<std::wstring> messages;
+	std::vector<std::string> messages;
 
 
 	const auto end = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
@@ -72,14 +72,14 @@ std::vector<std::wstring> DxGfxInfoMng::FetchMessages() const
 		// get the message and push its description into the vector
 		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
 
-		
+		/*
 		//convert description to wstring
 		const char* pDesc = pMessage->pDescription;
 		std::wstring WpDesc(messageLength, L'#');
 		mbstowcs(&WpDesc[0], pDesc, messageLength);
-		
+		*/
 
-		messages.emplace_back(WpDesc);
+		messages.emplace_back(pMessage->pDescription);
 	}
 
 	return messages;

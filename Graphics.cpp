@@ -129,7 +129,7 @@ void Graphics::ClearBuffer(float R, float G, float B)
 	pDeviceContext->ClearRenderTargetView(pTargetView, colour);
 }
 
-Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::wstring> infoMsg) noexcept
+Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::string> infoMsg) noexcept
 	:
 	Exception(curLine,fName),
 	hr(hr)
@@ -173,7 +173,7 @@ const wchar_t* Graphics::HResultException::whatw() const noexcept
 	wss << std::endl;
 	wss << FetchLine();
 	*/
-	wss << FetchErrorType()
+	wss << ErrorType
 		<<
 		std::endl
 		<< L"[Error Code] 0x" << std::hex <<
@@ -185,18 +185,14 @@ const wchar_t* Graphics::HResultException::whatw() const noexcept
 		FetchErrorWString() << std::endl
 		<< L"[Description] " <<
 		FetchErrorDescription() << std::endl
-		<< FetchLine() << std::endl;
+		<< L"Exception Thrown in Line " << FetchLine() << std::endl;
 
 	if (!info.empty()) {
 		wss << L"\n{Error Info}\n" << FetchErrorInfo() << std::endl <<
 			std::endl;
 	}
-	wss << FetchLine();
-	
-
-	//ERROR MUST EXIST WITHIN THE ABOVE CODE. FUCKING HELL MAN
-	//Error cannot be due to FetchErrorInfo() nor info.empty().
-
+	wss << L"Exception Thrown in Line " << FetchLine() << std::endl;
+	wss << Exception::FetchFileName();
 
 	buffer_w = wss.str();
 	return buffer_w.c_str(); //buffer_w.c_str();
@@ -227,6 +223,11 @@ std::wstring Graphics::HResultException::FetchErrorDescription() const noexcept
 
 std::wstring Graphics::HResultException::FetchErrorInfo() const noexcept
 {
+
+	std::wstring wsTmp(info.begin(), info.end());
+
+	std::wstring info = wsTmp;
+
 	return info;
 }
 
