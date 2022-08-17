@@ -47,7 +47,7 @@ DxGfxInfoMng::~DxGfxInfoMng()
 
 void DxGfxInfoMng::Apply() noexcept
 {
-	// set the index (nextMsg) so that the nextMsg all to GetMessages()
+	// set the index (nextMsg) so that the nextMsg all to FetchMessages()
 	// will only get errors generated after this call
 
 
@@ -72,10 +72,12 @@ std::vector<std::wstring> DxGfxInfoMng::FetchMessages() const
 		// get the message and push its description into the vector
 		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
 
+		
 		//convert description to wstring
 		const char* pDesc = pMessage->pDescription;
 		std::wstring WpDesc(messageLength, L'#');
 		mbstowcs(&WpDesc[0], pDesc, messageLength);
+		
 
 		messages.emplace_back(WpDesc);
 	}

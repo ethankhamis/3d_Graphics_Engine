@@ -26,12 +26,12 @@ private:
 private:
 
 public:
-	//class Exception : ExceptionHandler { using ExceptionHandler::ExceptionHandler; };
-	class HResultException : public ExceptionHandler
+	class Exception : public ExceptionHandler { using ExceptionHandler::ExceptionHandler; };
+	class HResultException : public Exception
 	{
 	public:   
 		HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::wstring> infoMsg = {})  noexcept;
-		const wchar_t* whatw() const noexcept override;
+		const wchar_t* whatw() const noexcept; //override;
 		const wchar_t* FetchErrorType() const noexcept override;
 		HRESULT FetchErrorCode() const noexcept;
 		std::wstring FetchErrorWString() const noexcept;
@@ -44,6 +44,7 @@ public:
 	class DeviceRemovedException : public HResultException
 	{
 		using HResultException::HResultException;
+	public:
 		const wchar_t* FetchErrorType() const noexcept override;
 	private:
 		std::wstring reason;

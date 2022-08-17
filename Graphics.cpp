@@ -1,5 +1,6 @@
 #include "dxerr.h"
 #include <sstream>
+#include <iostream>
 #include "Graphics.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -47,7 +48,7 @@ Graphics::Graphics(HWND hWnd)
 	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	SwapChainDesc.BufferCount = 1; // for two buffers (front+back)
 	//Window
-	SwapChainDesc.OutputWindow = hWnd;
+	SwapChainDesc.OutputWindow = (HWND)421;
 	SwapChainDesc.Windowed = 1;
 	//Flipping Presentation
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -114,9 +115,10 @@ void Graphics::EndFrame()
 #endif
 	if (FAILED(hr = pSwapChain->Present(1u, 0u)))
 	{
-		if (hr == DXGI_ERROR_DEVICE_REMOVED){throw
+		if (hr == DXGI_ERROR_DEVICE_REMOVED){
+			throw
 			GFX_DEVICE_REMOVED_EXCEPT(pDevice->GetDeviceRemovedReason());}
-		else{GFX_EXCEPT(hr);}
+		else{throw GFX_EXCEPT(hr);}
 	}
 }
 
@@ -129,17 +131,18 @@ void Graphics::ClearBuffer(float R, float G, float B)
 
 Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::wstring> infoMsg) noexcept
 	:
-	ExceptionHandler(curLine,fName),
+	Exception(curLine,fName),
 	hr(hr)
 {
 	// connect info messages with newlines into single string
 
 	for (const auto& m : infoMsg)
 	{
-		info += m;
+		info.append(m);
 		info.push_back('\n');
+		
 	}
-	// if newline does exist, get rid of it
+	// remove final newline
 	if (!info.empty()){info.pop_back();}
 }
 
@@ -147,27 +150,56 @@ const wchar_t* Graphics::HResultException::whatw() const noexcept
 {
 
 	std::wstringstream wss;
-	wss
-		<< FetchErrorType() << std::endl
-		<< "[Error Code] 0x" << std::hex <<
+
+	std::wstring ErrorType = FetchErrorType();
+
+	/*
+	wss << FetchErrorType();
+	wss << std::endl;
+	wss << L"{Error Code} 0x";
+	wss << std::hex;
+	wss << std::uppercase;
+	wss << FetchErrorCode();
+	wss << std::dec;
+	wss << L" (";
+	wss << static_cast<unsigned long>(FetchErrorCode());
+	wss << L")";
+	wss << std::endl;
+	wss << L"{Error String} ";
+	wss << FetchErrorWString();
+	wss << std::endl;
+	wss << L"{Description} ";
+	wss << FetchErrorDescription();
+	wss << std::endl;
+	wss << FetchLine();
+	*/
+	wss << FetchErrorType()
+		<<
+		std::endl
+		<< L"[Error Code] 0x" << std::hex <<
 		std::uppercase << FetchErrorCode()
-		<< std::dec << " (" << 
+		<< std::dec << L" (" <<
 		static_cast<unsigned long>(FetchErrorCode()) <<
-		")" << std::endl
-		<< "[Error String] " <<
+		L")" << std::endl
+		<< L"[Error String] " <<
 		FetchErrorWString() << std::endl
-		<< "[Description] " <<
+		<< L"[Description] " <<
 		FetchErrorDescription() << std::endl
-		<< FetchLine();
+		<< FetchLine() << std::endl;
 
 	if (!info.empty()) {
 		wss << L"\n{Error Info}\n" << FetchErrorInfo() << std::endl <<
 			std::endl;
 	}
+	wss << FetchLine();
+	
+
+	//ERROR MUST EXIST WITHIN THE ABOVE CODE. FUCKING HELL MAN
+	//Error cannot be due to FetchErrorInfo() nor info.empty().
 
 
 	buffer_w = wss.str();
-	return buffer_w.c_str();
+	return buffer_w.c_str(); //buffer_w.c_str();
 }
 
 const wchar_t* Graphics::HResultException::FetchErrorType() const noexcept
@@ -189,7 +221,7 @@ std::wstring Graphics::HResultException::FetchErrorDescription() const noexcept
 {
 	const unsigned int bufferSize = 512;
 	wchar_t buffer[bufferSize];
-	DXGetErrorDescriptionW(hr, buffer, sizeof(buffer));
+	DXGetErrorDescriptionW(hr, buffer, bufferSize);
 	return buffer;
 }
 

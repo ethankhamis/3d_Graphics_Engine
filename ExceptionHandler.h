@@ -9,7 +9,7 @@ private:
 	std::wstring fName; 
 public:
 	ExceptionHandler( unsigned int curLine, const wchar_t* fName) noexcept;
-	virtual const wchar_t* whatw() const noexcept; //override std::exception's 'what()' func
+	virtual const wchar_t* whatw() const noexcept;
 	virtual const wchar_t* FetchErrorType() const noexcept;
 	const  std::wstring& FetchFileName() const noexcept;
 	unsigned int FetchLine() const noexcept;

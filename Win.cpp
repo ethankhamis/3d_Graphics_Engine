@@ -15,7 +15,7 @@ Wnd::WndClass::WndClass() noexcept
 	wc.lpfnWndProc = HandleMsgSetup;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = FetchInstance();
+	wc.hInstance = hInstance; //(FetchInstance());
 	wc.hIcon = static_cast<HICON>(LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON,16,16,0 ));
 	wc.hCursor = nullptr;
 	wc.hbrBackground = nullptr;
@@ -42,7 +42,8 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 
 Graphics& Wnd::grfx()
 {
-	if (!pGraphics) { throw EHWND_NOGFX_EXCEPT(); }
+	if (!pGraphics) { 
+		throw EHWND_NOGFX_EXCEPT(); }
 
 	return *pGraphics;
 }
@@ -74,7 +75,8 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		CW_USEDEFAULT, CW_USEDEFAULT, wr.right - wr.left, wr.bottom - wr.top,
 		nullptr, nullptr, WndClass::FetchInstance(), this
 	);
-	if (hWnd == nullptr) { throw EHWND_LAST_EXCEPT(); }
+	if (hWnd == nullptr) { 
+		throw EHWND_LAST_EXCEPT(); }
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);

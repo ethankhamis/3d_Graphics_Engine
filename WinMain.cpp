@@ -15,8 +15,26 @@ int CALLBACK WinMain(
 		return Application{}.Start();
 	}
 	catch (const ExceptionHandler& exception)
-	{
-		MessageBoxW(nullptr, exception.whatw(), exception.FetchErrorType(), MB_OK | MB_ICONEXCLAMATION);
+	{							// error is specifically related to whatw() in graphics.cpp
+
+		std::wstring s = exception.whatw();
+
+		for (int i = 0;; i++)
+		{
+			if (s[i] == L'\0')
+			{
+				if (std::next(s[i]) != NULL)
+				{
+					s[i] = ' ';
+					continue;
+				}
+			}
+		}
+		s += L'\0';
+		
+		
+
+		MessageBoxExW(nullptr, s.c_str(), exception.FetchErrorType(), MB_OK | MB_ICONEXCLAMATION, NULL);
 	}
 	catch (const std::exception& exception)
 	{
@@ -25,12 +43,12 @@ int CALLBACK WinMain(
 		std::wstring ws;
 		copy(cs.begin(), cs.end(), back_inserter(ws));
 
-		MessageBoxW(nullptr, ws.c_str()
-			, L"std Exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBoxExW(nullptr, ws.c_str()
+			, L"std Exception", MB_OK | MB_ICONEXCLAMATION,NULL);
 	}
 	catch (...)
 	{
-		MessageBoxW(nullptr, L"No details", L"Unknown exception", MB_OK | MB_ICONEXCLAMATION);
+		MessageBoxExW(nullptr, L"No details", L"Unknown exception", MB_OK | MB_ICONEXCLAMATION,NULL);
 	}
 	return -1;
 }
