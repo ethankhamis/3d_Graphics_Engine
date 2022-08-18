@@ -1,6 +1,6 @@
 #pragma once
 #include <queue>
-
+#include <optional>
 
 class Mouse
 {
@@ -27,14 +27,7 @@ public:
 			Unrecognised
 		};
 	public:
-		Event() noexcept
-			:
-			type(TypeName::Unrecognised),
-			left_Pressed(false),
-			right_Pressed(false),
-			x(0),
-			y(0)
-		{}
+
 		Event(TypeName type, const Mouse& p) noexcept
 			:
 			type(type),
@@ -44,10 +37,6 @@ public:
 			y(p.y)
 		{}
 	public:
-		bool Valid() const noexcept
-		{
-			return type != TypeName::Unrecognised;
-		}
 		TypeName Type() const noexcept
 		{
 			return type;
@@ -86,7 +75,7 @@ public:
 	bool Inside_Window_Check() const noexcept;
 	bool Left_Pressed() const noexcept;
 	bool Right_Pressed() const noexcept;
-	Mouse::Event Read() noexcept;
+	std::optional<Mouse::Event> Read() noexcept;
 	bool Empty() const noexcept
 	{
 		return buffer.empty();

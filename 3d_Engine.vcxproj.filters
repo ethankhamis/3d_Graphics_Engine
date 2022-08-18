@@ -25,18 +25,15 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="I/O">
+      <UniqueIdentifier>{85872952-a404-4148-a2a6-61e55855e3de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Win.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
@@ -57,18 +54,18 @@
     <ClCompile Include="DirectXInfoManagement.cpp">
       <Filter>Exception-Based</Filter>
     </ClCompile>
+    <ClCompile Include="Mouse.cpp">
+      <Filter>I/O</Filter>
+    </ClCompile>
+    <ClCompile Include="Keyboard.cpp">
+      <Filter>I/O</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
@@ -92,6 +89,12 @@
     <ClInclude Include="DirectXInfoManagement.h">
       <Filter>Exception-Based</Filter>
     </ClInclude>
+    <ClInclude Include="Mouse.h">
+      <Filter>I/O</Filter>
+    </ClInclude>
+    <ClInclude Include="Keyboard.h">
+      <Filter>I/O</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -105,6 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
+    <FxCompile Include="PixelShader.hlsl">
       <Filter>Shaders</Filter>
     </FxCompile>
   </ItemGroup>

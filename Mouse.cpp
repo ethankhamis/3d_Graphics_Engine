@@ -1,4 +1,5 @@
 #include "Mouse.h"
+#include <optional>
 #include "WinDef.h"
 
 std::pair<int, int> Mouse::Position() const noexcept
@@ -31,7 +32,7 @@ bool Mouse::Right_Pressed() const noexcept
 	return right_Pressed;
 }
 
-Mouse::Event Mouse::Read() noexcept
+std::optional<Mouse::Event> Mouse::Read() noexcept
 {
 	if (buffer.size() > 0u)
 	{
@@ -41,7 +42,7 @@ Mouse::Event Mouse::Read() noexcept
 	}
 	else
 	{
-		return Mouse::Event();
+		return {};
 	}
 }
 
