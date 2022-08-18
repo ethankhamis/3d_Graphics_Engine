@@ -8,7 +8,8 @@
 #define WIDE1(x) WIDE2(x)
 #define WFILE WIDE1(__FILE__)
 
-
+//namespace wrl = Microsoft::WRL;
+//
 // graphics exception checking/throwing macros (some with dxgi infos)
 #define GFX_EXCEPT_NOINFO(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
 #define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,__FILE__,hr )
@@ -48,7 +49,7 @@ Graphics::Graphics(HWND hWnd)
 	SwapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	SwapChainDesc.BufferCount = 1; // for two buffers (front+back)
 	//Window
-	SwapChainDesc.OutputWindow = (HWND)421;
+	SwapChainDesc.OutputWindow = hWnd;
 	SwapChainDesc.Windowed = 1;
 	//Flipping Presentation
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
@@ -80,31 +81,10 @@ Graphics::Graphics(HWND hWnd)
 		)
 	);
 
-	ID3D11Resource* pBackBuffer = nullptr;
-	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource), reinterpret_cast<void**>(&pBackBuffer)));
-	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer, nullptr, &pTargetView));
-	pBackBuffer->Release();
+	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer = nullptr;
+	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource),&pBackBuffer));
+	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTargetView));
 
-}
-
-Graphics::~Graphics()
-{
-	if (!pDevice)
-	{
-		pDevice->Release();
-	}
-	if (!pSwapChain)
-	{
-		pSwapChain->Release();
-	}
-	if (!pDeviceContext)
-	{
-		pDeviceContext->Release();
-	}
-	if (!pTargetView)
-	{
-		pTargetView->Release();
-	}
 }
 
 void Graphics::EndFrame()
@@ -126,7 +106,7 @@ void Graphics::EndFrame()
 void Graphics::ClearBuffer(float R, float G, float B)
 {
 	const float colour[] = { R,G,B,1.0 };
-	pDeviceContext->ClearRenderTargetView(pTargetView, colour);
+	pDeviceContext->ClearRenderTargetView(pTargetView.Get(), colour);
 }
 
 Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::string> infoMsg) noexcept
@@ -234,4 +214,45 @@ std::wstring Graphics::HResultException::FetchErrorInfo() const noexcept
 const wchar_t* Graphics::DeviceRemovedException::FetchErrorType() const noexcept
 {
 	return L"Graphics Exception [Device_Removed] spec(DXGI_ERROR_DEVICE_REMOVED)";
+}
+
+Graphics::InfoException::InfoException(unsigned int curLine, const wchar_t* fName, std::vector<std::string> infoMsgs) noexcept
+	:
+	Exception(curLine,fName)
+{
+	// join all info messages with newlines into single string
+	for (const auto& m : infoMsgs)
+	{
+		info.append(m);
+		info.push_back('\n');
+	}
+	// remove final newline if exists
+	if (!info.empty())
+	{
+		info.pop_back();
+	}
+}
+
+const wchar_t* Graphics::InfoException::whatw() const noexcept
+{
+	std::wstringstream wss;
+	wss << FetchErrorType() << std::endl
+		<< "\n[Error Info]\n" << FetchErrorInfo() 
+		<< std::endl << std::endl << FetchErrorWString();
+	buffer_w = wss.str();
+	return buffer_w.c_str();
+}
+
+const wchar_t* Graphics::InfoException::FetchErrorType() const noexcept
+{
+	return L"Graphics Exception";
+}
+
+std::wstring Graphics::InfoException::FetchErrorInfo() const noexcept
+{
+	std::wstring wsTmp(info.begin(), info.end());
+
+	std::wstring info = wsTmp;
+
+	return info;
 }

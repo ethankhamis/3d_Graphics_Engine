@@ -22,6 +22,9 @@
     <Filter Include="DxError">
       <UniqueIdentifier>{a1bfc6c9-65c0-4d07-9a83-7446e20c8c47}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -99,5 +102,10 @@
     <Image Include="3d\pieck.ico">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Shaders</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

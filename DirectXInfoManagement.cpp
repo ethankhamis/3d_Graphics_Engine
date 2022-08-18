@@ -33,16 +33,8 @@ DxGfxInfoMng::DxGfxInfoMng()
 	}
 	
 	HRESULT hr;
-	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), reinterpret_cast<void**>(&pIDxGfxInfoQueue)));
+	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pIDxGfxInfoQueue));
 	
-}
-
-DxGfxInfoMng::~DxGfxInfoMng()
-{
-	if (pIDxGfxInfoQueue != nullptr)
-	{
-		pIDxGfxInfoQueue->Release();
-	}
 }
 
 void DxGfxInfoMng::Apply() noexcept

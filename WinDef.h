@@ -1,5 +1,7 @@
 #pragma once
-#define _WIN32_WINNT 1532
+//#define _WIN32_WINNT 1532
+#define NTDDI_VERSION NTDDI_VISTA 
+#define _WIN32_WINNT _WIN32_WINNT_VISTA 
 
 /* ASSURES WINDOWS 7+ AS TARGET */
 
