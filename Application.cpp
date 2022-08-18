@@ -7,7 +7,7 @@ void Application::ExecFrame()
 {
 	const float colour = 0.5;
 	window.grfx().ClearBuffer(1, 0.14, 0.1);
-
+	window.grfx().RenderTestTriangle();
 	window.grfx().EndFrame();
 }
 

@@ -16,6 +16,7 @@ struct Graphics
 public:
 	void EndFrame();
 	void ClearBuffer(float R, float G, float B);
+	void RenderTestTriangle();
 public:
 
 private:

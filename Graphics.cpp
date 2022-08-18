@@ -1,6 +1,7 @@
 #include "dxerr.h"
 #include <sstream>
 #include <iostream>
+#include <d3dcompiler.h>
 #include "Graphics.h"
 
 #pragma comment(lib, "d3d11.lib")
@@ -20,10 +21,13 @@
 #define GFX_EXCEPT(hr) Graphics::HResultException( __LINE__,WFILE,(hr),infomanager.FetchMessages() )
 #define GFX_THROW_INFO(hrcall) infomanager.Apply(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,WFILE,(hr),infomanager.FetchMessages() )
+#define GFX_THROW_INFO_ONLY(call) infomanager.Apply(); (call); {auto m = infomanager.FetchMessages(); if(!m.empty()) {throw Graphics::InfoException( __LINE__,WFILE,m);}}
+
 #else
 #define GFX_EXCEPT(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
 #define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,WFILE,(hr) )
+#define GFX_THROW_INFO_ONLY(call) (call)
 #endif
 
 
@@ -109,6 +113,106 @@ void Graphics::ClearBuffer(float R, float G, float B)
 {
 	const float colour[] = { R,G,B,1.0 };
 	pDeviceContext->ClearRenderTargetView(pTargetView.Get(), colour);
+}
+
+void Graphics::RenderTestTriangle()
+{
+	namespace wrl = Microsoft::WRL;
+
+	HRESULT hr;
+
+	struct Vertex
+	{
+		float x;
+		float y;
+		float r;
+		float g;
+		float b;
+	};
+
+	// create vertex buffer (1 2d triangle at center of screen)
+	const Vertex vertices[] =
+	{
+		{ 0.0f,0.5f,1.0f,0.0f,0.0f },
+		{ 0.5f,-0.5f,0.0f,1.0f,0.0f },
+		{ -0.5f,-0.5f,0.0f,0.0f,1.0f },
+	};
+	wrl::ComPtr<ID3D11Buffer> pVertexBuffer;
+	D3D11_BUFFER_DESC bd = {};
+	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bd.Usage = D3D11_USAGE_DEFAULT;
+	bd.CPUAccessFlags = 0u;
+	bd.MiscFlags = 0u;
+	bd.ByteWidth = sizeof(vertices);
+	bd.StructureByteStride = sizeof(Vertex);
+	D3D11_SUBRESOURCE_DATA sd = {};
+	sd.pSysMem = vertices;
+	GFX_THROW_INFO(pDevice->CreateBuffer(&bd, &sd, &pVertexBuffer));
+
+	// Bind vertex buffer to pipeline
+	const UINT stride = sizeof(Vertex);
+	const UINT offset = 0u;
+	pDeviceContext->IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+
+
+	// create pixel shader
+	wrl::ComPtr<ID3D11PixelShader> pPixelShader;
+	wrl::ComPtr<ID3DBlob> pBlob;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"PixelShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreatePixelShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pPixelShader));
+
+	// bind pixel shader
+	pDeviceContext->PSSetShader(pPixelShader.Get(), nullptr, 0u);
+
+
+	// create vertex shader
+	wrl::ComPtr<ID3D11VertexShader> pVertexShader;
+	GFX_THROW_INFO(D3DReadFileToBlob(L"VertexShader.cso", &pBlob));
+	GFX_THROW_INFO(pDevice->CreateVertexShader(pBlob->GetBufferPointer(), pBlob->GetBufferSize(), nullptr, &pVertexShader));
+
+	// bind vertex shader
+	pDeviceContext->VSSetShader(pVertexShader.Get(), nullptr, 0u);
+
+
+	// input (vertex) layout (2d position only)
+	wrl::ComPtr<ID3D11InputLayout> pInputLayout;
+	const D3D11_INPUT_ELEMENT_DESC ied[] =
+	{
+		{ "Position",0,DXGI_FORMAT_R32G32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+		{ "Color",0,DXGI_FORMAT_R32G32B32_FLOAT,0,8u,D3D11_INPUT_PER_VERTEX_DATA,0 },
+	};
+	GFX_THROW_INFO(pDevice->CreateInputLayout(
+		ied, (UINT)std::size(ied),
+		pBlob->GetBufferPointer(),
+		pBlob->GetBufferSize(),
+		&pInputLayout
+	));
+
+	// bind vertex layout
+	pDeviceContext->IASetInputLayout(pInputLayout.Get());
+
+
+	// bind render target
+	pDeviceContext->OMSetRenderTargets(1u, pTargetView.GetAddressOf(), nullptr);
+
+
+	// Set primitive topology to triangle list (groups of 3 vertices)
+	pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+
+	// configure viewport
+	D3D11_VIEWPORT vp;
+	vp.Width = 800;
+	vp.Height = 600;
+	vp.MinDepth = 0;
+	vp.MaxDepth = 1;
+	vp.TopLeftX = 0;
+	vp.TopLeftY = 0;
+	pDeviceContext->RSSetViewports(1u, &vp);
+
+
+	GFX_THROW_INFO_ONLY(pDeviceContext->Draw((UINT)std::size(vertices), 0u));
+
 }
 
 Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::string> infoMsg) noexcept
