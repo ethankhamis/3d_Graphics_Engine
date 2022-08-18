@@ -1,6 +1,6 @@
 #include "Keyboard.h"
 
-char Keyboard::Char_Read() noexcept
+std::optional<char> Keyboard::Char_Read() noexcept
 {
 	if (CharBuffer.size() > 0u)
 	{
@@ -9,7 +9,7 @@ char Keyboard::Char_Read() noexcept
 	}
 	else
 	{
-		return NULL;
+		return {};
 	}
 }
 
@@ -34,7 +34,7 @@ bool Keyboard::Key_Pressed(unsigned char keycode) const noexcept
 	return keyStates[keycode];
 }
 
-Keyboard::Event Keyboard::Key_Read() noexcept
+std::optional<Keyboard::Event> Keyboard::Key_Read() noexcept
 {
 	if (KeyBuffer.size() > 0u)
 	{
@@ -44,7 +44,7 @@ Keyboard::Event Keyboard::Key_Read() noexcept
 	}
 	else 
 	{
-		return Keyboard::Event();
+		return {};
 	}
 }
 

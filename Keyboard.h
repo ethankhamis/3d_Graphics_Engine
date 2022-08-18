@@ -1,5 +1,6 @@
 #pragma once
 #include <queue>
+#include <optional>
 #include <bitset>
 #define NullUnsigned 0u
 
@@ -14,9 +15,7 @@ struct Keyboard
 	struct Event
 	{
 	public:
-		Event():type(TypeName::Unrecognised),keycode(NullUnsigned) {}
-	public:
-		enum class TypeName { Press, Release, Unrecognised };
+		enum class TypeName { Press, Release};
 	private:
 		TypeName type;
 		unsigned char keycode;
@@ -27,10 +26,6 @@ struct Keyboard
 		unsigned char Keycode_Get() const noexcept
 		{
 			return keycode;
-		}
-		bool Valid() const noexcept
-		{
-			return type != TypeName::Unrecognised;
 		}
 		bool Released() const noexcept
 		{
@@ -45,14 +40,14 @@ struct Keyboard
 
 
 	// char events
-	char Char_Read() noexcept;
+	std::optional<char> Char_Read() noexcept;
 	bool Char_Empty() const noexcept;
 	void Char_Flush() noexcept;
 	void Flush() noexcept;
 
 	// key events
 	bool Key_Pressed(unsigned char keycode) const noexcept;
-	Event Key_Read() noexcept;
+	std::optional<Event> Key_Read() noexcept;
 	bool Key_Empty() noexcept;
 	void Key_Flush() noexcept;
 
