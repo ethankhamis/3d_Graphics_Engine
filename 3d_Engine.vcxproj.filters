@@ -43,6 +43,12 @@
     <Filter Include="Buffers &amp; Shaders\Buffers">
       <UniqueIdentifier>{7402a81e-9c4b-47f8-bfc9-c76210012680}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Buffers &amp; Shaders\Buffers\.cpp">
+      <UniqueIdentifier>{e1dd1cb0-dc19-4d99-a904-6861fa8b256c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Buffers\.h">
+      <UniqueIdentifier>{4a975c31-68d0-4849-87d2-0498054b467b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -77,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
       <Filter>Buffers &amp; Shaders\Shaders\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="IndexBuffer.cpp">
+      <Filter>Buffers &amp; Shaders\Buffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexBuffer.cpp">
+      <Filter>Buffers &amp; Shaders\Buffers\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -118,6 +130,12 @@
     </ClInclude>
     <ClInclude Include="VertexShader.h">
       <Filter>Buffers &amp; Shaders\Shaders\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexBuffer.h">
+      <Filter>Buffers &amp; Shaders\Buffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexBuffer.h">
+      <Filter>Buffers &amp; Shaders\Buffers\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
