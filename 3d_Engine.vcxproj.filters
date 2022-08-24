@@ -25,29 +25,44 @@
     <Filter Include="Performance &amp; Helpers">
       <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras">
+    <Filter Include="Primatives">
+      <UniqueIdentifier>{679bd81a-0e39-4b40-bf20-282e4524fbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives\Box">
+      <UniqueIdentifier>{feed05d3-8c22-4e26-b4b8-d555715609c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders + Related Others">
       <UniqueIdentifier>{4b06691e-0c61-4bf5-8d67-6ca26915a49c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Shaders">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Shaders">
       <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.hlsl">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Shaders\.hlsl">
       <UniqueIdentifier>{230dc34d-ac69-435e-a465-cf9785cf5915}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.cpp">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Shaders\.cpp">
       <UniqueIdentifier>{08ecf602-ea02-4c61-80ae-0ab695237a16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.h">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Shaders\.h">
       <UniqueIdentifier>{2164074a-2630-43b7-aec3-556345c7fe7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Buffers">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Buffers">
       <UniqueIdentifier>{7402a81e-9c4b-47f8-bfc9-c76210012680}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Buffers\.cpp">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Buffers\.cpp">
       <UniqueIdentifier>{e1dd1cb0-dc19-4d99-a904-6861fa8b256c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders + extras\Buffers\.h">
+    <Filter Include="Buffers &amp; Shaders + Related Others\Buffers\.h">
       <UniqueIdentifier>{4a975c31-68d0-4849-87d2-0498054b467b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders + Related Others\Others">
+      <UniqueIdentifier>{c0e42619-c5ae-4e3d-a747-7442698032bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Bindable">
+      <UniqueIdentifier>{06f61d29-cc37-4f61-abfd-6316d0e36230}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Drawable">
+      <UniqueIdentifier>{7a96adc8-595a-4e38-8cf9-093370ba8d72}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -82,26 +97,38 @@
       <Filter>I/O</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Buffers &amp; Shaders + extras\Buffers\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Buffers\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Buffers &amp; Shaders + extras\Buffers\.cpp</Filter>
-    </ClCompile>
-    <ClCompile Include="TransformConstBuffer.cpp">
-      <Filter>Buffers &amp; Shaders + extras</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Buffers\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="PixelShader.cpp">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="PrimitiveTopology.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformConstBuffer.cpp">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClCompile>
+    <ClCompile Include="Box.cpp">
+      <Filter>Primatives\Box</Filter>
+    </ClCompile>
+    <ClCompile Include="Bindable.cpp">
+      <Filter>Bindable</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawable.cpp">
+      <Filter>Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
@@ -131,26 +158,50 @@
     <ClInclude Include="Keyboard.h">
       <Filter>I/O</Filter>
     </ClInclude>
-    <ClInclude Include="GraphicsThrowMacros.h">
+    <ClInclude Include="ThrowMacros.h">
       <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
     <ClInclude Include="VertexShader.h">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.h</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.h</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Buffers\.h</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformConstBuffer.h">
-      <Filter>Buffers &amp; Shaders + extras</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Buffers\.h</Filter>
     </ClInclude>
     <ClInclude Include="PixelShader.h">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.h</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.h</Filter>
     </ClInclude>
     <ClInclude Include="ConstBuffer(s).h">
-      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Buffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="PrimitiveTopology.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformConstBuffer.h">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="Box.h">
+      <Filter>Primatives\Box</Filter>
+    </ClInclude>
+    <ClInclude Include="DefaultBindables.h">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="MathematicalConstants.h">
+      <Filter>Performance &amp; Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Bindable.h">
+      <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,10 +216,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.hlsl</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
-      <Filter>Buffers &amp; Shaders + extras\Shaders\.hlsl</Filter>
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@
 #include "Win.h"
 #include "Graphics.h"
 #include <dxgidebug.h>
-#include "GraphicsThrowMacros.h"
+#include "ThrowMacros.h"
 #include <memory>
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4996)
@@ -39,10 +39,6 @@ DxGfxInfoMng::DxGfxInfoMng()
 
 void DxGfxInfoMng::Apply() noexcept
 {
-	// set the index (nextMsg) so that the nextMsg all to FetchMessages()
-	// will only get errors generated after this call
-
-
 	nextMsg = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
@@ -56,20 +52,13 @@ std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 	{
 		HRESULT hr;
 		SIZE_T messageLength;
-		// get the size of message i in bytes
+		// get size of message i in bytes
 		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
 		// allocate memory for message
 		std::unique_ptr bytes = std::make_unique<byte[]>(messageLength);
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
-		// get the message and push its description into the vector
+		// get the message and push description into std::vector
 		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
-
-		/*
-		//convert description to wstring
-		const char* pDesc = pMessage->pDescription;
-		std::wstring WpDesc(messageLength, L'#');
-		mbstowcs(&WpDesc[0], pDesc, messageLength);
-		*/
 
 		messages.emplace_back(pMessage->pDescription);
 	}

@@ -3,12 +3,19 @@
 //#define NTDDI_VERSION
 #include <d3d11.h>
 #include "DirectXInfoManagement.h"
+#include <d3dcompiler.h>
+#include <DirectXMath.h>
+#include <memory>
+#include <random>
 #include "ExceptionHandler.h"
 #include <wrl.h>
 #include <vector>
+#define wndUnsigned UINT
 
 struct Graphics
 {
+	friend struct Bindable;
+
 	Graphics( HWND hWnd );
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
@@ -16,8 +23,10 @@ struct Graphics
 public:
 	void EndFrame();
 	void ClearBuffer(float R, float G, float B);
-	void RenderTestTriangle();
 public:
+	void DrawIndexed(wndUnsigned count) noexcept (!Debug);
+	void ApplyProjection(DirectX::FXMMATRIX pj) noexcept;
+	DirectX::FXMMATRIX FetchProjection() const noexcept;
 
 private:
 #ifndef NDEBUG
@@ -28,9 +37,9 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTargetView;
-
+	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
 private:
-
+	DirectX::XMMATRIX projection;
 public:
 	class Exception : public ExceptionHandler { using ExceptionHandler::ExceptionHandler; };
 	class HResultException : public Exception
@@ -64,6 +73,5 @@ public:
 		std::wstring FetchErrorInfo() const noexcept;
 	private:
 		std::string info;
-	
 	};
 };
