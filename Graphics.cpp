@@ -3,33 +3,10 @@
 #include <iostream>
 #include <d3dcompiler.h>
 #include "Graphics.h"
+#include "GraphicsThrowMacros.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
-
-#define WIDE2(x) L##x
-#define WIDE1(x) WIDE2(x)
-#define WFILE WIDE1(__FILE__)
-
-//namespace wrl = Microsoft::WRL;
-//
-// graphics exception checking/throwing macros (some with dxgi infos)
-#define GFX_EXCEPT_NOINFO(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,__FILE__,hr )
-
-#ifndef NDEBUG
-#define GFX_EXCEPT(hr) Graphics::HResultException( __LINE__,WFILE,(hr),infomanager.FetchMessages() )
-#define GFX_THROW_INFO(hrcall) infomanager.Apply(); if( FAILED( hr = (hrcall) ) ) throw GFX_EXCEPT(hr)
-#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,WFILE,(hr),infomanager.FetchMessages() )
-#define GFX_THROW_INFO_ONLY(call) infomanager.Apply(); (call); {auto m = infomanager.FetchMessages(); if(!m.empty()) {throw Graphics::InfoException( __LINE__,WFILE,m);}}
-
-#else
-#define GFX_EXCEPT(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
-#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
-#define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,WFILE,(hr) )
-#define GFX_THROW_INFO_ONLY(call) (call)
-#endif
-
 
 
 Graphics::Graphics(HWND hWnd)

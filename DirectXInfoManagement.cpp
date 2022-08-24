@@ -4,12 +4,12 @@
 #include "Win.h"
 #include "Graphics.h"
 #include <dxgidebug.h>
+#include "GraphicsThrowMacros.h"
 #include <memory>
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4996)
 #pragma comment(lib, "dxguid.lib")
 
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,WFILE,hr )
 
 DxGfxInfoMng::DxGfxInfoMng()
 {

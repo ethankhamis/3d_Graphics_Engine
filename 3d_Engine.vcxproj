@@ -166,6 +166,7 @@
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GraphicsThrowMacros.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
     <ClInclude Include="resource.h" />

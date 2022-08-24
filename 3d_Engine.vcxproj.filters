@@ -16,9 +16,6 @@
     <Filter Include="Exception-Based">
       <UniqueIdentifier>{617aca65-baef-4ff1-a495-f784fba68b0d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Performance">
-      <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="DxError">
       <UniqueIdentifier>{a1bfc6c9-65c0-4d07-9a83-7446e20c8c47}</UniqueIdentifier>
     </Filter>
@@ -27,6 +24,9 @@
     </Filter>
     <Filter Include="I/O">
       <UniqueIdentifier>{85872952-a404-4148-a2a6-61e55855e3de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Performance &amp; Helpers">
+      <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -81,7 +81,7 @@
       <Filter>Exception-Based</Filter>
     </ClInclude>
     <ClInclude Include="WinDef.h">
-      <Filter>Performance</Filter>
+      <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
     <ClInclude Include="dxerr.h">
       <Filter>DxError</Filter>
@@ -94,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="Keyboard.h">
       <Filter>I/O</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicsThrowMacros.h">
+      <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
