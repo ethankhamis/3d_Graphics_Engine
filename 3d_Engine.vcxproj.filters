@@ -19,14 +19,29 @@
     <Filter Include="DxError">
       <UniqueIdentifier>{a1bfc6c9-65c0-4d07-9a83-7446e20c8c47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="I/O">
       <UniqueIdentifier>{85872952-a404-4148-a2a6-61e55855e3de}</UniqueIdentifier>
     </Filter>
     <Filter Include="Performance &amp; Helpers">
       <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders">
+      <UniqueIdentifier>{4b06691e-0c61-4bf5-8d67-6ca26915a49c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Shaders">
+      <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Shaders\.hlsl">
+      <UniqueIdentifier>{230dc34d-ac69-435e-a465-cf9785cf5915}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Shaders\.cpp">
+      <UniqueIdentifier>{08ecf602-ea02-4c61-80ae-0ab695237a16}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Shaders\.h">
+      <UniqueIdentifier>{2164074a-2630-43b7-aec3-556345c7fe7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Buffers &amp; Shaders\Buffers">
+      <UniqueIdentifier>{7402a81e-9c4b-47f8-bfc9-c76210012680}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -59,6 +74,9 @@
     </ClCompile>
     <ClCompile Include="Keyboard.cpp">
       <Filter>I/O</Filter>
+    </ClCompile>
+    <ClCompile Include="VertexShader.cpp">
+      <Filter>Buffers &amp; Shaders\Shaders\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +116,9 @@
     <ClInclude Include="GraphicsThrowMacros.h">
       <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="VertexShader.h">
+      <Filter>Buffers &amp; Shaders\Shaders\.h</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -110,11 +131,11 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="VertexShader.hlsl">
-      <Filter>Shaders</Filter>
-    </FxCompile>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>Shaders</Filter>
+      <Filter>Buffers &amp; Shaders\Shaders\.hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="VertexShader.hlsl">
+      <Filter>Buffers &amp; Shaders\Shaders\.hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
