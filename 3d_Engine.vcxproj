@@ -157,7 +157,9 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="TransformConstBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Win.cpp" />
@@ -165,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="ConstBuffer(s).h" />
     <ClInclude Include="DirectXInfoManagement.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
@@ -173,8 +176,10 @@
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Mouse.h" />
+    <ClInclude Include="PixelShader.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
+    <ClInclude Include="TransformConstBuffer.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Win.h" />

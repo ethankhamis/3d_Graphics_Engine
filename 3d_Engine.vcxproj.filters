@@ -25,28 +25,28 @@
     <Filter Include="Performance &amp; Helpers">
       <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders">
+    <Filter Include="Buffers &amp; Shaders + extras">
       <UniqueIdentifier>{4b06691e-0c61-4bf5-8d67-6ca26915a49c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Shaders">
+    <Filter Include="Buffers &amp; Shaders + extras\Shaders">
       <UniqueIdentifier>{482df0b9-1066-4582-ace0-39b92c7a67f5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Shaders\.hlsl">
+    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.hlsl">
       <UniqueIdentifier>{230dc34d-ac69-435e-a465-cf9785cf5915}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Shaders\.cpp">
+    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.cpp">
       <UniqueIdentifier>{08ecf602-ea02-4c61-80ae-0ab695237a16}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Shaders\.h">
+    <Filter Include="Buffers &amp; Shaders + extras\Shaders\.h">
       <UniqueIdentifier>{2164074a-2630-43b7-aec3-556345c7fe7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Buffers">
+    <Filter Include="Buffers &amp; Shaders + extras\Buffers">
       <UniqueIdentifier>{7402a81e-9c4b-47f8-bfc9-c76210012680}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Buffers\.cpp">
+    <Filter Include="Buffers &amp; Shaders + extras\Buffers\.cpp">
       <UniqueIdentifier>{e1dd1cb0-dc19-4d99-a904-6861fa8b256c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Buffers &amp; Shaders\Buffers\.h">
+    <Filter Include="Buffers &amp; Shaders + extras\Buffers\.h">
       <UniqueIdentifier>{4a975c31-68d0-4849-87d2-0498054b467b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -82,13 +82,19 @@
       <Filter>I/O</Filter>
     </ClCompile>
     <ClCompile Include="VertexShader.cpp">
-      <Filter>Buffers &amp; Shaders\Shaders\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="IndexBuffer.cpp">
-      <Filter>Buffers &amp; Shaders\Buffers\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Buffers\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="VertexBuffer.cpp">
-      <Filter>Buffers &amp; Shaders\Buffers\.cpp</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Buffers\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="TransformConstBuffer.cpp">
+      <Filter>Buffers &amp; Shaders + extras</Filter>
+    </ClCompile>
+    <ClCompile Include="PixelShader.cpp">
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,13 +135,22 @@
       <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
     <ClInclude Include="VertexShader.h">
-      <Filter>Buffers &amp; Shaders\Shaders\.h</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.h</Filter>
     </ClInclude>
     <ClInclude Include="IndexBuffer.h">
-      <Filter>Buffers &amp; Shaders\Buffers\.h</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
     </ClInclude>
     <ClInclude Include="VertexBuffer.h">
-      <Filter>Buffers &amp; Shaders\Buffers\.h</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformConstBuffer.h">
+      <Filter>Buffers &amp; Shaders + extras</Filter>
+    </ClInclude>
+    <ClInclude Include="PixelShader.h">
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstBuffer(s).h">
+      <Filter>Buffers &amp; Shaders + extras\Buffers\.h</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -150,10 +165,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="PixelShader.hlsl">
-      <Filter>Buffers &amp; Shaders\Shaders\.hlsl</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.hlsl</Filter>
     </FxCompile>
     <FxCompile Include="VertexShader.hlsl">
-      <Filter>Buffers &amp; Shaders\Shaders\.hlsl</Filter>
+      <Filter>Buffers &amp; Shaders + extras\Shaders\.hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>
