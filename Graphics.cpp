@@ -38,15 +38,15 @@ Graphics::Graphics(HWND hWnd)
 	SwapChainDesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 	SwapChainDesc.Flags = NULL;
 
-	//use to check returns of d3d factory functions
-	HRESULT hr;
 	//create device + swapchain(front+back buffers) + rendering context
 
-	UINT swapCreateFlags = NULLUNSIGNED;
+	UINT swapCreateFlags = 0u;
 #ifndef NDEBUG
 	swapCreateFlags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
+	//use to check returns of d3d factory functions
+	HRESULT hr;
 	GFX_THROW_INFO(D3D11CreateDeviceAndSwapChain
 	(
 		nullptr,
@@ -64,7 +64,7 @@ Graphics::Graphics(HWND hWnd)
 		)
 	);
 
-	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer = nullptr;
+	Microsoft::WRL::ComPtr<ID3D11Resource> pBackBuffer;
 	GFX_THROW_INFO(pSwapChain->GetBuffer(0, __uuidof(ID3D11Resource),&pBackBuffer));
 	GFX_THROW_INFO(pDevice->CreateRenderTargetView(pBackBuffer.Get(), nullptr, &pTargetView));
 
@@ -133,17 +133,16 @@ void Graphics::EndFrame()
 }
 
 
-void Graphics::ClearBuffer(float R, float G, float B)
+void Graphics::ClearBuffer(float R, float G, float B) noexcept
 {
-	const float colour[] = { R,G,B,1.0 };
+	const float colour[] = { R,G,B,1.0f };
 	pDeviceContext->ClearRenderTargetView(pTargetView.Get(), colour);
 }
 
 
-void Graphics::DrawIndexed(wndUnsigned count) noexcept(!Debug)
+void Graphics::DrawIndexed(UINT count) noexcept(!Debug)
 {
-	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(count, 0u, 0u)
-	);
+	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(count, 0u, 0u));
 }
 
 void Graphics::ApplyProjection(DirectX::FXMMATRIX pj) noexcept
@@ -151,7 +150,7 @@ void Graphics::ApplyProjection(DirectX::FXMMATRIX pj) noexcept
 	projection = pj;
 }
 
-DirectX::FXMMATRIX Graphics::FetchProjection() const noexcept
+DirectX::XMMATRIX Graphics::FetchProjection() const noexcept
 {
 	return projection;
 }

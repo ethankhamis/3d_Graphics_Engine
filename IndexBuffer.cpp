@@ -29,7 +29,7 @@ void IndexBuffer::Bind(Graphics& gfx) noexcept
 			DXGI_FORMAT_R16_UINT, 0u);
 }
 
-wndUnsigned IndexBuffer::FetchCount() const noexcept
+UINT IndexBuffer::FetchCount() const noexcept
 {
 	return count;
 }

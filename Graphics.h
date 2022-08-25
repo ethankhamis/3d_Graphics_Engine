@@ -10,36 +10,34 @@
 #include "ExceptionHandler.h"
 #include <wrl.h>
 #include <vector>
-#define wndUnsigned UINT
 
 struct Graphics
 {
 	friend struct Bindable;
-
+public:
 	Graphics( HWND hWnd );
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
 	~Graphics() = default;
 public:
 	void EndFrame();
-	void ClearBuffer(float R, float G, float B);
+	void ClearBuffer(float R, float G, float B) noexcept;
 public:
-	void DrawIndexed(wndUnsigned count) noexcept (!Debug);
+	void DrawIndexed(UINT count) noexcept (!Debug);
 	void ApplyProjection(DirectX::FXMMATRIX pj) noexcept;
-	DirectX::FXMMATRIX FetchProjection() const noexcept;
-
+	DirectX::XMMATRIX FetchProjection() const noexcept;
 private:
-#ifndef NDEBUG
-	DxGfxInfoMng infomanager;
-#endif // !NDEBUG
-
+	DirectX::XMMATRIX projection;
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwapChain;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pDeviceContext;
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> pTargetView;
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> pDepthStencilView;
 private:
-	DirectX::XMMATRIX projection;
+#ifndef NDEBUG
+	DxGfxInfoMng infomanager;
+#endif // !NDEBUG
+private:
 public:
 	class Exception : public ExceptionHandler { using ExceptionHandler::ExceptionHandler; };
 	class HResultException : public Exception
