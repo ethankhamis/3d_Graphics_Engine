@@ -53,7 +53,7 @@ inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constan
 	ConstBufSubResouceData.pSysMem = &constants;
 	GFX_THROW_INFO(FetchDevice(gfx)
 		->
-		CreateBuffer(&ConstBufDesc, nullptr, &pConstBuffer)
+		CreateBuffer(&ConstBufDesc, &ConstBufSubResouceData, &pConstBuffer)
 	);
 }
 

@@ -13,7 +13,7 @@ Application::Application()
 	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 2.0f);
 	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.3f);
 	std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
-	for (auto i = 0; i < 50; i++)
+	for (auto i = 0; i < 150; i++)
 	{
 		boxes.emplace_back(std::make_unique<Box>(
 			window.grfx(), rng, adist,
@@ -26,7 +26,7 @@ Application::Application()
 void Application::ExecFrame()
 {
 	auto delta = timer.MarkTime();
-	window.grfx().ClearBuffer(0.2f, 0.1f, 0.2f);
+	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 	for (auto& box : boxes)
 	{
 		box->Update(delta);
