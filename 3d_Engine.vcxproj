@@ -178,6 +178,7 @@
     <ClInclude Include="ConstBuffer(s).h" />
     <ClInclude Include="DefaultBindables.h" />
     <ClInclude Include="DirectXInfoManagement.h" />
+    <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="Graphics.h" />

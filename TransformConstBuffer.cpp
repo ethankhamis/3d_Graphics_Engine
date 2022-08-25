@@ -9,12 +9,7 @@ TransformConstBuffer::TransformConstBuffer(Graphics& gfx, const Drawable& parent
 void TransformConstBuffer::Bind(Graphics& gfx) noexcept
 {
 	vConstBuffer.Update
-	(
-		gfx, DirectX::XMMatrixTranspose
-	(
-		parent.FetchTransformMat() * gfx.FetchProjection()
-	)
-	);
+	(gfx, DirectX::XMMatrixTranspose(parent.FetchTransformMat() * gfx.FetchProjection()));
 
 	vConstBuffer.Bind(gfx);
 }

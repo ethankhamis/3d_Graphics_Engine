@@ -6,6 +6,9 @@ struct Bindable;
 
 struct Drawable
 {
+	template<class T>
+	friend struct DrawableBase;
+public:
 	Drawable() = default;
 	Drawable(const Drawable& ) = delete;
 
@@ -16,9 +19,11 @@ public: // standard member functions
 	virtual ~Drawable() = default;
 	
 public: // member functions involving adding
-	void addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept;
+	void addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
 	void addBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
-protected:
-	const IndexBuffer* pIndexBuffer = nullptr;
+private:
+	virtual const std::vector<std::unique_ptr<Bindable>>& FetchStaticBinds() const noexcept = 0;
+private:
+	const struct IndexBuffer* pIndexBuffer = nullptr;
 	std::vector<std::unique_ptr<Bindable>> allBinds;
 };

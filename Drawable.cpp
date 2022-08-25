@@ -9,10 +9,12 @@
 void Drawable::Render(Graphics& gfx) const noexcept(!Debug)
 {
 	for (auto& bind : allBinds){ bind->Bind(gfx); }
+	for (auto& bind : FetchStaticBinds()) { bind->Bind(gfx); }
+	
 	gfx.DrawIndexed(pIndexBuffer->FetchCount());
 }
 
-void Drawable::addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept
+void Drawable::addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug)
 {
 	assert("Adding Index Buffer (2nd Attempt)" &&
 		pIndexBuffer == nullptr);

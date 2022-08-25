@@ -1,8 +1,9 @@
 #pragma once
-#include "Drawable.h"
+//#include "Drawable.h"
 #include <random>
+#include "DrawableBase.h"
 
-struct Box : public Drawable
+struct Box : public DrawableBase<Box>
 {
 	Box(Graphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,

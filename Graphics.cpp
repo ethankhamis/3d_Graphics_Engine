@@ -142,9 +142,7 @@ void Graphics::ClearBuffer(float R, float G, float B)
 
 void Graphics::DrawIndexed(wndUnsigned count) noexcept(!Debug)
 {
-	GFX_THROW_INFO_ONLY(pDeviceContext
-		->
-		DrawIndexed(count, 0u, 0u)
+	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(count, 0u, 0u)
 	);
 }
 
