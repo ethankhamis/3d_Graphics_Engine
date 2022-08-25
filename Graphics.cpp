@@ -137,6 +137,7 @@ void Graphics::ClearBuffer(float R, float G, float B) noexcept
 {
 	const float colour[] = { R,G,B,1.0f };
 	pDeviceContext->ClearRenderTargetView(pTargetView.Get(), colour);
+	pDeviceContext->ClearDepthStencilView(pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
 }
 
 
