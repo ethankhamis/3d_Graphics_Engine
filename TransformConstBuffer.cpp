@@ -1,15 +1,18 @@
 #include "TransformConstBuffer.h"
 
-TransformConstBuffer::TransformConstBuffer(Graphics& gfx, const Drawable& parent)
-:
-	vConstBuffer(gfx),
-	parent(parent)
-{}
+	TransformConstBuffer::TransformConstBuffer(Graphics & gfx, const Drawable & parent) noexcept
+		:
+		parent(parent)
+	{
+		if (!pVConstBuffer) {pVConstBuffer = std::make_unique<VConstantBuffer<DirectX::XMMATRIX>>(gfx);} //create buffer if not already created
+	}
 
-void TransformConstBuffer::Bind(Graphics& gfx) noexcept
+	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
 {
-	vConstBuffer.Update
+	pVConstBuffer->Update
 	(gfx, DirectX::XMMatrixTranspose(parent.FetchTransformMat() * gfx.FetchProjection()));
 
-	vConstBuffer.Bind(gfx);
+	pVConstBuffer->Bind(gfx);
 }
+
+std::unique_ptr<VConstantBuffer<DirectX::XMMATRIX>> TransformConstBuffer::pVConstBuffer;

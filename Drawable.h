@@ -18,7 +18,7 @@ public: // standard member functions
 	virtual void Update(float DeltaTime) noexcept = 0;
 	virtual ~Drawable() = default;
 	
-public: // member functions involving adding
+protected: // member functions involving adding
 	void addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
 	void addBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
 private:

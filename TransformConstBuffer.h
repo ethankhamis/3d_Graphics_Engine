@@ -5,11 +5,11 @@
 
 struct TransformConstBuffer : public Bindable
 {
-	TransformConstBuffer(Graphics& gfx, const Drawable& parent);
+	TransformConstBuffer(Graphics& gfx, const Drawable& parent) noexcept;
 public:
 	void Bind(Graphics& gfx) noexcept override;
 private:
-	VConstantBuffer<DirectX::XMMATRIX> vConstBuffer;
+	static  std::unique_ptr<VConstantBuffer<DirectX::XMMATRIX>> pVConstBuffer;
 private:
 	const Drawable& parent;
 };

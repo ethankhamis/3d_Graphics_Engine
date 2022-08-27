@@ -3,14 +3,14 @@
 #include "IndexBuffer.h"
 
 template<class T>
-class DrawableBase : public Drawable
+struct DrawableBase : public Drawable
 {
-public:
-	bool IsStaticInitialized() const noexcept
+protected:
+	static bool is_static_init() noexcept
 	{
 		return !staticBinds.empty();
 	}
-	void ApplyStaticBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
+	static void ApplyStaticBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
 	{
 		assert("*Must* use AddIndexBuffer to bind index buffer" && typeid(*bind) != typeid(IndexBuffer));
 		staticBinds.push_back(std::move(bind));

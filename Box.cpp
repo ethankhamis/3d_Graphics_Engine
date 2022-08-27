@@ -20,7 +20,7 @@ Box::Box(Graphics& gfx,
 	theta(adist(rng)),
 	phi(adist(rng))
 {
-	if (!IsStaticInitialized())
+	if (!is_static_init())
 	{
 		struct Vertex
 		{
