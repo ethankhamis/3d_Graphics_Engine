@@ -40,5 +40,12 @@ N convert_to_rad(N degrees)
 	return degrees * rad_conversion;
 }
 
+template <Numeric_T N>
+constexpr N interpolate(const N& source, const N& dest, float alpha)
+{
+	float dif = static_cast<float>(dest - source);
+	return static_cast<float>(source) + (dif * alpha);
+}
+
 
 
