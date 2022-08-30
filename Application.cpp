@@ -10,9 +10,9 @@ Application::Application()
 	std::mt19937 rng(std::random_device{}());
 	std::uniform_real_distribution<float> adist(0.0f, 3.1415f * 2.0f);
 	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 1.0f);
-	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.1f);
+	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.08f);
 	std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
-	for (auto i = 0; i < 100; i++)
+	for (auto i = 0; i < 5; i++)
 	{
 		boxes.emplace_back(std::make_unique<Box>(
 			window.grfx(), rng, adist,
@@ -25,14 +25,12 @@ Application::Application()
 void Application::ExecFrame()
 {
 	auto delta = timer.MarkTime();
-	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
+	window.grfx().ClearBuffer(1.0f, 1.0f, 1.0f);
 	for (auto& box : boxes)
 	{
 		box->Update(delta);
 		box->Render(window.grfx());
-		
 	}
-
 	window.grfx().EndFrame();
 }
 

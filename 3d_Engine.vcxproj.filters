@@ -213,7 +213,7 @@
       <Filter>Primatives\Sphere</Filter>
     </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
-      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+      <Filter>Primatives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

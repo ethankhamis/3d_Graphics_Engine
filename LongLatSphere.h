@@ -20,111 +20,85 @@ struct Sphere
 template<class Vertex>
 inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude, int Division_Longitude)
 {
-	assert(Division_Latitude >= 3); assert(Division_Longitude >= 3);
+	namespace dx = DirectX;
+	assert(Division_Latitude >= 3);
+	assert(Division_Longitude >= 3);
 
-	const auto calculateIndex = [Division_Latitude, Division_Longitude](uint16_t idx_Lat, uint16_t idx_Long)
-	{ return idx_Lat * Division_Longitude + idx_Long; };
-
-	const float Lattitude_Angle = (PI / Division_Latitude);
-	const float Longitude_Angle = (PI / Division_Longitude) * 2.0f;
-	vector<Vertex> vertices;
 	constexpr float radius = 1.0f;
-	const DirectX::XMVECTOR base = DirectX::XMVectorSet(0.0f, 0.0f, radius, NULL, 0f);
+	const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
+	const float lattitudeAngle = PI / Division_Latitude;
+	const float longitudeAngle = 2.0f * PI / Division_Longitude;
 
-	for (int LatIndex = 1; LatIndex < Division_Latitude; ++LatIndex)
+	std::vector<Vertex> vertices;
+	for (int iLat = 1; iLat < Division_Latitude; iLat++)
 	{
-		const DirectX::XMVECTOR LatitudeBase =
-			DirectX::XMVector3Transform
-			(
-				base,
-				DirectX::XMMatrixRotationX(Lattitude_Angle * LatIndex)
-			);
-		for (int LongIndex = NULL; LongIndex < Division_Longitude; ++LongIndex)
+		const auto latBase = dx::XMVector3Transform(
+			base,
+			dx::XMMatrixRotationX(lattitudeAngle * iLat)
+		);
+		for (int iLong = 0; iLong < Division_Longitude; iLong++)
 		{
 			vertices.emplace_back();
-			DirectX::XMVECTOR vertex =
-				DirectX::XMVector3Transform
-				(
-					LatitudeBase,
-					DirectX::XMMatrixRotationZ
-					(
-						Longitude_Angle * LongIndex
-					)
-				);
-			DirectX::XMStoreFloat3
-			(&vertices.back().pos,
-				vertex
+			auto v = dx::XMVector3Transform(
+				latBase,
+				dx::XMMatrixRotationZ(longitudeAngle * iLong)
 			);
+			dx::XMStoreFloat3(&vertices.back().pos, v);
 		}
 	}
 
-	// add cap vertices START
-
-	//northpole
-	const auto Index_NorthPole =
-		static_cast<uint16_t>(sizeof(vertices) / sizeof(vertices[NULL]));
+	// add the cap vertices
+	const auto iNorthPole = (unsigned short)vertices.size();
 	vertices.emplace_back();
-
-	DirectX::XMStoreFloat3
-	(
-		&vertices.back().pos,
-		base
-	);
-	//southpole
-	const auto Index_SouthPole =
-		static_cast<uint16_t>(sizeof(vertices) / sizeof(vertices[NULL]));
+	dx::XMStoreFloat3(&vertices.back().pos, base);
+	const auto iSouthPole = (unsigned short)vertices.size();
 	vertices.emplace_back();
-	DirectX::XMStoreFloat3
-	(
-		&vertices.back().pos,
-		DirectX::XMVectorNegate(base)
-	);
+	dx::XMStoreFloat3(&vertices.back().pos, dx::XMVectorNegate(base));
 
-	//apply
-	vector<uint16_t> indices;
-	for (uint16_t idx_lat = NULL; idx_lat < Division_Longitude - 2; ++Division_Longitude)
+	const auto calcIdx = [Division_Latitude, Division_Longitude](unsigned short iLat, unsigned short iLong)
+	{ return iLat * Division_Longitude + iLong; };
+	std::vector<unsigned short> indices;
+	for (unsigned short iLat = 0; iLat < Division_Latitude - 2; iLat++)
 	{
-		for (uint16_t idx_long = NULL; idx_long < Division_Latitude - 1; ++Division_Latitude)
+		for (unsigned short iLong = 0; iLong < Division_Longitude - 1; iLong++)
 		{
-			indices.push_back(calculateIndex(idx_lat, idx_long + 1));
-			indices.push_back(calculateIndex(idx_lat + 1, idx_long));
-			indices.push_back(calculateIndex(idx_lat + 1, idx_long + 1));
-			indices.push_back(calculateIndex(idx_lat, idx_long));
-			indices.push_back(calculateIndex(idx_lat + 1, idx_long));
-			indices.push_back(calculateIndex(idx_lat, idx_long + 1));
+			indices.push_back(calcIdx(iLat, iLong));
+			indices.push_back(calcIdx(iLat + 1, iLong));
+			indices.push_back(calcIdx(iLat, iLong + 1));
+			indices.push_back(calcIdx(iLat, iLong + 1));
+			indices.push_back(calcIdx(iLat + 1, iLong));
+			indices.push_back(calcIdx(iLat + 1, iLong + 1));
 		}
-		indices.push_back(calculateIndex(idx_lat, NULL));
-		indices.push_back(calculateIndex(idx_lat + 1, Division_Longitude - 1));
-		indices.push_back(calculateIndex(idx_lat + 1, NULL));
-		indices.push_back(calculateIndex(idx_lat, Division_Longitude - 1));
-		indices.push_back(calculateIndex(idx_lat + 1, Division_Longitude - 1));
-		indices.push_back(calculateIndex(idx_lat, NULL));
+		// wrap band
+		indices.push_back(calcIdx(iLat, Division_Longitude - 1));
+		indices.push_back(calcIdx(iLat + 1, Division_Longitude - 1));
+		indices.push_back(calcIdx(iLat, 0));
+		indices.push_back(calcIdx(iLat, 0));
+		indices.push_back(calcIdx(iLat + 1, Division_Longitude - 1));
+		indices.push_back(calcIdx(iLat + 1, 0));
 	}
 
-
-	//cap fans
-	for (uint16_t idx_long = NULL; idx_long < Division_Longitude - 1; ++idx_long)
+	// cap fans
+	for (unsigned short iLong = 0; iLong < Division_Longitude - 1; iLong++)
 	{
-		//southpole
-		indices.emplace_back(Index_SouthPole);
-		indices.emplace_back(calculateIndex(Division_Latitude - 2, idx_long));
-		indices.emplace_back(calculateIndex(Division_Latitude - 2, idx_long + 1));
-		//northpole
-		indices.emplace_back(Index_NorthPole);
-		indices.emplace_back(calculateIndex(NULL, idx_long));
-		indices.emplace_back(calculateIndex(NULL, idx_long + 1));
+		// north
+		indices.push_back(iNorthPole);
+		indices.push_back(calcIdx(0, iLong));
+		indices.push_back(calcIdx(0, iLong + 1));
+		// south
+		indices.push_back(calcIdx(Division_Latitude - 2, iLong + 1));
+		indices.push_back(calcIdx(Division_Latitude - 2, iLong));
+		indices.push_back(iSouthPole);
 	}
+	// wrap triangles
+	// north
+	indices.push_back(iNorthPole);
+	indices.push_back(calcIdx(0, Division_Longitude - 1));
+	indices.push_back(calcIdx(0, 0));
+	// south
+	indices.push_back(calcIdx(Division_Latitude - 2, 0));
+	indices.push_back(calcIdx(Division_Latitude - 2, Division_Longitude - 1));
+	indices.push_back(iSouthPole);
 
-	//wrap polygons
-
-	//southpole
-	indices.push_back(Index_SouthPole);
-	indices.push_back(calculateIndex(Division_Latitude - 2, NULL));
-	indices.push_back(calculateIndex(Division_Latitude - 2, 1 - Division_Longitude));
-	//northpole
-	indices.push_back(Index_NorthPole);
-	indices.push_back(calculateIndex(NULL, 1 - Division_Longitude));
-	indices.push_back(calculateIndex(NULL, NULL));
-
-	return { std::move(vertices), std::move(indices) };
+	return { std::move(vertices),std::move(indices) };
 }

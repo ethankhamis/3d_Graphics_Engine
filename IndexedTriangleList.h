@@ -7,14 +7,14 @@ using std::vector;
 template<class T>
 struct IndexedTriangleList
 {
+	IndexedTriangleList() = default;
 	IndexedTriangleList(vector<T> v, vector<uint16_t> i)
 		:
 		vertices(std::move(v)), indices(std::move(i))
 	{
-		assert(sizeof(vertices) / sizeof(vertices[0]) > 2);
-		assert((sizeof(indices) / sizeof(indices[0])) % 3 == 0);
+		assert(vertices.size() > 2);
+		assert(indices.size() % 3 == 0);
 	}
-	IndexedTriangleList() = default;
 
 	void Transform(DirectX::FXMMATRIX matrix)
 	{
