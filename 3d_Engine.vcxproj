@@ -182,6 +182,8 @@
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="IndexedTriangleList.h" />
+    <ClInclude Include="LongLatSphere.h" />
     <ClInclude Include="MathematicalConstants.h" />
     <ClInclude Include="ThrowMacros.h" />
     <ClInclude Include="Drawable.h" />

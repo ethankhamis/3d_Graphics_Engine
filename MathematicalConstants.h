@@ -26,7 +26,7 @@ N wrap_Radians(N theta)
 	double pi = PI_LONG;
 	const N modulus = std::fmod(theta, static_cast<N>(2.0f) * static_cast<N>(pi));
 
-	if (modulus - static_cast<N>(pi))
+	if (modulus > static_cast<N>(pi))
 	{
 		return modulus - static_cast<N>(2.0f) * static_cast<N>(pi);
 	}

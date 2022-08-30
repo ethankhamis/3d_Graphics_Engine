@@ -64,6 +64,9 @@
     <Filter Include="Drawable">
       <UniqueIdentifier>{7a96adc8-595a-4e38-8cf9-093370ba8d72}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives\Sphere">
+      <UniqueIdentifier>{baaee290-03f4-468d-bca9-aa12ef2912f6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -205,6 +208,12 @@
     </ClInclude>
     <ClInclude Include="DrawableBase.h">
       <Filter>Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="LongLatSphere.h">
+      <Filter>Primatives\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="IndexedTriangleList.h">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
