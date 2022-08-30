@@ -20,8 +20,8 @@ struct IndexedTriangleList
 	{
 		for (auto& vertex : vertices)
 		{
-			const DirectX::XMVECTOR pos = DirectX::XMLoadFloat3(&vertex , pos);
-			DirectX::XMStoreFloat3(&vertex, pos, DirectX::XMVector3Transform(pos, matrix));
+			const DirectX::XMVECTOR pos = DirectX::XMLoadFloat3(&vertex.pos);
+			DirectX::XMStoreFloat3(&vertex.pos, DirectX::XMVector3Transform(pos, matrix));
 		}
 	}
 	vector<T> vertices;

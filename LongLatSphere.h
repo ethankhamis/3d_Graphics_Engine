@@ -11,7 +11,7 @@ struct Sphere
 	template<class Vertex>
 	static IndexedTriangleList<Vertex> Create()
 	{
-		return Create_Tessalated<Vertex>(12, 24);
+		return Create_Advanced<Vertex>(12, 24);
 	}
 
 
@@ -39,23 +39,23 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 				base,
 				DirectX::XMMatrixRotationX(Lattitude_Angle * LatIndex)
 			);
-	}
-	for (int LongIndex = NULL; LongIndex < Division_Longitude; ++LongIndex)
-	{
-		vertices.emplace_back();
-		DirectX::XMVECTOR vertex =
-			DirectX::XMVector3Transform
-			(
-				LatitudeBase,
-				DirectX::XMMatrixRotationZ
+		for (int LongIndex = NULL; LongIndex < Division_Longitude; ++LongIndex)
+		{
+			vertices.emplace_back();
+			DirectX::XMVECTOR vertex =
+				DirectX::XMVector3Transform
 				(
-					Longitude_Angle * LongIndex
-				)
+					LatitudeBase,
+					DirectX::XMMatrixRotationZ
+					(
+						Longitude_Angle * LongIndex
+					)
+				);
+			DirectX::XMStoreFloat3
+			(&vertices.back().pos,
+				vertex
 			);
-		DirectX::XMStoreFloat3
-		(&vertices.back().pos,
-			v
-		);
+		}
 	}
 
 	// add cap vertices START
@@ -123,8 +123,8 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 	indices.push_back(calculateIndex(Division_Latitude - 2, 1 - Division_Longitude));
 	//northpole
 	indices.push_back(Index_NorthPole);
-	indices.push_back(calculateIdx(NULL, 1 - Division_Longitude));
-	indices.push_back(calculateIdx(NULL, NULL));
+	indices.push_back(calculateIndex(NULL, 1 - Division_Longitude));
+	indices.push_back(calculateIndex(NULL, NULL));
 
 	return { std::move(vertices), std::move(indices) };
 }
