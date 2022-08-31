@@ -176,6 +176,7 @@
     <ClInclude Include="Bindable.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="ConstBuffer(s).h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="DefaultBindables.h" />
     <ClInclude Include="DirectXInfoManagement.h" />
     <ClInclude Include="DrawableBase.h" />

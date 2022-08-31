@@ -67,6 +67,12 @@
     <Filter Include="Primatives\Sphere">
       <UniqueIdentifier>{baaee290-03f4-468d-bca9-aa12ef2912f6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives\Plane">
+      <UniqueIdentifier>{c1aa23b1-11cb-463d-b3bb-d730bf28ed01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives\Cube">
+      <UniqueIdentifier>{20eb09d6-7005-41dc-b6ba-85b919617119}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -214,6 +220,12 @@
     </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Primatives</Filter>
+    </ClInclude>
+    <ClInclude Include="Plane.h">
+      <Filter>Primatives\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>Primatives\Cube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
