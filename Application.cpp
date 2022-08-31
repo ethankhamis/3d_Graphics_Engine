@@ -12,7 +12,7 @@ Application::Application()
 	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 1.0f);
 	std::uniform_real_distribution<float> odist(0.0f, 3.1415f * 0.08f);
 	std::uniform_real_distribution<float> rdist(6.0f, 20.0f);
-	for (auto i = 0; i < 5; i++)
+	for (auto i = 0; i < 400; i++)
 	{
 		boxes.emplace_back(std::make_unique<Box>(
 			window.grfx(), rng, adist,

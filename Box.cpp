@@ -3,6 +3,7 @@
 #include "ThrowMacros.h"
 #include "LongLatSphere.h"
 #include "Plane.h"
+#include "Cone.h"
 #include "Cube.h"
 
 Box::Box(Graphics& gfx,
@@ -29,7 +30,7 @@ Box::Box(Graphics& gfx,
 		{
 			DirectX::XMFLOAT3 pos;
 		};
-		auto model = Cube::Create<Vertex>();
+		auto model = Cone::Create<Vertex>();
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 

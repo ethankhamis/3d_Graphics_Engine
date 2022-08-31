@@ -73,6 +73,9 @@
     <Filter Include="Primatives\Cube">
       <UniqueIdentifier>{20eb09d6-7005-41dc-b6ba-85b919617119}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives\Cone">
+      <UniqueIdentifier>{63550f69-e4e1-4c3d-8e22-3abdfceabba0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Cube.h">
       <Filter>Primatives\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Cone.h">
+      <Filter>Primatives\Cone</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
