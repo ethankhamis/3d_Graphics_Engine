@@ -53,11 +53,11 @@ Box::Box(Graphics& gfx,
 		{
 			{
 				{ 1.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f  },
 				{ 1.0f,0.0f,0.0f  },
+				{ 0.0f,0.0f,0.0f  },
 				{ 1.0f,0.0f,0.0f  },
-				{ 1.0f,0.0f,0.0f  },
-				{ 1.0f,0.0f,0.0f  },
-				{ 1.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
 			}
 		};
 		ApplyStaticBind(std::make_unique<PixelConstantBuffer<ConstantBuffer2>>(gfx, cb2));
