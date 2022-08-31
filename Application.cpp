@@ -6,7 +6,7 @@
 #include "MathematicalConstants.h"
 
 Application::Application()
-	:window(800, 600, L"6~3D") {
+	:window(1000, 750, L"6~3D") {
 	std::mt19937 rng(std::random_device{}());
 	std::uniform_real_distribution<float> adist(0.0f, 3.1415f * 2.0f);
 	std::uniform_real_distribution<float> ddist(0.0f, 3.1415f * 1.0f);

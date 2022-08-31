@@ -76,6 +76,9 @@
     <Filter Include="Primatives\Cone">
       <UniqueIdentifier>{63550f69-e4e1-4c3d-8e22-3abdfceabba0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Buffers &amp; Shaders + Related Others\Others\.hlsl">
+      <UniqueIdentifier>{48843754-3da9-4dca-9546-0c5da8121dc2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -245,10 +248,16 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="PixelShader.hlsl">
+    <FxCompile Include="ColourIndexPS.hlsl">
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
-    <FxCompile Include="VertexShader.hlsl">
+    <FxCompile Include="ColourIndexVS.hlsl">
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="ColourBlendVS.hlsl">
+      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="ColourBlendPS.hlsl">
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
   </ItemGroup>
