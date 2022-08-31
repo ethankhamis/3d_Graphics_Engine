@@ -26,8 +26,8 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 
 	constexpr float radius = 1.0f;
 	const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
-	const float lattitudeAngle = PI / Division_Latitude;
-	const float longitudeAngle = 2.0f * PI / Division_Longitude;
+	const float lattitudeAngle = static_cast<float>(PI / Division_Latitude);
+	const float longitudeAngle = static_cast<float>(2.0f * PI / Division_Longitude);
 
 	std::vector<Vertex> vertices;
 	for (int iLat = 1; iLat < Division_Latitude; iLat++)

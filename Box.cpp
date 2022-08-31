@@ -2,6 +2,7 @@
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
 #include "LongLatSphere.h"
+#include "Plane.h"
 
 Box::Box(Graphics& gfx,
 	std::mt19937& rng,
@@ -27,7 +28,7 @@ Box::Box(Graphics& gfx,
 		{
 			DirectX::XMFLOAT3 pos;
 		};
-		auto model = Sphere::Create<Vertex>();
+		auto model = Plane::Create<Vertex>();
 		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 

@@ -47,5 +47,11 @@ constexpr N interpolate(const N& source, const N& dest, float alpha)
 	return static_cast<float>(source) + (dif * alpha);
 }
 
+template <Numeric_T N>
+const N Sqrd(N number)
+{
+	return (number * number);
+}
+
 
 
