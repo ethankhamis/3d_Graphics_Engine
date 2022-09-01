@@ -13,5 +13,6 @@ private:
 private:
 	void ExecFrame();
 private:
-	std::vector<std::unique_ptr<struct Box>> boxes;
+	std::vector<std::unique_ptr<struct Drawable>> drawables;
+	static constexpr unsigned int nDrawables = 300;
 };

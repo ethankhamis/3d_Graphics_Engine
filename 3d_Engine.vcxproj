@@ -152,6 +152,8 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Bindable.cpp" />
+    <ClCompile Include="BindLongLatSphere.cpp" />
+    <ClCompile Include="BindPlane.cpp" />
     <ClCompile Include="Box.cpp" />
     <ClCompile Include="DirectXInfoManagement.cpp" />
     <ClCompile Include="Drawable.cpp" />
@@ -174,6 +176,8 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Bindable.h" />
+    <ClInclude Include="BindLongLatSphere.h" />
+    <ClInclude Include="BindPlane.h" />
     <ClInclude Include="Box.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstBuffer(s).h" />

@@ -79,6 +79,12 @@
     <Filter Include="Buffers &amp; Shaders + Related Others\Others\.hlsl">
       <UniqueIdentifier>{48843754-3da9-4dca-9546-0c5da8121dc2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives\Sphere\IcoSphere">
+      <UniqueIdentifier>{7c810487-5c98-4bc5-a500-1c8fb7ac959b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives\Sphere\LongLatSphere">
+      <UniqueIdentifier>{fae0c006-d850-4186-9776-9952e22167b1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -140,6 +146,12 @@
     </ClCompile>
     <ClCompile Include="Drawable.cpp">
       <Filter>Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="BindLongLatSphere.cpp">
+      <Filter>Primatives\Sphere\LongLatSphere</Filter>
+    </ClCompile>
+    <ClCompile Include="BindPlane.cpp">
+      <Filter>Primatives\Plane</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -221,9 +233,6 @@
     <ClInclude Include="DrawableBase.h">
       <Filter>Drawable</Filter>
     </ClInclude>
-    <ClInclude Include="LongLatSphere.h">
-      <Filter>Primatives\Sphere</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Primatives</Filter>
     </ClInclude>
@@ -235,6 +244,15 @@
     </ClInclude>
     <ClInclude Include="Cone.h">
       <Filter>Primatives\Cone</Filter>
+    </ClInclude>
+    <ClInclude Include="LongLatSphere.h">
+      <Filter>Primatives\Sphere\LongLatSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="BindLongLatSphere.h">
+      <Filter>Primatives\Sphere\LongLatSphere</Filter>
+    </ClInclude>
+    <ClInclude Include="BindPlane.h">
+      <Filter>Primatives\Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
