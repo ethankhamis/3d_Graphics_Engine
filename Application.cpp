@@ -12,6 +12,7 @@
 Application::Application()
 	:window(1000, 750, L"6~3D")
 {
+	/*
 	struct Factory
 	{
 		Factory(Graphics& gfx)
@@ -69,13 +70,14 @@ Application::Application()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, f);
 
+	*/
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
 
 void Application::ExecFrame()
 {
 	auto delta = timer.MarkTime();
-	window.grfx().ClearBuffer(1.0f, 1.0f, 1.0f);
+	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
 	for (auto& drawable : drawables)
 	{
 		drawable->Update(delta);
