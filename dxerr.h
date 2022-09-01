@@ -44,7 +44,7 @@ extern "C" {
 	//                         __LINE__ macro.
 	//         HRESULT hr      An HRESULT that will be traced to the debug stream.
 	//         CHAR* strMsg    A string that will be traced to the debug stream (may be NULL)
-	//         BOOL bPopMsgBox If TRUE, then a message box will popup also containing the passed info.
+	//         BOOL bPopMsgBox If TRUE, then a message Box will popup also containing the passed info.
 	//
 	//  Return: The hr that was passed in.  
 	//--------------------------------------------------------------------------------------
@@ -60,11 +60,11 @@ extern "C" {
 #if defined(DEBUG) || defined(_DEBUG)
 #define DXTRACE_MSG(str)              DXTrace( __FILEW__, (DWORD)__LINE__, 0, str, false )
 #define DXTRACE_ERR(str,hr)           DXTrace( __FILEW__, (DWORD)__LINE__, hr, str, false )
-#define DXTRACE_ERR_MSGBOX(str,hr)    DXTrace( __FILEW__, (DWORD)__LINE__, hr, str, true )
+#define DXTRACE_ERR_MSGBox(str,hr)    DXTrace( __FILEW__, (DWORD)__LINE__, hr, str, true )
 #else
 #define DXTRACE_MSG(str)              (0L)
 #define DXTRACE_ERR(str,hr)           (hr)
-#define DXTRACE_ERR_MSGBOX(str,hr)    (hr)
+#define DXTRACE_ERR_MSGBox(str,hr)    (hr)
 #endif
 
 #ifdef __cplusplus

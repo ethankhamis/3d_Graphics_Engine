@@ -12,7 +12,7 @@ protected:
 	}
 	static void ApplyStaticBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
 	{
-		assert("*Must* use AddIndexBuffer to bind index buffer" && typeid(*bind) != typeid(IndexBuffer));
+		assert("*Must* use ApplyIndexBufferfer to bind index buffer" && typeid(*bind) != typeid(IndexBuffer));
 		staticBinds.push_back(std::move(bind));
 	}
 	void ApplyStaticIndexBuffer(std::unique_ptr<IndexBuffer> ibuf) noexcept(!Debug)

@@ -36,13 +36,13 @@ LongLatSphere::LongLatSphere(Graphics& gfx, std::mt19937& rng, std::uniform_real
 		const PixelShaderConstants PSC2 =
 		{
 			{
-				{ 1.0f,1.0f,1.0f },
 				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
 				{ 0.0f,0.0f,0.0f },
 			}
 		};
@@ -63,11 +63,11 @@ LongLatSphere::LongLatSphere(Graphics& gfx, std::mt19937& rng, std::uniform_real
 	// deform vertices of model by linear transformation
 	model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-	addBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	ApplyBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-	addIndexBuf(std::make_unique<IndexBuffer>(gfx, model.indices));
+	ApplyIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-	addBind(std::make_unique<TransformConstBuffer>(gfx, *this));
+	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 }
 
 void LongLatSphere::Update(float dt) noexcept

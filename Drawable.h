@@ -19,8 +19,8 @@ public: // standard member functions
 	virtual ~Drawable() = default;
 	
 protected: // member functions involving adding
-	void addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
-	void addBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
+	void ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
+	void ApplyBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& FetchStaticBinds() const noexcept = 0;
 private:

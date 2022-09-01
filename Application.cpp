@@ -1,6 +1,6 @@
 #include "Application.h"
 #include <sstream>
-#include "Box.h"
+#include "BindCube.h"
 #include <memory>
 #include "BindLongLatSphere.h"
 #include "Timer.h"
@@ -24,7 +24,7 @@ Application::Application()
 			switch (typedist(rng))
 			{
 			case 0:
-				return std::make_unique<Box>(
+				return std::make_unique<BindCube>(
 					gfx, rng, adist, ddist,
 					odist, rdist, bdist
 					);

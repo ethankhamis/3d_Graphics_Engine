@@ -4,23 +4,23 @@
 #include "Plane.h"
 
 Plane_t::Plane_t(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_int_distribution<int>& hDiv, std::uniform_int_distribution<int>& vDiv)
-:
+	:
 	r(rdist(rng)),
-    droll(ddist(rng)),
-    dpitch(ddist(rng)),
-    dyaw(odist(rng)),
-    dtheta(odist(rng)),
-    dchi(odist(rng)),
-    chi(adist(rng)),
-    theta(adist(rng)),
-    phi(adist(rng))
+	droll(ddist(rng)),
+	dpitch(ddist(rng)),
+	dyaw(ddist(rng)),
+	dphi(odist(rng)),
+	dtheta(odist(rng)),
+	dchi(odist(rng)),
+	chi(adist(rng)),
+	theta(adist(rng)),
+	phi(adist(rng))
 {
-	if(!is_static_init())
+	if (!is_static_init())
 	{
 		auto pvs = std::make_unique<VertexShader>(gfx, L"ColourIndexVS.cso");
 		auto pvsbc = pvs->FetchByteCode();
 		ApplyStaticBind(std::move(pvs));
-
 		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"ColourIndexPS.cso"));
 
 		struct PixelShaderConstants
@@ -36,24 +36,22 @@ Plane_t::Plane_t(Graphics& gfx, std::mt19937& rng, std::uniform_real_distributio
 		const PixelShaderConstants PSC2 =
 		{
 			{
-				{ 1.0f,1.0f,1.0f },
 				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,1.0f,0.0f },
-				{ 1.0f,1.0f,0.0f },
-				{ 0.0f,0.0f,1.0f },
-				{ 1.0f,0.0f,1.0f },
-				{ 0.0f,1.0f,1.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 1.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
+				{ 0.0f,0.0f,0.0f },
 				{ 0.0f,0.0f,0.0f },
 			}
 		};
 		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PixelShaderConstants>>(gfx, PSC2));
-
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		ApplyStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
-
 		ApplyStaticBind(std::make_unique<PrimTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	}
 
@@ -61,15 +59,17 @@ Plane_t::Plane_t(Graphics& gfx, std::mt19937& rng, std::uniform_real_distributio
 	{
 		DirectX::XMFLOAT3 pos;
 	};
+	
 	auto model = Plane::Create_Advanced<Vertex>(vDiv(rng), hDiv(rng));
-	// deform vertices of model by linear transformation
+	// linear transformation to deform vertices of model
+
 	model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
 
-	addBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	ApplyBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-	addIndexBuf(std::make_unique<IndexBuffer>(gfx, model.indices));
+	ApplyIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-	addBind(std::make_unique<TransformConstBuffer>(gfx, *this));
+	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 }
 
 void Plane_t::Update(float deltaTime) noexcept

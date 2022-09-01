@@ -1,10 +1,10 @@
-#include "Box.h"
+#include "BindCube.h"
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
 #include "Cube.h"
 #include <algorithm>
 
-Box::Box(Graphics& gfx,
+BindCube::BindCube(Graphics& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -79,7 +79,7 @@ Box::Box(Graphics& gfx,
 		ApplyIndexFromStatic();
 	}
 
-	addBind(std::make_unique<TransformConstBuffer>(gfx, *this));
+	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 
 	//model deformation transform per instance
 	DirectX::XMStoreFloat3x3
@@ -95,7 +95,7 @@ Box::Box(Graphics& gfx,
 
 }
 
-void Box::Update(float dt) noexcept
+void BindCube::Update(float dt) noexcept
 {
 	roll += droll * dt;
 	pitch += dpitch * dt;
@@ -105,7 +105,7 @@ void Box::Update(float dt) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX Box::FetchTransformMat() const noexcept
+DirectX::XMMATRIX BindCube::FetchTransformMat() const noexcept
 {
 	return DirectX::XMLoadFloat3x3(&model_transform) *
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *

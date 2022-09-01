@@ -3,9 +3,9 @@
 #include <random>
 #include "DrawableBase.h"
 
-struct Box : public DrawableBase<Box>
+struct BindCube : public DrawableBase<BindCube>
 {
-	Box(Graphics& gfx, std::mt19937& rng,
+	BindCube(Graphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
 		std::uniform_real_distribution<float>& odist,

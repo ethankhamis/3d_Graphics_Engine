@@ -14,7 +14,7 @@ void Drawable::Render(Graphics& gfx) const noexcept(!Debug)
 	gfx.DrawIndexed(pIndexBuffer->FetchCount());
 }
 
-void Drawable::addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug)
+void Drawable::ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug)
 {
 	assert("Adding Index Buffer (2nd Attempt)" &&
 		pIndexBuffer == nullptr);
@@ -22,9 +22,9 @@ void Drawable::addIndexBuf(std::unique_ptr<struct IndexBuffer> indexBuffer) noex
 	allBinds.push_back(std::move(indexBuffer));
 }
 
-void Drawable::addBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
+void Drawable::ApplyBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
 {
-	assert("MUST USE FUNC 'AddIndexBuf' when binding index buffer" && typeid(*bind) != typeid(IndexBuffer));
+	assert("MUST USE FUNC 'ApplyIndexBuffer' when binding index buffer" && typeid(*bind) != typeid(IndexBuffer));
 	allBinds.push_back(std::move(bind));
 
 }

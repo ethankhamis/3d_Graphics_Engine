@@ -138,9 +138,6 @@
     <ClCompile Include="TransformConstBuffer.cpp">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClCompile>
-    <ClCompile Include="Box.cpp">
-      <Filter>Primatives\Box</Filter>
-    </ClCompile>
     <ClCompile Include="Bindable.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
@@ -152,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="BindPlane.cpp">
       <Filter>Primatives\Plane</Filter>
+    </ClCompile>
+    <ClCompile Include="BindCube.cpp">
+      <Filter>Primatives\Cube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -212,9 +212,6 @@
     <ClInclude Include="InputLayout.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
-    <ClInclude Include="Box.h">
-      <Filter>Primatives\Box</Filter>
-    </ClInclude>
     <ClInclude Include="DefaultBindables.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
@@ -253,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="BindPlane.h">
       <Filter>Primatives\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="BindCube.h">
+      <Filter>Primatives\Cube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
