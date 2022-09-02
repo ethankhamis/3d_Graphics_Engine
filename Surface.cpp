@@ -44,17 +44,11 @@ const std::wstring& Surface::Exception::FetchNote() const noexcept
     return note;
 }
 
-Surface::Surface(unsigned int w, unsigned int h, unsigned int pitch) noexcept
-    :
-    pBuffer(std::make_unique<Colour[]>(pitch * h)),
-    width(w),
-    height(h)
-{
-}
-
 Surface::Surface(unsigned int w, unsigned int h) noexcept
     :
-    Surface(w, h, w)
+    pBuffer(std::make_unique<Colour[]>(w * h)),
+    width(w),
+    height(h)
 {
 }
 

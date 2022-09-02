@@ -18,7 +18,6 @@ struct Surface
 		std::wstring note;
 	};
 public:
-	Surface(unsigned int w, unsigned int h, unsigned int pitch) noexcept;
 	Surface(unsigned int w, unsigned int h) noexcept;
 	Surface(Surface&& src) noexcept;
 	Surface(Surface&) = delete;
