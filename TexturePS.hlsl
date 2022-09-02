@@ -1,7 +1,8 @@
-Texture2D _texture;
-SamplerState splr;
+Texture2D texture_;
 
-float4 main( float2 texture_coords : TexCoord) : SV_Target
+SamplerState sampler_s;
+
+float4 main(float2 texCoords : TexCoord) : SV_Target
 {
-	return tex.Sample(splr,texture_coords)
+	return texture_.Sample(sampler_s,texCoords);
 }

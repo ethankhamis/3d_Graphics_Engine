@@ -1,18 +1,19 @@
-cbuffer CBuf
-{
-	matrix transform
-};
-
 struct VSOut
 {
-	float2 texture_coords : TexCoord;
+	float2 texture_ : TexCoord;
 	float4 position : SV_Position;
 };
 
-VSOut main(float3 position : Position, float2 texture_coordinates : TexCoord)
+cbuffer CBuf
 {
-	VSOut vso;
-	vso.position = mul(float4(position, 1.0f), transform);
-	vso.texture_coordinates = texture_coordinates;
-	return vso;
+	matrix transform;
+};
+
+
+VSOut main(float3 position : Position, float2 texture_ : TexCoord)
+{
+	VSOut vsoutput;
+	vsoutput.position = mul(float4(position, 1.0f), transform);
+	vsoutput.texture_ = texture_;
+	return vsoutput;
 }
