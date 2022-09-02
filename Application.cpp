@@ -8,11 +8,15 @@
 #include <DirectXMath.h>
 #include "BindPlane.h"
 #include <algorithm>
+#include "GfxDeviceInterface+Mng.h"
+#include "Surface.h"
+
+GDIpManager gdipm;
 
 Application::Application()
 	:window(1000, 750, L"6~3D")
 {
-	/*
+	
 	struct Factory
 	{
 		Factory(Graphics& gfx)
@@ -70,7 +74,8 @@ Application::Application()
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, f);
 
-	*/
+	const auto s = Surface::WithFile(L"Images\\eren.png");
+	
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
 

@@ -74,10 +74,3 @@ public:
 		const wchar_t* FetchErrorType() const noexcept override;
 	};
 };
-
-#define WIDE2(x) L##x
-#define WIDE1(x) WIDE2(x)
-#define WFILE WIDE1(__FILE__)
-#define EHWND_EXCEPT( hr ) Wnd::HResultException( __LINE__,WFILE,(hr) )
-#define EHWND_LAST_EXCEPT() Wnd::HResultException( __LINE__,WFILE,GetLastError() )
-#define EHWND_NOGFX_EXCEPT() Wnd::NoGfxException(__LINE__, WFILE)

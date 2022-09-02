@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -85,22 +77,48 @@
     <Filter Include="Primatives\Sphere\LongLatSphere">
       <UniqueIdentifier>{fae0c006-d850-4186-9776-9952e22167b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Others">
+      <UniqueIdentifier>{444a306d-a7f5-47b6-a707-e9c6d0c9e7c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Others\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Others\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Texture-Related">
+      <UniqueIdentifier>{7996e0b4-acb8-4d29-8de2-bd37072ccb4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture-Related\GDI">
+      <UniqueIdentifier>{07aeda77-18b3-4af3-9258-add46343e850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture-Related\Surface">
+      <UniqueIdentifier>{29639014-c315-4ca3-ab21-f2f543ed9bc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture-Related\Colour">
+      <UniqueIdentifier>{03e58f60-c144-4aff-8764-6df585a67abb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture-Related\hlsl">
+      <UniqueIdentifier>{2724a9ce-a574-452f-ba08-d0601e3bfdf2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Win.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Timer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ExceptionHandler.cpp">
       <Filter>Exception-Based</Filter>
@@ -130,7 +148,7 @@
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="PrimitiveTopology.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="InputLayout.cpp">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
@@ -153,19 +171,25 @@
     <ClCompile Include="BindCube.cpp">
       <Filter>Primatives\Cube</Filter>
     </ClCompile>
+    <ClCompile Include="GfxDeviceInterface+Mng.cpp">
+      <Filter>Texture-Related\GDI</Filter>
+    </ClCompile>
+    <ClCompile Include="Surface.cpp">
+      <Filter>Others\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
-      <Filter>Header Files</Filter>
+      <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Header Files</Filter>
+      <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
+      <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
+      <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExceptionHandler.h">
       <Filter>Exception-Based</Filter>
@@ -204,7 +228,7 @@
       <Filter>Buffers &amp; Shaders + Related Others\Buffers\.h</Filter>
     </ClInclude>
     <ClInclude Include="PrimitiveTopology.h">
-      <Filter>Header Files</Filter>
+      <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TransformConstBuffer.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
@@ -254,6 +278,15 @@
     <ClInclude Include="BindCube.h">
       <Filter>Primatives\Cube</Filter>
     </ClInclude>
+    <ClInclude Include="GfxDeviceInterface+Mng.h">
+      <Filter>Texture-Related\GDI</Filter>
+    </ClInclude>
+    <ClInclude Include="Colour.h">
+      <Filter>Texture-Related\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="Surface.h">
+      <Filter>Texture-Related\Surface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -277,6 +310,12 @@
     </FxCompile>
     <FxCompile Include="ColourBlendPS.hlsl">
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturePS.hlsl">
+      <Filter>Texture-Related\hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="TextureVS.hlsl">
+      <Filter>Texture-Related\hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

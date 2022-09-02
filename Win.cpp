@@ -1,5 +1,6 @@
 #include "Win.h"
 #include <sstream>
+#include "ThrowMacros.h"
 #include "Mouse.h"
 #include "resource.h"
 

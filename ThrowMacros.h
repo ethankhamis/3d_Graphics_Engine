@@ -26,3 +26,7 @@
 // HRESULT must exist in scope macros to work
 #define GFX_EXCEPT_NOINFO(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
 #define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,WFILE,hr )
+
+#define EHWND_EXCEPT( hr ) Wnd::HResultException( __LINE__,WFILE,(hr) )
+#define EHWND_LAST_EXCEPT() Wnd::HResultException( __LINE__,WFILE,GetLastError() )
+#define EHWND_NOGFX_EXCEPT() Wnd::NoGfxException(__LINE__, WFILE)

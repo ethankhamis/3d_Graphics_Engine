@@ -159,6 +159,7 @@
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="ExceptionHandler.cpp" />
+    <ClCompile Include="GfxDeviceInterface+Mng.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
@@ -166,6 +167,7 @@
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
+    <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformConstBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -179,6 +181,7 @@
     <ClInclude Include="BindLongLatSphere.h" />
     <ClInclude Include="BindPlane.h" />
     <ClInclude Include="BindCube.h" />
+    <ClInclude Include="Colour.h" />
     <ClInclude Include="Cone.h" />
     <ClInclude Include="ConstBuffer(s).h" />
     <ClInclude Include="Cube.h" />
@@ -187,11 +190,13 @@
     <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
+    <ClInclude Include="GfxDeviceInterface+Mng.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="LongLatSphere.h" />
     <ClInclude Include="MathematicalConstants.h" />
     <ClInclude Include="Plane.h" />
+    <ClInclude Include="Surface.h" />
     <ClInclude Include="ThrowMacros.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="IndexBuffer.h" />
@@ -240,6 +245,8 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)%(Filename).cso</ObjectFileOutput>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="TexturePS.hlsl" />
+    <FxCompile Include="TextureVS.hlsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
