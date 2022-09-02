@@ -171,7 +171,7 @@
     <ClCompile Include="SemiSkinnedCube.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
-    <ClCompile Include="SkinnedTexturedCube.cpp" />
+    <ClCompile Include="SkinnedCube.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformConstBuffer.cpp" />
@@ -205,7 +205,7 @@
     <ClInclude Include="SemiSkinnedCube.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
-    <ClInclude Include="SkinnedTexturedCube.h" />
+    <ClInclude Include="SkinnedCube.h" />
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="ThrowMacros.h" />
     <ClInclude Include="Drawable.h" />

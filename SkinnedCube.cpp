@@ -1,11 +1,11 @@
-#include "SkinnedTexturedCube.h"
+#include "SkinnedCube.h"
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
 #include "Cube.h"
 #include "Surface.h"
 #include "Texture.h"
 
-SkinnedTexturedCube::SkinnedTexturedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist)
+SkinnedCube::SkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -63,7 +63,7 @@ SkinnedTexturedCube::SkinnedTexturedCube(Graphics& gfx, std::mt19937& rng, std::
 
 }
 
-void SkinnedTexturedCube::Update(float deltaTime) noexcept
+void SkinnedCube::Update(float deltaTime) noexcept
 {
 	roll += droll * deltaTime;
 	pitch += dpitch * deltaTime;
@@ -73,7 +73,7 @@ void SkinnedTexturedCube::Update(float deltaTime) noexcept
 	chi += dchi * deltaTime;
 }
 
-DirectX::XMMATRIX SkinnedTexturedCube::FetchTransformMat() const noexcept
+DirectX::XMMATRIX SkinnedCube::FetchTransformMat() const noexcept
 {return
 	    DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *

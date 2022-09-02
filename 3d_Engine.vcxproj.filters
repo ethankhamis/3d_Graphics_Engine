@@ -213,7 +213,7 @@
     <ClCompile Include="TexturedPlane.cpp">
       <Filter>Primatives\Texture_Oriented\Plane</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedTexturedCube.cpp">
+    <ClCompile Include="SkinnedCube.cpp">
       <Filter>Primatives\Texture_Oriented\Cube\FullySkinned</Filter>
     </ClCompile>
     <ClCompile Include="SemiSkinnedCube.cpp">
@@ -332,7 +332,7 @@
     <ClInclude Include="TexturedPlane.h">
       <Filter>Primatives\Texture_Oriented\Plane</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedTexturedCube.h">
+    <ClInclude Include="SkinnedCube.h">
       <Filter>Primatives\Texture_Oriented\Cube\FullySkinned</Filter>
     </ClInclude>
     <ClInclude Include="SemiSkinnedCube.h">

@@ -13,8 +13,8 @@ struct Cube
 	template<class Vertex>
 	static IndexedTriangleList<Vertex> Create_Skinned();
 
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_SemiSkinned();
+	//template<class Vertex>
+	//static IndexedTriangleList<Vertex> Create_SemiSkinned();
 };
 
 template<class Vertex>
@@ -90,41 +90,43 @@ inline IndexedTriangleList<Vertex> Cube::Create_Skinned()
 	};
 }
 
+/*
 template<class Vertex>
 inline IndexedTriangleList<Vertex> Cube::Create_SemiSkinned()
 {
+
 	constexpr float side = 0.5f;
 
 
-	vector<Vertex> vertices(14);
+	vector<Vertex> vertices(8);
 	vertices[0].pos = { -side, -side, -side };
+	vertices[0].tex = { 0.0f,0.0f };
 	vertices[1].pos = { side, -side, -side };
+	vertices[1].tex = { 1.0f,0.0f };
 	vertices[2].pos = { -side, side, -side };
+	vertices[2].tex = { 0.0f,1.0f };
 	vertices[3].pos = { side, side, -side };
+	vertices[3].tex = { 1.0f,1.0f };
 	vertices[4].pos = { -side, -side, side };
+	vertices[4].tex = { 0.0f,0.0f };
 	vertices[5].pos = { side, -side, side };
+	vertices[5].tex = { 1.0f,0.0f };
 	vertices[6].pos = { -side, side, side };
+	vertices[6].tex = { 0.0f,1.0f };
 	vertices[7].pos = { side, side, side };
+	vertices[7].tex = { 1.0f,1.0f };
 
-	vertices[0].tex = { 0.0f,0.0f   };
-	vertices[1].tex = { 1.0f,0.0f   };
-	vertices[2].tex = {  0.0f,1.0f  };
-	vertices[3].tex = { 1.0f,1.0f   };
-	vertices[4].tex = {  0.0f,0.0f  };
-	vertices[5].tex = {  1.0f,0.0f  };
-	vertices[6].tex = {  0.0f,1.0f  };
-	vertices[7].tex = {  1.0f,1.0f  };
+
 
 
 
 	return{
 		std::move(vertices),{
-			0,2,1,   2,3,1,
-			4,8,5,   5,8,9,
-			2,6,3,   3,6,7,
-			4,5,7,   4,7,6,
-			2,10,11, 2,11,6,
-			12,3,7,  12,7,13
-		}
-	};
-}
+			0,2,1, 2,3,1,
+			1,3,5, 3,7,5,
+			2,6,3, 3,6,7,
+			4,5,7, 4,7,6,
+			0,4,2, 2,4,6,
+			0,1,4, 1,5,4}};
+	}
+	*/

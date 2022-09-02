@@ -11,8 +11,8 @@
 #include "GfxDeviceInterface+Mng.h"
 #include "Surface.h"
 #include "TexturedPlane.h"
-#include "SemiSkinnedCube.h"
-#include "SkinnedTexturedCube.h"
+//#include "SemiSkinnedCube.h"
+#include "SkinnedCube.h"
 
 GDIpManager gdipm;
 
@@ -56,7 +56,7 @@ Application::Application()
 					gfx, rng, adist, ddist, odist, rdist
 					);
 			case 1:
-				return std::make_unique<SkinnedTexturedCube>
+				return std::make_unique<SkinnedCube>
 					(
 						gfx, rng, adist, ddist, odist, rdist
 

@@ -1,3 +1,4 @@
+/*
 #include "SemiSkinnedCube.h"
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
@@ -5,7 +6,7 @@
 #include "Surface.h"
 #include "Texture.h"
 
-SemiSkinnedTexturedCube::SemiSkinnedTexturedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist)
+SemiSkinnedCube::SemiSkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -61,7 +62,7 @@ SemiSkinnedTexturedCube::SemiSkinnedTexturedCube(Graphics& gfx, std::mt19937& rn
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 }
 
-void SemiSkinnedTexturedCube::Update(float deltaTime) noexcept
+void SemiSkinnedCube::Update(float deltaTime) noexcept
 {
 	roll += droll * deltaTime;
 	pitch += dpitch * deltaTime;
@@ -71,7 +72,7 @@ void SemiSkinnedTexturedCube::Update(float deltaTime) noexcept
 	chi += dchi * deltaTime;
 }
 
-DirectX::XMMATRIX SemiSkinnedTexturedCube::FetchTransformMat() const noexcept
+DirectX::XMMATRIX SemiSkinnedCube::FetchTransformMat() const noexcept
 {
 	return
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
@@ -79,3 +80,4 @@ DirectX::XMMATRIX SemiSkinnedTexturedCube::FetchTransformMat() const noexcept
 		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi) *
 		DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f);
 }
+*/

@@ -1,9 +1,9 @@
 #pragma once
 #include "DrawableBase.h"
 
-struct SemiSkinnedTexturedCube : public DrawableBase<SemiSkinnedTexturedCube>
+struct SemiSkinnedCube : public DrawableBase<SemiSkinnedCube>
 {
-	SemiSkinnedTexturedCube
+	SemiSkinnedCube
 	(Graphics& gfx, std::mt19937& rng,
 		std::uniform_real_distribution<float>& adist,
 		std::uniform_real_distribution<float>& ddist,
