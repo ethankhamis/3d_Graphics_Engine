@@ -168,8 +168,10 @@
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
     <ClCompile Include="Sampler.cpp" />
+    <ClCompile Include="SemiSkinnedCube.cpp" />
     <ClCompile Include="Surface.cpp" />
     <ClCompile Include="Texture.cpp" />
+    <ClCompile Include="SkinnedTexturedCube.cpp" />
     <ClCompile Include="TexturedPlane.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformConstBuffer.cpp" />
@@ -200,8 +202,10 @@
     <ClInclude Include="MathematicalConstants.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Sampler.h" />
+    <ClInclude Include="SemiSkinnedCube.h" />
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
+    <ClInclude Include="SkinnedTexturedCube.h" />
     <ClInclude Include="TexturedPlane.h" />
     <ClInclude Include="ThrowMacros.h" />
     <ClInclude Include="Drawable.h" />

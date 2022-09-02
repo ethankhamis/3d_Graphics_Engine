@@ -11,6 +11,8 @@
 #include "GfxDeviceInterface+Mng.h"
 #include "Surface.h"
 #include "TexturedPlane.h"
+#include "SemiSkinnedCube.h"
+#include "SkinnedTexturedCube.h"
 
 GDIpManager gdipm;
 
@@ -54,9 +56,10 @@ Application::Application()
 					gfx, rng, adist, ddist, odist, rdist
 					);
 			case 1:
-				return std::make_unique<TexturedPlane>
+				return std::make_unique<SkinnedTexturedCube>
 					(
 						gfx, rng, adist, ddist, odist, rdist
+
 						);
 				/*
 			case 1:
@@ -94,7 +97,7 @@ Application::Application()
 
 	Factory f(window.grfx());
 	drawables.reserve(nDrawables);
-	std::generate_n(std::back_inserter(drawables), nDrawables, f);
+	std::generate_n(std::back_inserter(drawables), nDrawables, Factory{ window.grfx() });
 	
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
