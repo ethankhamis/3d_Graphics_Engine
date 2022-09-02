@@ -100,8 +100,11 @@
     <Filter Include="Texture-Related\Colour">
       <UniqueIdentifier>{03e58f60-c144-4aff-8764-6df585a67abb}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Texture-Related\hlsl">
+    <Filter Include="Texture-Related\.hlsl">
       <UniqueIdentifier>{2724a9ce-a574-452f-ba08-d0601e3bfdf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture-Related\Texture">
+      <UniqueIdentifier>{484e1435-73ce-4612-94fe-09e2b8e86f73}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -175,7 +178,10 @@
       <Filter>Texture-Related\GDI</Filter>
     </ClCompile>
     <ClCompile Include="Surface.cpp">
-      <Filter>Others\Source Files</Filter>
+      <Filter>Texture-Related\Surface</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Texture-Related\Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +293,9 @@
     <ClInclude Include="Surface.h">
       <Filter>Texture-Related\Surface</Filter>
     </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Texture-Related\Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -312,10 +321,10 @@
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
     <FxCompile Include="TexturePS.hlsl">
-      <Filter>Texture-Related\hlsl</Filter>
+      <Filter>Texture-Related\.hlsl</Filter>
     </FxCompile>
     <FxCompile Include="TextureVS.hlsl">
-      <Filter>Texture-Related\hlsl</Filter>
+      <Filter>Texture-Related\.hlsl</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

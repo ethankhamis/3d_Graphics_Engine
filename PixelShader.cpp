@@ -5,7 +5,7 @@ namespace WRL = Microsoft::WRL;
 
 PixelShader::PixelShader(Graphics& gfx, const std::wstring& filepath)
 {
-	INFOMAN(gfx);
+	DEF_INFOMANAGER(gfx);
 	ComPtr<ID3DBlob> pBlob;
 	GFX_THROW_INFO(D3DReadFileToBlob(filepath.c_str(), &pBlob));
 	GFX_THROW_INFO

@@ -4,7 +4,7 @@
 
 VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath)
 {
-	INFOMAN(gfx);
+	DEF_INFOMANAGER(gfx);
 
 	GFX_THROW_INFO( D3DReadFileToBlob(filepath.c_str(), &pByteCodeBlob));
 

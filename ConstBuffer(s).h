@@ -39,7 +39,7 @@ public:
 template<typename Ctype>
 inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constants)
 {
-	INFOMAN(gfx);
+	DEF_INFOMANAGER(gfx);
 
 	D3D11_BUFFER_DESC ConstBufDesc = {};
 	ConstBufDesc.MiscFlags = 0u;
@@ -60,7 +60,7 @@ inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constan
 template<typename Ctype>
 inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx)
 {
-	INFOMAN(gfx);
+	DEF_INFOMANAGER(gfx);
 
 
 	D3D11_BUFFER_DESC ConstBufDesc = {};
@@ -79,7 +79,7 @@ inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx)
 template<typename Ctype>
 inline void ConstantBuffer<Ctype>::Update(Graphics& gfx, const Ctype& constants)
 {
-	INFOMAN(gfx);
+	DEF_INFOMANAGER(gfx);
 
 	D3D11_MAPPED_SUBRESOURCE MappedSubRes;
 	GFX_THROW_INFO(FetchDeviceContext(gfx)->Map(

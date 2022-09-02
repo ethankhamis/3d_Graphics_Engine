@@ -9,7 +9,7 @@ struct VertexBuffer : public Bindable
 	template <class Vertex>
 	VertexBuffer(Graphics& gfx, const std::vector<Vertex>& vertices) : stride(sizeof(Vertex))
 	{
-		INFOMAN(gfx);
+		DEF_INFOMANAGER(gfx);
 
 		D3D11_BUFFER_DESC bufferDesc = {};
 		
