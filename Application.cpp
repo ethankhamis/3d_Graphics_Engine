@@ -53,14 +53,19 @@ Application::Application()
 					(
 					gfx, rng, adist, ddist, odist, rdist
 					);
-
+			case 1:
+				return std::make_unique<TexturedPlane>
+					(
+						gfx, rng, adist, ddist, odist, rdist
+						);
+				/*
 			case 1:
 				return std::make_unique<Plane_t>
 					(
 						gfx, rng, adist, ddist,
 						odist, rdist, hDiv, vDiv
 						);
-				
+				*/
 
 			default:
 				assert(false && "bad drawable type in factory");

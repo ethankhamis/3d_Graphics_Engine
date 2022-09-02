@@ -14,5 +14,5 @@ private:
 	void ExecFrame();
 private:
 	std::vector<std::unique_ptr<struct Drawable>> drawables;
-	static constexpr unsigned int nDrawables = 300;
+	static constexpr unsigned int nDrawables = 1;
 };

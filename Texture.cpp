@@ -25,8 +25,20 @@ Texture::Texture(Graphics& gfx, const Surface& surface)
 	srd.SysMemPitch = memPitch;
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> Texture;
 	GFX_THROW_INFO(FetchDevice(gfx)->CreateTexture2D(&textureDescription, &srd, &Texture));
+
+
+	// create the resource view on the texture
+	D3D11_SHADER_RESOURCE_VIEW_DESC srvd = {};
+	srvd.Format = textureDescription.Format;
+	srvd.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	srvd.Texture2D.MostDetailedMip = 0;
+	srvd.Texture2D.MipLevels = 1;
+	GFX_THROW_INFO(FetchDevice(gfx)->CreateShaderResourceView(
+		Texture.Get(), &srvd, &pTextureView
+	));
 }
 
 void Texture::Bind(Graphics& gfx) noexcept
 {
+	FetchDeviceContext(gfx)->PSSetShaderResources(0u, 1u, pTextureView.GetAddressOf());
 }
