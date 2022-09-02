@@ -10,6 +10,7 @@
 #include <algorithm>
 #include "GfxDeviceInterface+Mng.h"
 #include "Surface.h"
+#include "TexturedPlane.h"
 
 GDIpManager gdipm;
 
@@ -28,6 +29,7 @@ Application::Application()
 		{
 			switch (typedist(rng))
 			{
+				/*
 			case 0:
 				return std::make_unique<BindCube>(
 					gfx, rng, adist, ddist,
@@ -44,6 +46,21 @@ Application::Application()
 						gfx, rng, adist, ddist,
 						odist, rdist, hDiv, vDiv
 					);
+					*/
+
+			case 0:
+				return std::make_unique<TexturedPlane>
+					(
+					gfx, rng, adist, ddist, odist, rdist
+					);
+
+			case 1:
+				return std::make_unique<Plane_t>
+					(
+						gfx, rng, adist, ddist,
+						odist, rdist, hDiv, vDiv
+						);
+				
 
 			default:
 				assert(false && "bad drawable type in factory");
@@ -67,14 +84,12 @@ Application::Application()
 		std::uniform_int_distribution<int> vDiv{ 5,20 };
 		std::uniform_int_distribution<int> hDiv{ 5,20 };
 
-		std::uniform_int_distribution<int> typedist{ 0,2 };
+		std::uniform_int_distribution<int> typedist{ 0,1 };
 	};
 
 	Factory f(window.grfx());
 	drawables.reserve(nDrawables);
 	std::generate_n(std::back_inserter(drawables), nDrawables, f);
-
-	const auto s = Surface::WithFile(L"Images\\eren.png");
 	
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
 }
@@ -85,7 +100,7 @@ void Application::ExecFrame()
 	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
 	for (auto& drawable : drawables)
 	{
-		drawable->Update(delta);
+		drawable->Update(window.kbd.Key_Pressed(VK_SPACE) ? 0.0f : delta);
 		drawable->Render(window.grfx());
 	}
 	window.grfx().EndFrame();

@@ -120,7 +120,7 @@ Surface Surface::WithFile(const std::wstring& filename)
     UINT w = NULL;
     UINT h = NULL;
     UINT pitch = NULL;
-    std::unique_ptr<Colour[]> pBuffer = nullptr;
+    std::unique_ptr<Colour[]> pBuffer;
 
     {
         gdp::Bitmap bitmap(filename.c_str());
@@ -131,6 +131,7 @@ Surface Surface::WithFile(const std::wstring& filename)
             throw Exception(__LINE__, WFILE, wss.str());
         }
 
+        w = bitmap.GetWidth();;
         h = bitmap.GetHeight();
         pBuffer = std::make_unique<Colour[]>(w * h);
 
@@ -140,7 +141,7 @@ Surface Surface::WithFile(const std::wstring& filename)
             {
                 gdp::Color c;
                 bitmap.GetPixel(x, y, &c);
-                pBuffer[y * pitch + x] = c.GetValue();
+                pBuffer[y * w + x] = c.GetValue();
             }
         }
     }
