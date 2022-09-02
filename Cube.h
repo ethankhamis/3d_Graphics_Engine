@@ -47,8 +47,11 @@ inline IndexedTriangleList<Vertex> Cube::Create()
 template<class Vertex>
 inline IndexedTriangleList<Vertex> Cube::Create_Skinned()
 {
-	constexpr float side = 0.5f;
+
+	constexpr float side = .5f;
+
 	vector<Vertex> vertices(14);
+
 	vertices[0].pos = { -side,-side,-side };
 	vertices[0].tex = { 2.0f / 3.0f,0.0f / 4.0f };
 	vertices[1].pos = { side,-side,-side };

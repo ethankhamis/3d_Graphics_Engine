@@ -14,6 +14,9 @@
 //#include "SemiSkinnedCube.h"
 #include "SkinnedCube.h"
 
+#include "imgui/imgui.h"
+
+
 GDIpManager gdipm;
 
 Application::Application()
@@ -55,6 +58,7 @@ Application::Application()
 					(
 					gfx, rng, adist, ddist, odist, rdist
 					);
+				
 			case 1:
 				return std::make_unique<SkinnedCube>
 					(
@@ -105,12 +109,28 @@ Application::Application()
 void Application::ExecFrame()
 {
 	auto delta = timer.MarkTime();
+
+	if (window.kbd.Key_Pressed(VK_SPACE))
+	{
+		window.grfx().EndGUI();
+	}
+	else
+	{
+		window.grfx().StartGUI();
+	}
+	
 	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
 	for (auto& drawable : drawables)
 	{
 		drawable->Update(window.kbd.Key_Pressed(VK_SPACE) ? 0.0f : delta);
 		drawable->Render(window.grfx());
 	}
+
+	if (show_demo)
+	{
+		ImGui::ShowDemoWindow(&show_demo);
+	}
+
 	window.grfx().EndFrame();
 }
 

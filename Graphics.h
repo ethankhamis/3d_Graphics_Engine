@@ -26,6 +26,13 @@ public:
 	void DrawIndexed(UINT count) noexcept (!Debug);
 	void ApplyProjection(DirectX::FXMMATRIX pj) noexcept;
 	DirectX::XMMATRIX FetchProjection() const noexcept;
+public:// IMGUI RELATED
+	void StartGUI() noexcept;
+	void EndGUI() noexcept;
+	bool GUI_Status() const noexcept;
+private:// IMGUI RELATED
+	bool Gui_Status = true;
+
 private:
 	DirectX::XMMATRIX projection;
 	Microsoft::WRL::ComPtr<ID3D11Device> pDevice;

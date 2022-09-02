@@ -3,6 +3,7 @@
 #include "ThrowMacros.h"
 #include "Mouse.h"
 #include "resource.h"
+#include "imgui/imgui_impl_win32.h"
 
 Wnd::WndClass Wnd::WndClass::wndClass;
 
@@ -81,6 +82,9 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
+	
+	//initalise win32 implementation of ImGUI
+	ImGui_ImplWin32_Init(hWnd);
 
 	//create graphics instance
 	pGraphics = std::make_unique<Graphics>(hWnd);
@@ -89,6 +93,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 
 Wnd::~Wnd() noexcept
 {
+	ImGui_ImplWin32_Shutdown();
 	DestroyWindow(hWnd);
 }
 
@@ -102,6 +107,11 @@ void Wnd::ApplyTitle(const std::wstring& t)
 
 LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexcept
 {
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
+	{
+		return true;
+	}
+
 	switch (msg)
 	{
 	case WM_CLOSE:

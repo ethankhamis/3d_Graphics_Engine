@@ -18,13 +18,12 @@ SkinnedCube::SkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_dis
 	theta(adist(rng)),
 	phi(adist(rng))
 {
-	namespace dx = DirectX;
 
 	if (!is_static_init())
 	{
 		struct Vertex
 		{
-			dx::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 pos;
 			struct
 			{
 				float u;

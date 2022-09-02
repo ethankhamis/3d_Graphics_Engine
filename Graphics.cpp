@@ -4,6 +4,8 @@
 #include <d3dcompiler.h>
 #include "Graphics.h"
 #include "ThrowMacros.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -115,10 +117,17 @@ Graphics::Graphics(HWND hWnd)
 	vp.TopLeftY = 0.0f;
 	pDeviceContext->RSSetViewports(1u, &vp);
 
+	//initialise d3d implementation of IMGUI
+	ImGui_ImplDX11_Init(pDevice.Get(), pDeviceContext.Get());
 }
 
 void Graphics::EndFrame()
 {
+	if (Gui_Status)
+	{
+		ImGui::Render();
+		ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+	}
 	HRESULT hr;
 #ifndef NDEBUG
 	infomanager.Apply();
@@ -135,6 +144,13 @@ void Graphics::EndFrame()
 
 void Graphics::ClearBuffer(float R, float G, float B) noexcept
 {
+	if (Gui_Status)
+	{
+		ImGui_ImplDX11_NewFrame();
+		ImGui_ImplWin32_NewFrame();
+		ImGui::NewFrame();
+	}
+
 	const float colour[] = { R,G,B,1.0f };
 	pDeviceContext->ClearRenderTargetView(pTargetView.Get(), colour);
 	pDeviceContext->ClearDepthStencilView(pDepthStencilView.Get(), D3D11_CLEAR_DEPTH, 1.0f, 0u);
@@ -154,6 +170,21 @@ void Graphics::ApplyProjection(DirectX::FXMMATRIX pj) noexcept
 DirectX::XMMATRIX Graphics::FetchProjection() const noexcept
 {
 	return projection;
+}
+
+void Graphics::StartGUI() noexcept
+{
+	Gui_Status = true;
+}
+
+void Graphics::EndGUI() noexcept
+{
+	Gui_Status = false;
+}
+
+bool Graphics::GUI_Status() const noexcept
+{
+	return Gui_Status;
 }
 
 Graphics::HResultException::HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hr, std::vector<std::string> infoMsg) noexcept
