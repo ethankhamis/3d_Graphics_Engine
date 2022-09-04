@@ -1,12 +1,12 @@
 #include "Application.h"
 #include <sstream>
-#include "BindCube.h"
+#include "BindSolidCube.h"
 #include <memory>
 #include "BindLongLatSphere.h"
 #include "Timer.h"
 #include "MathematicalConstants.h"
 #include <DirectXMath.h>
-#include "BindPlane.h"
+#include "BindSolidPlane.h"
 #include <algorithm>
 #include "GfxDeviceInterface+Mng.h"
 #include "Surface.h"
@@ -36,33 +36,27 @@ Application::Application()
 			{
 				/*
 			case 0:
-				return std::make_unique<BindCube>(
+				return std::make_unique<BindSolidCube>(
 					gfx, rng, adist, ddist,
 					odist, rdist, bdist
-					);
-			case 1:
+					);*/
+			case 0:
 				return std::make_unique<LongLatSphere>(
 					gfx, rng, adist, ddist,
 					odist, rdist, longdist, latdist
 					);
-			case 2:
-				return std::make_unique<Plane_t>
-					(
-						gfx, rng, adist, ddist,
-						odist, rdist, hDiv, vDiv
-					);
-					*/
 
-			case 0:
-				return std::make_unique<TexturedPlane>
-					(
-					gfx, rng, adist, ddist, odist, rdist
-					);
-				
+				/*
 			case 1:
-				return std::make_unique<SkinnedCube>
+				return std::make_unique<BindSolidPlane>
 					(
-						gfx, rng, adist, ddist, odist, rdist
+					gfx, rng, adist, ddist, odist, rdist,hDiv,vDiv
+					);
+		*/
+			case 1:
+				return std::make_unique<BindSolidCube>
+					(
+						gfx, rng, adist, ddist, odist, rdist, bdist
 
 						);
 				/*
@@ -90,8 +84,8 @@ Application::Application()
 		std::uniform_real_distribution<float> odist{ 0.0f,PI * 0.08f };
 		std::uniform_real_distribution<float> rdist{ 6.0f,20.0f };
 		std::uniform_real_distribution<float> bdist{ 0.4f,3.0f };
-		std::uniform_int_distribution<int> latdist{ 5,20 };
-		std::uniform_int_distribution<int> longdist{ 10,40 };
+		std::uniform_int_distribution<int> latdist{ 10,20 };
+		std::uniform_int_distribution<int> longdist{ 10,20 };
 
 		std::uniform_int_distribution<int> vDiv{ 5,20 };
 		std::uniform_int_distribution<int> hDiv{ 5,20 };
@@ -108,17 +102,8 @@ Application::Application()
 
 void Application::ExecFrame()
 {
-	auto delta = timer.MarkTime();
+	auto delta = timer.MarkTime() * speed;
 
-	if (window.kbd.Key_Pressed(VK_SPACE))
-	{
-		window.grfx().EndGUI();
-	}
-	else
-	{
-		window.grfx().StartGUI();
-	}
-	
 	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
 	for (auto& drawable : drawables)
 	{
@@ -126,10 +111,12 @@ void Application::ExecFrame()
 		drawable->Render(window.grfx());
 	}
 
-	if (show_demo)
+	if (ImGui::Begin("Time"))
 	{
-		ImGui::ShowDemoWindow(&show_demo);
+		ImGui::SliderFloat("Scale Speed", &speed, 0.f, 4.f);
 	}
+
+	ImGui::End();
 
 	window.grfx().EndFrame();
 }

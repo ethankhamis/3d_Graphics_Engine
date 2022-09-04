@@ -1,10 +1,10 @@
-#include "BindCube.h"
+#include "BindSolidCube.h"
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
 #include "Cube.h"
 #include <algorithm>
 
-BindCube::BindCube(Graphics& gfx,
+BindSolidCube::BindSolidCube(Graphics& gfx,
 	std::mt19937& rng,
 	std::uniform_real_distribution<float>& adist,
 	std::uniform_real_distribution<float>& ddist,
@@ -95,7 +95,7 @@ BindCube::BindCube(Graphics& gfx,
 
 }
 
-void BindCube::Update(float dt) noexcept
+void BindSolidCube::Update(float dt) noexcept
 {
 	roll += droll * dt;
 	pitch += dpitch * dt;
@@ -105,7 +105,7 @@ void BindCube::Update(float dt) noexcept
 	chi += dchi * dt;
 }
 
-DirectX::XMMATRIX BindCube::FetchTransformMat() const noexcept
+DirectX::XMMATRIX BindSolidCube::FetchTransformMat() const noexcept
 {
 	return DirectX::XMLoadFloat3x3(&model_transform) *
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *

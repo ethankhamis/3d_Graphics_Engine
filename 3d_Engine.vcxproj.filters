@@ -225,10 +225,10 @@
     <ClCompile Include="SemiSkinnedCube.cpp">
       <Filter>Primatives\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClCompile>
-    <ClCompile Include="BindCube.cpp">
+    <ClCompile Include="BindSolidCube.cpp">
       <Filter>Primatives\Colour_Oriented\Cube</Filter>
     </ClCompile>
-    <ClCompile Include="BindPlane.cpp">
+    <ClCompile Include="BindSolidPlane.cpp">
       <Filter>Primatives\Colour_Oriented\Plane</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
@@ -365,10 +365,10 @@
     <ClInclude Include="SemiSkinnedCube.h">
       <Filter>Primatives\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClInclude>
-    <ClInclude Include="BindCube.h">
+    <ClInclude Include="BindSolidCube.h">
       <Filter>Primatives\Colour_Oriented\Cube</Filter>
     </ClInclude>
-    <ClInclude Include="BindPlane.h">
+    <ClInclude Include="BindSolidPlane.h">
       <Filter>Primatives\Colour_Oriented\Plane</Filter>
     </ClInclude>
     <ClInclude Include="LongLatSphere.h">

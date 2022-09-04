@@ -17,7 +17,8 @@ private:
 	void ExecFrame();
 private:
 	std::vector<std::unique_ptr<struct Drawable>> drawables;
-	static constexpr unsigned int nDrawables = 10;
+	static constexpr unsigned int nDrawables = 60;
+	float speed = 1.f;
 private:
 	bool show_demo = true;
 };

@@ -1,9 +1,9 @@
-#include "BindPlane.h"
+#include "BindSolidPlane.h"
 #include "DefaultBindables.h"
 #include "ThrowMacros.h"
 #include "Plane.h"
 
-Plane_t::Plane_t(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_int_distribution<int>& hDiv, std::uniform_int_distribution<int>& vDiv)
+BindSolidPlane::BindSolidPlane(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_int_distribution<int>& hDiv, std::uniform_int_distribution<int>& vDiv)
 	:
 	r(rdist(rng)),
 	droll(ddist(rng)),
@@ -72,7 +72,7 @@ Plane_t::Plane_t(Graphics& gfx, std::mt19937& rng, std::uniform_real_distributio
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 }
 
-void Plane_t::Update(float deltaTime) noexcept
+void BindSolidPlane::Update(float deltaTime) noexcept
 {
 	roll += droll * deltaTime;
 	pitch += dpitch * deltaTime;
@@ -82,7 +82,7 @@ void Plane_t::Update(float deltaTime) noexcept
 	chi += dchi * deltaTime;
 }
 
-DirectX::XMMATRIX Plane_t::FetchTransformMat() const noexcept
+DirectX::XMMATRIX BindSolidPlane::FetchTransformMat() const noexcept
 {
 	return 
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *

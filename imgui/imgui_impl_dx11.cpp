@@ -303,9 +303,10 @@ static void ImGui_ImplDX11_CreateFontsTexture()
         desc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
         desc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
         desc.MipLODBias = 0.f;
+        desc.MaxAnisotropy = 1;
         desc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
-        desc.MinLOD = 0.f;
-        desc.MaxLOD = 0.f;
+        desc.MinLOD = -FLT_MAX;
+        desc.MaxLOD = FLT_MAX;
         g_pd3dDevice->CreateSamplerState(&desc, &g_pFontSampler);
     }
 }

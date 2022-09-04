@@ -109,9 +109,9 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 {
 	if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
 	{
-		return true;
+		return 1;
 	}
-
+	const ImGuiIO io = ImGui::GetIO();
 	switch (msg)
 	{
 	case WM_CLOSE:
@@ -124,17 +124,22 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 		//Start of Windows Kbd Messages
 
+
+
 	case WM_CHAR:
 		kbd.Char_OnPress(static_cast<unsigned char>(wParam));
+		if (io.WantCaptureKeyboard) { break; }
 		break;
 
 	case WM_KEYUP:
 	case WM_SYSKEYUP:
+		if (io.WantCaptureKeyboard) { break; }
 		kbd.Key_OnRelease(static_cast<unsigned char>(wParam));
 		break;
 
 	case WM_KEYDOWN:
 	case WM_SYSKEYDOWN:
+		if (io.WantCaptureMouse) { break; }
 		if (!(kbd.AutoRepeat_State || lParam & 0x40000000 /*bit 30*/)) {
 			kbd.Key_onPress(static_cast<unsigned char>(wParam));
 		}
@@ -147,6 +152,9 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 	case WM_MOUSEMOVE:
 	{
+		SetForegroundWindow(hWnd);
+		if (io.WantCaptureMouse) { break; }
+
 		const POINTS pt = MAKEPOINTS(lParam);
 		if(pt.y<height && pt.y >=0 && pt.x>=0 && pt.x < width)
 		{
@@ -173,12 +181,14 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	}
 	case WM_LBUTTONDOWN:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Left_Pressed(pt.x, pt.y);
 		break;
 	}
 	case WM_RBUTTONDOWN:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Right_Pressed(pt.x, pt.y);
 		break;
@@ -186,12 +196,14 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 	case WM_MBUTTONDOWN:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Middle_Mouse_Pressed(pt.x, pt.y);
 		break;
 	}
 	case WM_LBUTTONUP:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Left_Released(pt.x, pt.y);
 
@@ -205,6 +217,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	}
 	case WM_RBUTTONUP:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Right_Released(pt.x, pt.y);
 
@@ -218,6 +231,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 	case WM_MBUTTONUP:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		mouse.Middle_Mouse_Released(pt.x, pt.y);
 
@@ -231,6 +245,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 	case WM_MOUSEWHEEL:
 	{
+		if (io.WantCaptureMouse) { break; }
 		const POINTS pt = MAKEPOINTS(lParam);
 		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 		mouse.Wheel_Delta(pt.x, pt.y, delta);
