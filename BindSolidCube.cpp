@@ -28,47 +28,31 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 		struct Vertex
 		{
 			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 n;
 		};
-		auto model = Cube::Create<Vertex>();
-		model.Transform(DirectX::XMMatrixScaling(1.0f, 1.0f, 1.2f));
+		auto model = Cube::Create_Independentf<Vertex>();
+		model.ApplyNormalsIndependent();
+
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"ColourIndexVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongShaderVS.cso");
 		auto pvsbc = pvs->FetchByteCode();
 		ApplyStaticBind(std::move(pvs));
 
-		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"ColourIndexPS.cso"));
+		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"PhongShaderPS.cso"));
 
 		ApplyStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
-		struct PSConsts
+		struct PSLightConstants
 		{
-			struct
-			{
-				float r;
-				float g;
-				float b;
-				float a;
-			} face_colors[8];
+			DirectX::XMVECTOR pos;
 		};
-		const PSConsts PSC2 =
-		{
-			{
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-				{ .2f,0.2f,0.2f },
-			}
-		};
-		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PSConsts>>(gfx, PSC2));
+		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PSLightConstants>>(gfx));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
+			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		ApplyStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 
@@ -81,16 +65,10 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 
-	//model deformation transform per instance
-	DirectX::XMStoreFloat3x3
-	(
+	// model deformation transform (per instance, not stored as bind)
+	DirectX::XMStoreFloat3x3(
 		&model_transform,
-		DirectX::XMMatrixScaling
-		(
-			2.0f,
-			2.0f,
-			2.0f//bdist(rng)
-		)
+		DirectX::XMMatrixScaling(1.3f, 1.3f, 1.3f)
 	);
 
 }

@@ -17,9 +17,6 @@
     <Filter Include="Performance &amp; Helpers">
       <UniqueIdentifier>{179fa3cf-0eeb-401d-88fc-0a6fd6ee4b9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Primatives">
-      <UniqueIdentifier>{679bd81a-0e39-4b40-bf20-282e4524fbf4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Buffers &amp; Shaders + Related Others">
       <UniqueIdentifier>{4b06691e-0c61-4bf5-8d67-6ca26915a49c}</UniqueIdentifier>
     </Filter>
@@ -88,54 +85,6 @@
     <Filter Include="Texture-Related\Sampler">
       <UniqueIdentifier>{4aaa1075-eeeb-400e-a2e4-ab8949b13bb9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Primatives\Texture_Oriented">
-      <UniqueIdentifier>{6ace3617-7dde-48a5-aac2-11395dad702d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Texture_Oriented\Plane">
-      <UniqueIdentifier>{4a7c20d4-f72e-44b7-97e8-4d6e07da5d43}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Texture_Oriented\Cube">
-      <UniqueIdentifier>{3e2c31cd-65b4-4c7f-ad8e-1f53edcd8d9e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Texture_Oriented\Cube\FullySkinned">
-      <UniqueIdentifier>{7d4a224a-c9e1-466e-9d7c-f8d92209b231}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Texture_Oriented\Cube\SemiSkinned">
-      <UniqueIdentifier>{08c39ece-b6c2-46d5-868c-8ebfc2d9baa0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Colour_Oriented">
-      <UniqueIdentifier>{758a891a-7123-424d-a8ca-b80c57165ba7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Colour_Oriented\Cube">
-      <UniqueIdentifier>{d78cff2e-6159-40ed-8fce-84b30662ecae}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Colour_Oriented\Plane">
-      <UniqueIdentifier>{2b504154-86b9-41d5-8f99-c8b123fccaeb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Colour_Oriented\Sphere">
-      <UniqueIdentifier>{f9ea265f-9bfd-4c35-8aa7-8c2ad3dd1acd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Colour_Oriented\Sphere\LongLatSphere">
-      <UniqueIdentifier>{fae0c006-d850-4186-9776-9952e22167b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative">
-      <UniqueIdentifier>{8f5aac92-db91-4377-894f-6b18b1058170}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative\Cube">
-      <UniqueIdentifier>{20eb09d6-7005-41dc-b6ba-85b919617119}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative\Cone">
-      <UniqueIdentifier>{63550f69-e4e1-4c3d-8e22-3abdfceabba0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative\Plane">
-      <UniqueIdentifier>{c1aa23b1-11cb-463d-b3bb-d730bf28ed01}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative\Sphere">
-      <UniqueIdentifier>{baaee290-03f4-468d-bca9-aa12ef2912f6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives\Primative\Sphere\IcoSphere">
-      <UniqueIdentifier>{7c810487-5c98-4bc5-a500-1c8fb7ac959b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Made By IMGUI">
       <UniqueIdentifier>{ff6dd0e8-430f-40a9-a67e-a5b8699714ef}</UniqueIdentifier>
     </Filter>
@@ -150,6 +99,69 @@
     </Filter>
     <Filter Include="Tools\Spawn">
       <UniqueIdentifier>{ffcde7ff-e4f9-47bf-b650-ab7ab7c48c80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds">
+      <UniqueIdentifier>{679bd81a-0e39-4b40-bf20-282e4524fbf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented">
+      <UniqueIdentifier>{6ace3617-7dde-48a5-aac2-11395dad702d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented\Plane">
+      <UniqueIdentifier>{4a7c20d4-f72e-44b7-97e8-4d6e07da5d43}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented\Cube">
+      <UniqueIdentifier>{3e2c31cd-65b4-4c7f-ad8e-1f53edcd8d9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented\Cube\FullySkinned">
+      <UniqueIdentifier>{7d4a224a-c9e1-466e-9d7c-f8d92209b231}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented\Cube\SemiSkinned">
+      <UniqueIdentifier>{08c39ece-b6c2-46d5-868c-8ebfc2d9baa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented">
+      <UniqueIdentifier>{758a891a-7123-424d-a8ca-b80c57165ba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cube">
+      <UniqueIdentifier>{d78cff2e-6159-40ed-8fce-84b30662ecae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Plane">
+      <UniqueIdentifier>{2b504154-86b9-41d5-8f99-c8b123fccaeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Sphere">
+      <UniqueIdentifier>{f9ea265f-9bfd-4c35-8aa7-8c2ad3dd1acd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Sphere\LongLatSphere">
+      <UniqueIdentifier>{fae0c006-d850-4186-9776-9952e22167b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative">
+      <UniqueIdentifier>{8f5aac92-db91-4377-894f-6b18b1058170}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative\Cube">
+      <UniqueIdentifier>{20eb09d6-7005-41dc-b6ba-85b919617119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative\Cone">
+      <UniqueIdentifier>{63550f69-e4e1-4c3d-8e22-3abdfceabba0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative\Plane">
+      <UniqueIdentifier>{c1aa23b1-11cb-463d-b3bb-d730bf28ed01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative\Sphere">
+      <UniqueIdentifier>{baaee290-03f4-468d-bca9-aa12ef2912f6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Primative\Sphere\IcoSphere">
+      <UniqueIdentifier>{7c810487-5c98-4bc5-a500-1c8fb7ac959b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\PointLight">
+      <UniqueIdentifier>{ffe3736a-a3b8-4e5c-ba1a-32627ef05a99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading">
+      <UniqueIdentifier>{fc865153-5df3-4810-8e41-d8a03a83d481}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Phong Shading">
+      <UniqueIdentifier>{08f3d736-d9e6-4234-99c2-24ab3e66cd1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Solid Shading">
+      <UniqueIdentifier>{3423aae6-8dd3-42f0-926f-11e35dcb29a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -210,8 +222,8 @@
     <ClCompile Include="Drawable.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="BindLongLatSphere.cpp">
-      <Filter>Primatives\Colour_Oriented\Sphere\LongLatSphere</Filter>
+    <ClCompile Include="BindSolidLongLatSphere.cpp">
+      <Filter>Primatives + Binds\Colour_Oriented\Sphere\LongLatSphere</Filter>
     </ClCompile>
     <ClCompile Include="GfxDeviceInterface+Mng.cpp">
       <Filter>Texture-Related\GDI</Filter>
@@ -226,19 +238,19 @@
       <Filter>Texture-Related\Sampler</Filter>
     </ClCompile>
     <ClCompile Include="TexturedPlane.cpp">
-      <Filter>Primatives\Texture_Oriented\Plane</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Plane</Filter>
     </ClCompile>
     <ClCompile Include="SkinnedCube.cpp">
-      <Filter>Primatives\Texture_Oriented\Cube\FullySkinned</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned</Filter>
     </ClCompile>
     <ClCompile Include="SemiSkinnedCube.cpp">
-      <Filter>Primatives\Texture_Oriented\Cube\SemiSkinned</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClCompile>
     <ClCompile Include="BindSolidCube.cpp">
-      <Filter>Primatives\Colour_Oriented\Cube</Filter>
+      <Filter>Primatives + Binds\Colour_Oriented\Cube</Filter>
     </ClCompile>
     <ClCompile Include="BindSolidPlane.cpp">
-      <Filter>Primatives\Colour_Oriented\Plane</Filter>
+      <Filter>Primatives + Binds\Colour_Oriented\Plane</Filter>
     </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
       <Filter>Made By IMGUI</Filter>
@@ -263,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Tools\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="PointLight.cpp">
+      <Filter>Tools\PointLight</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -342,16 +357,16 @@
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
-      <Filter>Primatives\Primative\Plane</Filter>
+      <Filter>Primatives + Binds\Primative\Plane</Filter>
     </ClInclude>
     <ClInclude Include="Cube.h">
-      <Filter>Primatives\Primative\Cube</Filter>
+      <Filter>Primatives + Binds\Primative\Cube</Filter>
     </ClInclude>
     <ClInclude Include="Cone.h">
-      <Filter>Primatives\Primative\Cone</Filter>
+      <Filter>Primatives + Binds\Primative\Cone</Filter>
     </ClInclude>
-    <ClInclude Include="BindLongLatSphere.h">
-      <Filter>Primatives\Colour_Oriented\Sphere\LongLatSphere</Filter>
+    <ClInclude Include="BindSolidLongLatSphere.h">
+      <Filter>Primatives + Binds\Colour_Oriented\Sphere\LongLatSphere</Filter>
     </ClInclude>
     <ClInclude Include="GfxDeviceInterface+Mng.h">
       <Filter>Texture-Related\GDI</Filter>
@@ -369,25 +384,22 @@
       <Filter>Texture-Related\Sampler</Filter>
     </ClInclude>
     <ClInclude Include="TexturedPlane.h">
-      <Filter>Primatives\Texture_Oriented\Plane</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Plane</Filter>
     </ClInclude>
     <ClInclude Include="SkinnedCube.h">
-      <Filter>Primatives\Texture_Oriented\Cube\FullySkinned</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned</Filter>
     </ClInclude>
     <ClInclude Include="SemiSkinnedCube.h">
-      <Filter>Primatives\Texture_Oriented\Cube\SemiSkinned</Filter>
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClInclude>
     <ClInclude Include="BindSolidCube.h">
-      <Filter>Primatives\Colour_Oriented\Cube</Filter>
+      <Filter>Primatives + Binds\Colour_Oriented\Cube</Filter>
     </ClInclude>
     <ClInclude Include="BindSolidPlane.h">
-      <Filter>Primatives\Colour_Oriented\Plane</Filter>
-    </ClInclude>
-    <ClInclude Include="LongLatSphere.h">
-      <Filter>Primatives\Colour_Oriented</Filter>
+      <Filter>Primatives + Binds\Colour_Oriented\Plane</Filter>
     </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
-      <Filter>Primatives\Primative</Filter>
+      <Filter>Primatives + Binds\Primative</Filter>
     </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>Made By IMGUI</Filter>
@@ -422,6 +434,12 @@
     <ClInclude Include="Spawn.h">
       <Filter>Tools\Spawn</Filter>
     </ClInclude>
+    <ClInclude Include="LongLatSphere.h">
+      <Filter>Primatives + Binds\Primative\Sphere</Filter>
+    </ClInclude>
+    <ClInclude Include="PointLight.h">
+      <Filter>Tools\PointLight</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -434,12 +452,6 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="ColourIndexPS.hlsl">
-      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="ColourIndexVS.hlsl">
-      <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
-    </FxCompile>
     <FxCompile Include="ColourBlendVS.hlsl">
       <Filter>Buffers &amp; Shaders + Related Others\Shaders\.hlsl</Filter>
     </FxCompile>
@@ -451,6 +463,18 @@
     </FxCompile>
     <FxCompile Include="TextureVS.hlsl">
       <Filter>Texture-Related\.hlsl</Filter>
+    </FxCompile>
+    <FxCompile Include="SolidPS.hlsl">
+      <Filter>Shading\Solid Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="SolidVS.hlsl">
+      <Filter>Shading\Solid Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderPS.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderVS.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

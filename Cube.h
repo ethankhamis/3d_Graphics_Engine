@@ -8,19 +8,22 @@ using std::vector;
 struct Cube
 {
 	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create();
+	static IndexedTriangleList<Vertex> Create(float _side = .5f);
 	
 	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Skinned();
+	static IndexedTriangleList<Vertex> Create_Skinned(float _side = 0.5f);
 
 	//template<class Vertex>
 	//static IndexedTriangleList<Vertex> Create_SemiSkinned();
+
+	template<class Vertex>
+	static IndexedTriangleList<Vertex> Create_Independentf(float _side = 0.5f);
 };
 
 template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create()
+inline IndexedTriangleList<Vertex> Cube::Create(float _side)
 {
-	constexpr float side = 0.5f;
+	float side = _side;
 	vector<Vertex> vertices(8);
 	vertices[0].pos = { -side, -side, -side };
 	vertices[1].pos = { side, -side, -side };
@@ -45,10 +48,10 @@ inline IndexedTriangleList<Vertex> Cube::Create()
 }
 
 template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_Skinned()
+inline IndexedTriangleList<Vertex> Cube::Create_Skinned(float _side)
 {
 
-	constexpr float side = 1.0f / 2.0f;
+	float side = _side;
 
 	std::vector<Vertex> vertices(14);
 
@@ -89,6 +92,49 @@ inline IndexedTriangleList<Vertex> Cube::Create_Skinned()
 			4,5,7,   4,7,6,
 			2,10,11, 2,11,6,
 			12,3,7,  12,7,13
+		}
+	};
+}
+
+template<class Vertex>
+inline IndexedTriangleList<Vertex> Cube::Create_Independentf(float _side)
+{
+	float side = _side;
+
+	std::vector<Vertex> vertices(24);
+	vertices[0].pos = { -side,-side,-side };// 0 near side
+	vertices[1].pos = { side,-side,-side };// 1
+	vertices[2].pos = { -side,side,-side };// 2
+	vertices[3].pos = { side,side,-side };// 3
+	vertices[4].pos = { -side,-side,side };// 4 far side
+	vertices[5].pos = { side,-side,side };// 5
+	vertices[6].pos = { -side,side,side };// 6
+	vertices[7].pos = { side,side,side };// 7
+	vertices[8].pos = { -side,-side,-side };// 8 left side
+	vertices[9].pos = { -side,side,-side };// 9
+	vertices[10].pos = { -side,-side,side };// 10
+	vertices[11].pos = { -side,side,side };// 11
+	vertices[12].pos = { side,-side,-side };// 12 right side
+	vertices[13].pos = { side,side,-side };// 13
+	vertices[14].pos = { side,-side,side };// 14
+	vertices[15].pos = { side,side,side };// 15
+	vertices[16].pos = { -side,-side,-side };// 16 bottom side
+	vertices[17].pos = { side,-side,-side };// 17
+	vertices[18].pos = { -side,-side,side };// 18
+	vertices[19].pos = { side,-side,side };// 19
+	vertices[20].pos = { -side,side,-side };// 20 top side
+	vertices[21].pos = { side,side,-side };// 21
+	vertices[22].pos = { -side,side,side };// 22
+	vertices[23].pos = { side,side,side };// 23
+
+	return{
+		std::move(vertices),{
+			0,2, 1,    2,3,1,
+			4,5, 7,    4,7,6,
+			8,10, 9,  10,11,9,
+			12,13,15, 12,15,14,
+			16,17,18, 18,17,19,
+			20,23,21, 20,22,23
 		}
 	};
 }

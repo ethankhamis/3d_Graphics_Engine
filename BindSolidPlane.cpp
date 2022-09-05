@@ -18,10 +18,10 @@ BindSolidPlane::BindSolidPlane(Graphics& gfx, std::mt19937& rng, std::uniform_re
 {
 	if (!is_static_init())
 	{
-		auto pvs = std::make_unique<VertexShader>(gfx, L"ColourIndexVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"SolidVS.cso");
 		auto pvsbc = pvs->FetchByteCode();
 		ApplyStaticBind(std::move(pvs));
-		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"ColourIndexPS.cso"));
+		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"SolidVS.cso"));
 
 		struct PixelShaderConstants
 		{

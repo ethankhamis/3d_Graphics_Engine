@@ -1,6 +1,6 @@
 #pragma once
 #include "Drawable.h"
-#include "BindLongLatSphere.h"
+#include "BindSolidLongLatSphere.h"
 #include "BindSolidCube.h"
 #include "BindSolidPlane.h"
 #include "TexturedPlane.h"
@@ -10,6 +10,7 @@
 #include <concepts>
 #include <typeinfo>
 #include "Surface.h"
+#include "PointLight.h"
 #include "imgui/imgui.h"
 
 enum struct Geometry;
@@ -30,29 +31,39 @@ struct Spawn
 {
 	Spawn(Graphics& gfx)
 		:
-		gfx(gfx)
+		gfx(gfx),
+		light(gfx)
 	{}
 
 	enum struct Geometry
 	{
-		LongLatSphere,
+		SolidLongLatSphere,
 		SolidPlane,
 		SolidCube,
 		TexturedPlane,
 		FullySkinnedCube,
 		
 
+
+		LightSource = 10,
 		Count,
 	};
 
 public:
 	void Window(std::vector<std::unique_ptr<Drawable>>& drawables)
 	{
-		if (ImGui::Begin("Spawn Object Selector"))
+		if (lighting)
+		{
+			light.Bind(gfx);
+			light.Render(gfx);
+			light.ControlWnd();
+		}
+
+		if (ImGui::Begin("Spawn Object Selector (CURRENT TEST ONLY ALLOWS FOR CUBES TO HAVE LIGHTING)"))
 		{
 			if (ImGui::Button("Spawn Solid Sphere"))
 			{
-				drawables.emplace_back(Chosen(Geometry::LongLatSphere));
+				drawables.emplace_back(Chosen(Geometry::SolidLongLatSphere));
 			}
 
 			if (ImGui::Button("Spawn Solid Plane"))
@@ -74,8 +85,21 @@ public:
 			{
 				drawables.emplace_back(Chosen(Geometry::FullySkinnedCube));
 			}
+
+			if (ImGui::Button("Spawn Random Geometry"))
+			{
+				drawables.emplace_back(Random());
+			}
+
+
+			if (ImGui::Checkbox("Enable Lighting",&lighting))
+			{
+				//lighting = true;
+			}
+
 		}
 		ImGui::End();
+
 	}
 public:
 	std::unique_ptr<Drawable> Random()
@@ -96,10 +120,9 @@ private:
 			switch (static_cast<int>(s))
 			{
 
-			case static_cast<int>(Geometry::LongLatSphere):
-				return std::make_unique<LongLatSphere>(
-					gfx, rng, adist, ddist,
-					odist, rdist, longdist, latdist
+			case static_cast<int>(Geometry::SolidLongLatSphere):
+				return std::make_unique<SolidLongLatSphere>(
+					gfx,2.0f
 					);
 				
 			case static_cast<int>(Geometry::SolidPlane):
@@ -145,4 +168,8 @@ private:
 	std::uniform_int_distribution<int> vDiv{ 5,20 };
 	std::uniform_int_distribution<int> hDiv{ 5,20 };
 	std::uniform_int_distribution<int> typedist{ 0, static_cast<int>(Geometry::Count)-2 };
+
+	private:
+		PointLight light;
+		bool lighting = false;
 	};
