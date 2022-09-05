@@ -38,4 +38,5 @@ void PointLight::Render(Graphics& gfx) const noexcept(Debug)
 void PointLight::Bind(Graphics& gfx) const noexcept
 {
 	Constb.Update(gfx, PointLightConstantBuffer{ position });
+	Constb.Bind(gfx);
 }
