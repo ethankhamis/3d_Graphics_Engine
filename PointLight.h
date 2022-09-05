@@ -15,11 +15,17 @@ struct PointLight
 private:
 	struct PointLightConstantBuffer
 	{
-		DirectX::XMFLOAT3 position;
-		float padding;
+		alignas(16) DirectX::XMFLOAT3 pos;
+		alignas(16) DirectX::XMFLOAT3 materialColor;
+		alignas(16) DirectX::XMFLOAT3 ambient;
+		alignas(16) DirectX::XMFLOAT3 diffuseColor;
+		float diffuseIntensity;
+		float attConst;
+		float attLin;
+		float attQuad;
 	};
-
-	DirectX::XMFLOAT3 position = { .0f,.0f,.0f };
+private:
+	PointLightConstantBuffer constbuffer_data;
 	mutable SolidLongLatSphere geo;
 	mutable PixelConstantBuffer<PointLightConstantBuffer> Constb;
 };
