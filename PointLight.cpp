@@ -20,7 +20,7 @@ void PointLight::ControlWnd() noexcept
 
 		ImGui::Text("Intensity + Colour");
 		ImGui::SliderFloat("Intensity", &cbData.diffuseIntensity, 0.01f, 2.0f, "%.2f", 2);
-		ImGui::ColorEdit3("Diffuse Colour", &cbData.diffuseColor.x);
+		ImGui::ColorEdit3("Diffuse Colour", &cbData.diffuseColour.x);
 		ImGui::ColorEdit3("Ambience", &cbData.ambient.x);
 
 		ImGui::Text("Falloff Params");

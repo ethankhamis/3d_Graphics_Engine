@@ -55,10 +55,12 @@ PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::unifor
 
 	struct PSMaterialConst
 	{
-		DirectX::XMFLOAT3 color;
-		float padding;
+		alignas(16) DirectX::XMFLOAT3 colour;
+		float specularIntensity = .6f;
+		float specularPower = 10.f;
+		float padding[2];
 	} colorConst;
-	colorConst.color = material;
+	colorConst.colour = material;
 	ApplyBind(std::make_unique<PixelConstantBuffer<PSMaterialConst>>(gfx, colorConst, 1u));
 
 	// model deformation transform (per instance, not stored as bind)

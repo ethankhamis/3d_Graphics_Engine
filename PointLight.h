@@ -16,7 +16,7 @@ private:
 	{
 		alignas(16) DirectX::XMFLOAT3 pos;
 		alignas(16) DirectX::XMFLOAT3 ambient;
-		alignas(16) DirectX::XMFLOAT3 diffuseColor;
+		alignas(16) DirectX::XMFLOAT3 diffuseColour;
 		float diffuseIntensity;
 		float attConst;
 		float attLin;
