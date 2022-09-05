@@ -28,25 +28,30 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 		struct Vertex
 		{
 			DirectX::XMFLOAT3 pos;
-			DirectX::XMFLOAT3 n;
 		};
-		auto model = Cube::Create_Independentf<Vertex>();
-		model.ApplyNormalsIndependent();
+		auto model = Cube::Create<Vertex>();
 
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongShaderVS.cso");
+		auto pvs = std::make_unique<VertexShader>(gfx, L"SolidVS.cso");
 		auto pvsbc = pvs->FetchByteCode();
 		ApplyStaticBind(std::move(pvs));
 
-		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"PhongShaderPS.cso"));
+		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"SolidPS.cso"));
 
 		ApplyStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
+
+		struct PSColourConstant
+		{
+			DirectX::XMFLOAT3 colour = { 1.f,1.f,1.f };
+			float padding;
+		} colourConstant;
+
+		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PSColourConstant>>(gfx, colourConstant));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
 			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		};
 		ApplyStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
 

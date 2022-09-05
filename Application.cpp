@@ -27,7 +27,7 @@ Application::Application()
 	
 	for (int i = 0; i < nDrawables; i++)
 	{
-		drawables.emplace_back(spawn.Random());
+		drawables.emplace_back(spawn.Chosen(5));
 	}
 	
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
@@ -39,15 +39,16 @@ void Application::ExecFrame()
 	auto delta = timer.MarkTime() * speed;
 
 	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
-
 	window.grfx().SetCameraMat(camera.FetchMatrix());
+	spawn.FetchLight()->Bind(window.grfx());
+
 	for (auto& drawable : drawables)
 	{
 		drawable->Update(window.kbd.Key_Pressed(VK_SPACE) ? 0.0f : delta);
 		drawable->Render(window.grfx());
 	}
+	spawn.FetchLight()->Render(window.grfx());
 
-	spawn.Window(drawables);
 
 	if (ImGui::Begin("Time"))
 	{
@@ -56,6 +57,9 @@ void Application::ExecFrame()
 
 	ImGui::End();
 	camera.ConstructControlWindow();
+	spawn.FetchLight()->ControlWnd();
+	spawn.Window(drawables);
+
 	window.grfx().EndFrame();
 }
 

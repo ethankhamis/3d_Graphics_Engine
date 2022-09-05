@@ -1,10 +1,11 @@
 #pragma once
 #include "Drawable.h"
-#include "BindSolidLongLatSphere.h"
-#include "BindSolidCube.h"
-#include "BindSolidPlane.h"
-#include "TexturedPlane.h"
-#include "SkinnedCube.h"
+//#include "BindSolidLongLatSphere.h"
+//#include "BindSolidCube.h"
+//#include "BindSolidPlane.h"
+#include "PhongShadingCube.h"
+//#include "TexturedPlane.h"
+//#include "SkinnedCube.h"
 #include "MathematicalConstants.h"
 #include <memory>
 #include <concepts>
@@ -42,6 +43,7 @@ struct Spawn
 		SolidCube,
 		TexturedPlane,
 		FullySkinnedCube,
+		PhongShadedCube,
 		
 
 
@@ -52,15 +54,10 @@ struct Spawn
 public:
 	void Window(std::vector<std::unique_ptr<Drawable>>& drawables)
 	{
-		if (lighting)
-		{
-			light.Bind(gfx);
-			light.Render(gfx);
-			light.ControlWnd();
-		}
 
 		if (ImGui::Begin("Spawn Object Selector (CURRENT TEST ONLY ALLOWS FOR CUBES TO HAVE LIGHTING)"))
 		{
+			/*
 			if (ImGui::Button("Spawn Solid Sphere"))
 			{
 				drawables.emplace_back(Chosen(Geometry::SolidLongLatSphere));
@@ -90,11 +87,16 @@ public:
 			{
 				drawables.emplace_back(Random());
 			}
+			*/
+			if (ImGui::Button("Spawn Phong Shaded Cube"))
+			{
+				drawables.emplace_back(Chosen(Geometry::PhongShadedCube));
+			}
 
+			
 
 			if (ImGui::Checkbox("Enable Lighting",&lighting))
 			{
-				//lighting = true;
 			}
 
 		}
@@ -113,12 +115,20 @@ public:
 		return Spawner( static_cast<int>(g) );
 	}
 
+public:
+	PointLight* FetchLight()
+	{
+		return &light;
+	}
+
 private:
 	template<Switchable _switch>
 		std::unique_ptr<Drawable> Spawner(_switch s)
 		{
+			
 			switch (static_cast<int>(s))
 			{
+				/*
 
 			case static_cast<int>(Geometry::SolidLongLatSphere):
 				return std::make_unique<SolidLongLatSphere>(
@@ -148,6 +158,11 @@ private:
 				return std::make_unique<SkinnedCube>(
 					gfx,rng, adist, ddist, odist, rdist
 					);
+				*/
+			case static_cast<int>(Geometry::PhongShadedCube):
+				const DirectX::XMFLOAT3 matrix = { 1 , 0 , 0 };
+				return std::make_unique<PhongShadingCube>
+					(gfx, rng, adist, ddist, odist, rdist, bdist,matrix);
 					
 
 			default:
@@ -167,9 +182,9 @@ private:
 	std::uniform_int_distribution<int> longdist{ 10,40 };
 	std::uniform_int_distribution<int> vDiv{ 5,20 };
 	std::uniform_int_distribution<int> hDiv{ 5,20 };
-	std::uniform_int_distribution<int> typedist{ 0, static_cast<int>(Geometry::Count)-2 };
+	std::uniform_real_distribution<float> cdist{ 0.0f, 1.0f };
+	std::uniform_int_distribution<int> typedist{ 0, static_cast<int>(Geometry::Count)-6 };
 
-	private:
-		PointLight light;
-		bool lighting = false;
+	PointLight light;
+	bool lighting = false;
 	};

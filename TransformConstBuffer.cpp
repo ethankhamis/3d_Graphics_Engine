@@ -1,10 +1,10 @@
 #include "TransformConstBuffer.h"
 
-	TransformConstBuffer::TransformConstBuffer(Graphics & gfx, const Drawable & parent) noexcept
+	TransformConstBuffer::TransformConstBuffer(Graphics & gfx, const Drawable & parent, UINT slot) noexcept
 		:
 		parent(parent)
 	{
-		if (!pVConstBuffer) {pVConstBuffer = std::make_unique<VConstantBuffer<allTransforms>>(gfx);} //create buffer if not already created
+		if (!pVConstBuffer) {pVConstBuffer = std::make_unique<VConstantBuffer<allTransforms>>(gfx,slot);} //create buffer if not already created
 	}
 
 	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
@@ -21,8 +21,8 @@
 				gfx.FetchProjection()
 			)
 		};
-		pVConstBuffer->Update(gfx,transforms);
 
+	pVConstBuffer->Update(gfx,transforms);
 	pVConstBuffer->Bind(gfx);
 }
 

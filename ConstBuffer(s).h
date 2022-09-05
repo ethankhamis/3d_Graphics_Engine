@@ -6,11 +6,12 @@
 template<typename Ctype>
 struct ConstantBuffer : public Bindable
 {
-	ConstantBuffer(Graphics& gfx, const Ctype& constants);
-	ConstantBuffer(Graphics& gfx);
+	ConstantBuffer(Graphics& gfx, const Ctype& constants, UINT slot = 0u);
+	ConstantBuffer(Graphics& gfx, UINT slot = 0u);
 	void Update(Graphics& gfx, const Ctype& constants);
 protected:
 	Microsoft::WRL::ComPtr<ID3D11Buffer> pConstBuffer;
+	UINT slot;
 };
 
 template<typename Ctype>
@@ -18,6 +19,7 @@ struct PixelConstantBuffer : public ConstantBuffer<Ctype> // Pixel Constant Buff
 {
 private:
 	using ConstantBuffer<Ctype>::pConstBuffer;
+	using ConstantBuffer<Ctype>::slot;
 	using Bindable::FetchDeviceContext;
 public:
 	using ConstantBuffer<Ctype>::ConstantBuffer;
@@ -29,6 +31,7 @@ struct VConstantBuffer : public ConstantBuffer<Ctype>// Vertex Constant Buffer
 {
 private:
 	using ConstantBuffer<Ctype>::pConstBuffer;
+	using ConstantBuffer<Ctype>::slot;
 	using Bindable::FetchDeviceContext;
 public:
 	using ConstantBuffer<Ctype>::ConstantBuffer;
@@ -37,11 +40,15 @@ public:
 };
 
 template<typename Ctype>
-inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constants)
+inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constants, UINT slot)
+	:
+	slot(slot)
 {
 	DEF_INFOMANAGER(gfx);
 
-	D3D11_BUFFER_DESC ConstBufDesc = {};
+	size_t size = sizeof(constants);
+
+	D3D11_BUFFER_DESC ConstBufDesc;
 	ConstBufDesc.MiscFlags = 0u;
 	ConstBufDesc.StructureByteStride = 0u;
 	ConstBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -49,21 +56,24 @@ inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, const Ctype& constan
 	ConstBufDesc.Usage = D3D11_USAGE_DYNAMIC;
 	ConstBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 
-	D3D11_SUBRESOURCE_DATA ConstBufSubResouceData = {};
-	ConstBufSubResouceData.pSysMem = &constants;
+	D3D11_SUBRESOURCE_DATA ConstBufSubResourceData = {};
+	ConstBufSubResourceData.pSysMem = &constants;
 	GFX_THROW_INFO(FetchDevice(gfx)
 		->
-		CreateBuffer(&ConstBufDesc, &ConstBufSubResouceData, &pConstBuffer)
+		CreateBuffer(&ConstBufDesc, &ConstBufSubResourceData, &pConstBuffer)
 	);
 }
 
 template<typename Ctype>
-inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx)
+inline ConstantBuffer<Ctype>::ConstantBuffer(Graphics& gfx, UINT slot)
+:
+	slot(slot)
 {
 	DEF_INFOMANAGER(gfx);
 
+	size_t size = sizeof(Ctype);
 
-	D3D11_BUFFER_DESC ConstBufDesc = {};
+	D3D11_BUFFER_DESC ConstBufDesc;
 	ConstBufDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	ConstBufDesc.Usage = D3D11_USAGE_DYNAMIC;
 	ConstBufDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
@@ -87,6 +97,7 @@ inline void ConstantBuffer<Ctype>::Update(Graphics& gfx, const Ctype& constants)
 		D3D11_MAP_WRITE_DISCARD, 0u,
 		&MappedSubRes));
 
+	size_t size = sizeof(constants);
 	memcpy(MappedSubRes.pData, &constants, sizeof(constants));
 	FetchDeviceContext(gfx)->Unmap(pConstBuffer.Get(), 0u);
 }
@@ -96,7 +107,7 @@ inline void PixelConstantBuffer<Ctype>::Bind(Graphics& gfx) noexcept
 {
 	FetchDeviceContext(gfx)
 		->
-		PSSetConstantBuffers(0u, 1u, pConstBuffer.GetAddressOf());
+		PSSetConstantBuffers(slot, 1u, pConstBuffer.GetAddressOf());
 }
 
 template<typename Ctype>
@@ -104,5 +115,5 @@ inline void VConstantBuffer<Ctype>::Bind(Graphics& gfx) noexcept
 {
 	FetchDeviceContext(gfx)
 		->
-		VSSetConstantBuffers(0u, 1u, pConstBuffer.GetAddressOf());
+		VSSetConstantBuffers(slot, 1u, pConstBuffer.GetAddressOf());
 }

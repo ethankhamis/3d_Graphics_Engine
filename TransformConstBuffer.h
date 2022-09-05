@@ -12,7 +12,7 @@ private:
 		DirectX::XMMATRIX model;
 	};
 public:
-	TransformConstBuffer(Graphics& gfx, const Drawable& parent) noexcept;
+	TransformConstBuffer(Graphics& gfx, const Drawable& parent, UINT slot = 0u) noexcept;
 public:
 	void Bind(Graphics& gfx) noexcept override;
 private:

@@ -173,6 +173,7 @@
     <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="PhongShadingCube.cpp" />
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
@@ -219,6 +220,7 @@
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="LongLatSphere.h" />
     <ClInclude Include="MathematicalConstants.h" />
+    <ClInclude Include="PhongShadingCube.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Sampler.h" />

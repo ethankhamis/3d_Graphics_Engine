@@ -163,6 +163,12 @@
     <Filter Include="Shading\Solid Shading">
       <UniqueIdentifier>{3423aae6-8dd3-42f0-926f-11e35dcb29a8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cube\NoLighting">
+      <UniqueIdentifier>{5825eb76-24b9-4428-a03f-d07c3303e29e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cube\PhongShading">
+      <UniqueIdentifier>{b57d4d5e-d617-40e6-bf7e-ddaa44534b50}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -246,9 +252,6 @@
     <ClCompile Include="SemiSkinnedCube.cpp">
       <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClCompile>
-    <ClCompile Include="BindSolidCube.cpp">
-      <Filter>Primatives + Binds\Colour_Oriented\Cube</Filter>
-    </ClCompile>
     <ClCompile Include="BindSolidPlane.cpp">
       <Filter>Primatives + Binds\Colour_Oriented\Plane</Filter>
     </ClCompile>
@@ -278,6 +281,12 @@
     </ClCompile>
     <ClCompile Include="PointLight.cpp">
       <Filter>Tools\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="BindSolidCube.cpp">
+      <Filter>Primatives + Binds\Colour_Oriented\Cube\NoLighting</Filter>
+    </ClCompile>
+    <ClCompile Include="PhongShadingCube.cpp">
+      <Filter>Primatives + Binds\Colour_Oriented\Cube\PhongShading</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -392,9 +401,6 @@
     <ClInclude Include="SemiSkinnedCube.h">
       <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClInclude>
-    <ClInclude Include="BindSolidCube.h">
-      <Filter>Primatives + Binds\Colour_Oriented\Cube</Filter>
-    </ClInclude>
     <ClInclude Include="BindSolidPlane.h">
       <Filter>Primatives + Binds\Colour_Oriented\Plane</Filter>
     </ClInclude>
@@ -439,6 +445,12 @@
     </ClInclude>
     <ClInclude Include="PointLight.h">
       <Filter>Tools\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="BindSolidCube.h">
+      <Filter>Primatives + Binds\Colour_Oriented\Cube\NoLighting</Filter>
+    </ClInclude>
+    <ClInclude Include="PhongShadingCube.h">
+      <Filter>Primatives + Binds\Colour_Oriented\Cube\PhongShading</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
