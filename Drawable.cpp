@@ -11,7 +11,7 @@ void Drawable::Render(Graphics& gfx) const noexcept(!Debug)
 	for (auto& bind : allBinds){ bind->Bind(gfx); }
 	for (auto& bind : FetchStaticBinds()) { bind->Bind(gfx); }
 	
-	gfx.DrawIndexed(pIndexBuffer->FetchCount());
+	gfx.RenderIndexed(pIndexBuffer->FetchCount());
 }
 
 void Drawable::ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug)

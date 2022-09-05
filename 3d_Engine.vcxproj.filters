@@ -142,6 +142,15 @@
     <Filter Include="ImGui">
       <UniqueIdentifier>{f071ad21-1e96-4ad6-86ad-db3cd2e6cebb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools">
+      <UniqueIdentifier>{f03ce9ba-757c-4ffc-8d61-1dda313b47f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Camera">
+      <UniqueIdentifier>{b07c77de-5ec8-4ded-b494-a9b1ccfb6f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Tools\Spawn">
+      <UniqueIdentifier>{ffcde7ff-e4f9-47bf-b650-ab7ab7c48c80}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -251,6 +260,9 @@
     </ClCompile>
     <ClCompile Include="ImGUIManager.cpp">
       <Filter>ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Tools\Camera</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -403,6 +415,12 @@
     </ClInclude>
     <ClInclude Include="ImGUIManager.h">
       <Filter>ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Tools\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Spawn.h">
+      <Filter>Tools\Spawn</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

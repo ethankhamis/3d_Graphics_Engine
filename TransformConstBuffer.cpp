@@ -10,7 +10,7 @@
 	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
 {
 	pVConstBuffer->Update
-	(gfx, DirectX::XMMatrixTranspose(parent.FetchTransformMat() * gfx.FetchProjection()));
+	(gfx, DirectX::XMMatrixTranspose(parent.FetchTransformMat() * gfx.FetchCameraMat() * gfx.FetchProjection()));
 
 	pVConstBuffer->Bind(gfx);
 }

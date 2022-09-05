@@ -54,14 +54,14 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 		const PSConsts PSC2 =
 		{
 			{
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,0.0f,0.0f  },
-				{ 0.0f,0.0f,0.0f  },
-				{ 1.0f,0.0f,0.0f  },
-				{ 0.0f,0.0f,0.0f  },
-				{ 1.0f,0.0f,0.0f },
-				{ 1.0f,0.0f,0.0f },
-				{ 0.0f,0.0f,0.0f  },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
+				{ .2f,0.2f,0.2f },
 			}
 		};
 		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PSConsts>>(gfx, PSC2));
@@ -87,9 +87,9 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 		&model_transform,
 		DirectX::XMMatrixScaling
 		(
-			1.0f,
-			1.0f,
-			bdist(rng)
+			2.0f,
+			2.0f,
+			2.0f//bdist(rng)
 		)
 	);
 
@@ -110,6 +110,5 @@ DirectX::XMMATRIX BindSolidCube::FetchTransformMat() const noexcept
 	return DirectX::XMLoadFloat3x3(&model_transform) *
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi) *
-		DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f);
+		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi);
 }

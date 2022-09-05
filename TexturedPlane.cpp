@@ -37,7 +37,7 @@ TexturedPlane::TexturedPlane(Graphics& gfx, std::mt19937 rng, std::uniform_real_
 		model.vertices[2].tex = { 0.0f,1.0f };
 		model.vertices[3].tex = { 1.0f,1.0f };
 
-		ApplyStaticBind(std::make_unique<Texture>(gfx, Surface::WithFile(L"Images\\eren.png")));
+		ApplyStaticBind(std::make_unique<Texture>(gfx, Surface::WithFile(L"Images\\lastofus.png")));
 
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 

@@ -18,14 +18,20 @@ public:
 	Graphics( HWND hWnd );
 	Graphics(const Graphics&) = delete;
 	Graphics& operator=(const Graphics&) = delete;
-	~Graphics() = default;
+	~Graphics();
 public:
 	void EndFrame();
 	void ClearBuffer(float R, float G, float B) noexcept;
 public:
-	void DrawIndexed(UINT count) noexcept (!Debug);
+	void RenderIndexed(UINT count) noexcept (!Debug);
+public:
 	void ApplyProjection(DirectX::FXMMATRIX pj) noexcept;
 	DirectX::XMMATRIX FetchProjection() const noexcept;
+public:
+	void SetCameraMat(DirectX::FXMMATRIX _camera) noexcept;
+	DirectX::XMMATRIX FetchCameraMat() const noexcept;
+private:
+	DirectX::XMMATRIX camera;
 public:// IMGUI RELATED
 	void StartGUI() noexcept;
 	void EndGUI() noexcept;

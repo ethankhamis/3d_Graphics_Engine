@@ -121,6 +121,11 @@ Graphics::Graphics(HWND hWnd)
 	ImGui_ImplDX11_Init(pDevice.Get(), pDeviceContext.Get());
 }
 
+Graphics::~Graphics()
+{
+	ImGui_ImplDX11_Shutdown();
+}
+
 void Graphics::EndFrame()
 {
 	if (Gui_Status)
@@ -157,7 +162,7 @@ void Graphics::ClearBuffer(float R, float G, float B) noexcept
 }
 
 
-void Graphics::DrawIndexed(UINT count) noexcept(!Debug)
+void Graphics::RenderIndexed(UINT count) noexcept(!Debug)
 {
 	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(count, 0u, 0u));
 }
@@ -170,6 +175,16 @@ void Graphics::ApplyProjection(DirectX::FXMMATRIX pj) noexcept
 DirectX::XMMATRIX Graphics::FetchProjection() const noexcept
 {
 	return projection;
+}
+
+void Graphics::SetCameraMat(DirectX::FXMMATRIX _camera) noexcept
+{
+	camera = _camera;
+}
+
+DirectX::XMMATRIX Graphics::FetchCameraMat() const noexcept
+{
+	return camera;
 }
 
 void Graphics::StartGUI() noexcept

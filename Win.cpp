@@ -111,7 +111,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 	{
 		return 1;
 	}
-	const ImGuiIO io = ImGui::GetIO();
+	const ImGuiIO& io = ImGui::GetIO();
 	switch (msg)
 	{
 	case WM_CLOSE:

@@ -3,6 +3,8 @@
 #include "ThrowMacros.h"
 #include "LongLatSphere.h"
 
+#define LongLatSphere_
+
 LongLatSphere::LongLatSphere(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_int_distribution<int>& longdist, std::uniform_int_distribution<int>& latdist)
 :
 	r(rdist(rng)),
@@ -82,9 +84,8 @@ void LongLatSphere::Update(float dt) noexcept
 
 DirectX::XMMATRIX LongLatSphere::FetchTransformMat() const noexcept
 {
-    return
+	return
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
 		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi) *
-		DirectX::XMMatrixTranslation(0.0f, 0.0f, 20.0f);
+		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi);
 }
