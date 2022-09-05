@@ -28,8 +28,8 @@ float4 main(float3 worldPos : Position, float3 n : Normal) : SV_Target
 	const float3 diffuse = diffuseColour * diffuseIntensity * att * max(0.0f,dot(dirToL,n));
 
 	//vector of reflected light
-	const float3 w = n * dot(dirToL, n);
-	const float3 r = w * 2.f - dirToL;
+	const float3 w = n * dot(vToL, n);
+	const float3 r = w * 2.f - vToL;
 
 	//specular highlights using angle betwen viewer vector and reflected vector -- narrowed
 	

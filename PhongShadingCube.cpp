@@ -66,7 +66,7 @@ PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::unifor
 	// model deformation transform (per instance, not stored as bind)
 	DirectX::XMStoreFloat3x3(
 		&model_transform,
-		DirectX::XMMatrixScaling(1.0f, 1.0f, 1.0f)
+		DirectX::XMMatrixScaling(2.0f, 2.0f, 2.3f)
 	);
 }
 

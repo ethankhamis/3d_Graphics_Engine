@@ -9,15 +9,14 @@
 
 	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
 {
-		const DirectX::XMMATRIX model = parent.FetchTransformMat();
+		const DirectX::XMMATRIX modelView = parent.FetchTransformMat() * gfx.FetchCameraMat();
 	
 		const allTransforms transforms =
 		{
-			DirectX::XMMatrixTranspose(model),
+			DirectX::XMMatrixTranspose(modelView),
 			DirectX::XMMatrixTranspose
 			(
-				model *
-				gfx.FetchCameraMat() *
+				modelView *
 				gfx.FetchProjection()
 			)
 		};

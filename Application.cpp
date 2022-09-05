@@ -40,7 +40,8 @@ void Application::ExecFrame()
 
 	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
-	spawn.FetchLight()->Bind(window.grfx());
+
+	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
 
 	for (auto& drawable : drawables)
 	{
@@ -52,7 +53,7 @@ void Application::ExecFrame()
 
 	if (ImGui::Begin("Time"))
 	{
-		ImGui::SliderFloat("Scale Speed", &speed, 0.f, 4.f);
+		ImGui::SliderFloat("Scale Speed", &speed, 0.f,10.f, "%.4f", 3.2f);
 	}
 
 	ImGui::End();
