@@ -23,7 +23,7 @@ private:
 		float attQuad;
 	};
 private:
-	PointLightCBuf cbData;
+	PointLightCBuf constbuffer_data;
 	mutable SolidLongLatSphere mesh;
 	mutable PixelConstantBuffer<PointLightCBuf> cbuf;
 };

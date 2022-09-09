@@ -6,16 +6,7 @@
 PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, std::uniform_real_distribution<float>& bdist,
 	DirectX::XMFLOAT3 material)
 	:
-	r(rdist(rng)),
-	droll(ddist(rng)),
-	dpitch(ddist(rng)),
-	dyaw(ddist(rng)),
-	dphi(odist(rng)),
-	dtheta(odist(rng)),
-	dchi(odist(rng)),
-	chi(adist(rng)),
-	theta(adist(rng)),
-	phi(adist(rng))
+	TestObject( gfx, rng, adist, ddist, odist, rdist )
 {
 	if (!is_static_init())
 	{
@@ -70,21 +61,10 @@ PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::unifor
 	);
 }
 
-void PhongShadingCube::Update(float delta) noexcept
-{
-	roll += droll * delta;
-	pitch += dpitch * delta;
-	yaw += dyaw * delta;
-	theta += dtheta * delta;
-	phi += dphi * delta;
-	chi += dchi * delta;
-}
 
 DirectX::XMMATRIX PhongShadingCube::FetchTransformMat() const noexcept
 {
-	return 
+	return
 		DirectX::XMLoadFloat3x3(&model_transform) *
-		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, roll) *
-		DirectX::XMMatrixTranslation(r, 0.0f, 0.0f) *
-		DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi);
+		TestObject::FetchTransformMat();
 }

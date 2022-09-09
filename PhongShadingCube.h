@@ -1,7 +1,7 @@
 #pragma once
-#include "DrawableBase.h"
+#include "ObjTestCase.h"
 
-struct PhongShadingCube : public DrawableBase<PhongShadingCube>
+struct PhongShadingCube : public TestObject<PhongShadingCube>
 {
 public:
 	PhongShadingCube(
@@ -14,25 +14,8 @@ public:
 		DirectX::XMFLOAT3 material
 	);
 
-	void Update(float delta) noexcept override;
 	DirectX::XMMATRIX FetchTransformMat() const noexcept override;
 private:
-
-	// positional
-	float r;
-	float roll = 0.0f;
-	float pitch = 0.0f;
-	float yaw = 0.0f;
-	float theta;
-	float phi;
-	float chi;
-	// speed (delta/s)
-	float droll;
-	float dpitch;
-	float dyaw;
-	float dtheta;
-	float dphi;
-	float dchi;
 	// model transform
 	DirectX::XMFLOAT3X3 model_transform;
 

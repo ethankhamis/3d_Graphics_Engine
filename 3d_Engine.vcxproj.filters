@@ -169,6 +169,12 @@
     <Filter Include="Primatives + Binds\Colour_Oriented\Cube\PhongShading">
       <UniqueIdentifier>{b57d4d5e-d617-40e6-bf7e-ddaa44534b50}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives + Binds\Primative\Prism">
+      <UniqueIdentifier>{1b86e334-b8be-42dc-8792-cdfe793372f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Other">
+      <UniqueIdentifier>{b140d472-ad74-4a3b-99e8-2e52dba40f20}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -451,6 +457,12 @@
     </ClInclude>
     <ClInclude Include="PhongShadingCube.h">
       <Filter>Primatives + Binds\Colour_Oriented\Cube\PhongShading</Filter>
+    </ClInclude>
+    <ClInclude Include="Prism.h">
+      <Filter>Primatives + Binds\Primative\Prism</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjTestCase.h">
+      <Filter>Primatives + Binds\Other</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

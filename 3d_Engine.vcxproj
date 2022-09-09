@@ -220,9 +220,11 @@
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="LongLatSphere.h" />
     <ClInclude Include="MathematicalConstants.h" />
+    <ClInclude Include="ObjTestCase.h" />
     <ClInclude Include="PhongShadingCube.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PointLight.h" />
+    <ClInclude Include="Prism.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="SemiSkinnedCube.h" />
     <ClInclude Include="Spawn.h" />
