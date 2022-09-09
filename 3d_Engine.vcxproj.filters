@@ -175,6 +175,9 @@
     <Filter Include="Primatives + Binds\Other">
       <UniqueIdentifier>{b140d472-ad74-4a3b-99e8-2e52dba40f20}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cylinder">
+      <UniqueIdentifier>{2cefb5ce-6756-4b1b-a067-8f8f2906320f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -293,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="PhongShadingCube.cpp">
       <Filter>Primatives + Binds\Colour_Oriented\Cube\PhongShading</Filter>
+    </ClCompile>
+    <ClCompile Include="Cylinder.cpp">
+      <Filter>Primatives + Binds\Colour_Oriented\Cylinder</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -464,6 +470,9 @@
     <ClInclude Include="ObjTestCase.h">
       <Filter>Primatives + Binds\Other</Filter>
     </ClInclude>
+    <ClInclude Include="Cylinder.h">
+      <Filter>Primatives + Binds\Colour_Oriented\Cylinder</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -498,6 +507,9 @@
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
     <FxCompile Include="PhongShaderVS.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="IndexedPhongPS.hlsl">
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
   </ItemGroup>

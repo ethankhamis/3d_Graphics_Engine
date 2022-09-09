@@ -6,6 +6,7 @@
 #include "PhongShadingCube.h"
 //#include "TexturedPlane.h"
 //#include "SkinnedCube.h"
+#include "Cylinder.h"
 #include "MathematicalConstants.h"
 #include <memory>
 #include <concepts>
@@ -44,6 +45,7 @@ struct Spawn
 		TexturedPlane,
 		FullySkinnedCube,
 		PhongShadedCube,
+		PhongShadedCylinder,
 		
 
 
@@ -92,11 +94,9 @@ public:
 			{
 				drawables.emplace_back(Chosen(Geometry::PhongShadedCube));
 			}
-
-			
-
-			if (ImGui::Checkbox("Enable Lighting",&lighting))
+			if (ImGui::Button("Spawn Phong Shaded Cylinder"))
 			{
+				drawables.emplace_back(Chosen(Geometry::PhongShadedCylinder));
 			}
 
 		}
@@ -164,6 +164,10 @@ private:
 				return std::make_unique<PhongShadingCube>
 					(gfx, rng, adist, ddist, odist, rdist, bdist,matrix);
 					
+			case static_cast<int>(Geometry::PhongShadedCylinder):
+				return std::make_unique<Cylinder>(
+					gfx, rng, adist, ddist, odist,
+					rdist, bdist, tdist);
 
 			default:
 				assert(false && "bad drawable type in factory");
@@ -184,7 +188,8 @@ private:
 	std::uniform_int_distribution<int> hDiv{ 5,20 };
 	std::uniform_real_distribution<float> cdist{ 0.0f, 1.0f };
 	std::uniform_int_distribution<int> typedist{ 0, static_cast<int>(Geometry::Count)-6 };
-
+	std::uniform_int_distribution<int> sdist{ 0,1 };
+	std::uniform_int_distribution<int> tdist{ 3,30 };
 	PointLight light;
 	bool lighting = false;
 	};

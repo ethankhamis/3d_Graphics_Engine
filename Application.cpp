@@ -19,12 +19,6 @@ Application::Application()
 	:window(1000, 750, L"6~3D"),
 	spawn(window.grfx())
 {
-	
-
-	//Spawn spawn(window.grfx());
-	//drawables.reserve(nDrawables);
-	//std::generate_n(std::back_inserter(drawables), nDrawables, Spawn{ window.grfx() });
-	
 	for (int i = 0; i < nDrawables; i++)
 	{
 		drawables.emplace_back(spawn.Chosen(5));
@@ -54,6 +48,11 @@ void Application::ExecFrame()
 	if (ImGui::Begin("Time"))
 	{
 		ImGui::SliderFloat("Scale Speed", &speed, 0.f,10.f, "%.4f", 3.2f);
+	}
+
+	if (window.kbd.Key_Pressed(VK_DELETE))
+	{
+		drawables.clear();
 	}
 
 	ImGui::End();

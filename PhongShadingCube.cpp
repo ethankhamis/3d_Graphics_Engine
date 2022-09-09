@@ -46,10 +46,10 @@ PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::unifor
 
 	struct PSMaterialConst
 	{
-		alignas(16) DirectX::XMFLOAT3 colour;
+		DirectX::XMFLOAT3 colour;
 		float specularIntensity = .6f;
 		float specularPower = 10.f;
-		float padding[2];
+		float padding[3];
 	} colorConst;
 	colorConst.colour = material;
 	ApplyBind(std::make_unique<PixelConstantBuffer<PSMaterialConst>>(gfx, colorConst, 1u));
