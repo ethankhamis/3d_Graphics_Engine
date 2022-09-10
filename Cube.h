@@ -147,16 +147,16 @@ inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side
 {
 	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
 
-	IndexedTriangleList_.vertices[0]. tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[1]. tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[2]. tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[3]. tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[4]. tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[5]. tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[6]. tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[7]. tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[8]. tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[9]. tc = { 1.f,0.f };
+	IndexedTriangleList_.vertices[0].tc = { 0.f,0.f };
+	IndexedTriangleList_.vertices[1].tc = { 1.f,0.f };
+	IndexedTriangleList_.vertices[2].tc = { 0.f,1.f };
+	IndexedTriangleList_.vertices[3].tc = { 1.f,1.f };
+	IndexedTriangleList_.vertices[4].tc = { 0.f,0.f };
+	IndexedTriangleList_.vertices[5].tc = { 1.f,0.f };
+	IndexedTriangleList_.vertices[6].tc = { 0.f,1.f };
+	IndexedTriangleList_.vertices[7].tc = { 1.f,1.f };
+	IndexedTriangleList_.vertices[8].tc = { 0.f,0.f };
+	IndexedTriangleList_.vertices[9].tc = { 1.f,0.f };
 	IndexedTriangleList_.vertices[10].tc = { 0.f,1.f };
 	IndexedTriangleList_.vertices[11].tc = { 1.f,1.f };
 	IndexedTriangleList_.vertices[12].tc = { 0.f,0.f };

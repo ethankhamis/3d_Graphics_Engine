@@ -196,6 +196,15 @@
     <Filter Include="Shading\Phong Shading\used for cone">
       <UniqueIdentifier>{2b9b89f6-89ae-44e9-9be5-b9d48c91d2ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shading\Phong Shading\used for cube\untextured">
+      <UniqueIdentifier>{e7a0ccd7-e198-483e-a529-214433ee11a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Phong Shading\used for cube\textured">
+      <UniqueIdentifier>{5028bcf4-923f-4e85-8762-fd8c5ac287fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded">
+      <UniqueIdentifier>{c54b88df-ab50-4d1f-a52f-a52dbd4883e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -270,9 +279,6 @@
     <ClCompile Include="TexturedPlane.cpp">
       <Filter>Primatives + Binds\Texture_Oriented\Plane</Filter>
     </ClCompile>
-    <ClCompile Include="SkinnedCube.cpp">
-      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned</Filter>
-    </ClCompile>
     <ClCompile Include="SemiSkinnedCube.cpp">
       <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClCompile>
@@ -320,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="SolidCone.cpp">
       <Filter>Primatives + Binds\Colour_Oriented\Cone\PhongShaded</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinnedCube.cpp">
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -425,9 +434,6 @@
     <ClInclude Include="TexturedPlane.h">
       <Filter>Primatives + Binds\Texture_Oriented\Plane</Filter>
     </ClInclude>
-    <ClInclude Include="SkinnedCube.h">
-      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned</Filter>
-    </ClInclude>
     <ClInclude Include="SemiSkinnedCube.h">
       <Filter>Primatives + Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
     </ClInclude>
@@ -497,6 +503,9 @@
     <ClInclude Include="SolidCone.h">
       <Filter>Primatives + Binds\Colour_Oriented\Cone\PhongShaded</Filter>
     </ClInclude>
+    <ClInclude Include="SkinnedCube.h">
+      <Filter>Primatives + Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -530,17 +539,23 @@
     <FxCompile Include="IndexedPhongPS.hlsl">
       <Filter>Shading\Phong Shading\used for cylinder</Filter>
     </FxCompile>
-    <FxCompile Include="PhongShaderPS.hlsl">
-      <Filter>Shading\Phong Shading\used for cube</Filter>
-    </FxCompile>
-    <FxCompile Include="PhongShaderVS.hlsl">
-      <Filter>Shading\Phong Shading\used for cube</Filter>
-    </FxCompile>
     <FxCompile Include="BlendedPhongShaderPS.hlsl">
       <Filter>Shading\Phong Shading\used for cone</Filter>
     </FxCompile>
     <FxCompile Include="BlendedPhongShaderVS.hlsl">
       <Filter>Shading\Phong Shading\used for cone</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderPS.hlsl">
+      <Filter>Shading\Phong Shading\used for cube\untextured</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderVS.hlsl">
+      <Filter>Shading\Phong Shading\used for cube\untextured</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturedPhongShaderPS.hlsl">
+      <Filter>Shading\Phong Shading\used for cube\textured</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturedPhongShaderVS.hlsl">
+      <Filter>Shading\Phong Shading\used for cube\textured</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

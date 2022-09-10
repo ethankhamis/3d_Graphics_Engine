@@ -5,7 +5,7 @@
 //#include "BindSolidPlane.h"
 #include "PhongShadingCube.h"
 //#include "TexturedPlane.h"
-//#include "SkinnedCube.h"
+#include "SkinnedCube.h"
 #include "SolidCone.h"
 #include "Cylinder.h"
 #include "MathematicalConstants.h"
@@ -48,6 +48,7 @@ struct Spawn
 		PhongShadedCube,
 		PhongShadedCylinder,
 		PhongShadedCone,
+		PhongShadedTexturedCube,
 		
 
 
@@ -103,6 +104,10 @@ public:
 			if (ImGui::Button("Spawn Phong Shaded Cone"))
 			{
 				drawables.emplace_back(Chosen(Geometry::PhongShadedCone));
+			}
+			if (ImGui::Button("Spawn Phong Shaded Textured Cube"))
+			{
+				drawables.emplace_back(Chosen(Geometry::PhongShadedTexturedCube));
 			}
 
 		}
@@ -179,6 +184,10 @@ private:
 				return std::make_unique<SolidCone>(
 					gfx, rng, adist, ddist, odist, rdist, tdist
 					);
+
+			case static_cast<int>(Geometry::PhongShadedTexturedCube):
+				return std::make_unique<SkinnedCube>
+					(gfx, rng, adist, ddist, odist, rdist);
 
 			default:
 				assert(false && "bad drawable type in factory");
