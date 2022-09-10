@@ -178,6 +178,9 @@
     <Filter Include="Primatives + Binds\Colour_Oriented\Cylinder">
       <UniqueIdentifier>{2cefb5ce-6756-4b1b-a067-8f8f2906320f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tools\Timer">
+      <UniqueIdentifier>{07d17780-79a6-4c46-b0f1-c3dcd6709b78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -187,9 +190,6 @@
       <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
-      <Filter>Others\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Timer.cpp">
       <Filter>Others\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Graphics.cpp">
@@ -300,15 +300,15 @@
     <ClCompile Include="Cylinder.cpp">
       <Filter>Primatives + Binds\Colour_Oriented\Cylinder</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Tools\Timer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
       <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Timer.h">
       <Filter>Others\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Graphics.h">
@@ -472,6 +472,9 @@
     </ClInclude>
     <ClInclude Include="Cylinder.h">
       <Filter>Primatives + Binds\Colour_Oriented\Cylinder</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Tools\Timer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,16 +8,19 @@ using std::vector;
 struct Cone
 {
 	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Advanced(int divisions);
+	static IndexedTriangleList<Vertex> Create_Advanced(unsigned int ndivisions);
 	template<class Vertex>
 	static IndexedTriangleList<Vertex> Create()
 	{
 		return Create_Advanced<Vertex>(24);
 	}
+
+	template<class Vertex>
+	static IndexedTriangleList<Vertex> Create_Advanced_IndependentFaces(unsigned int ndivisions);
 };
 
 template<class Vertex>
-inline IndexedTriangleList<Vertex> Cone::Create_Advanced(int divisions)
+inline IndexedTriangleList<Vertex> Cone::Create_Advanced(unsigned int divisions)
 {
 	assert(divisions > 2); // can be 3
 
@@ -69,4 +72,85 @@ inline IndexedTriangleList<Vertex> Cone::Create_Advanced(int divisions)
 		std::move(vertices),
 		std::move(indices)
 	};
+}
+
+template<class Vertex>
+inline IndexedTriangleList<Vertex> Cone::Create_Advanced_IndependentFaces(unsigned int ndivisions)
+{
+	assert(ndivisions >= 3);
+	const DirectX::XMVECTOR base = DirectX::XMVectorSet(1.f, .0f, -1.f, .0f);
+	const float longitude_angle = 2.f * PI / ndivisions;
+
+	vector<Vertex> vertices;
+
+
+	//push vertices for cone
+	const unsigned short cone_idx = static_cast<uint16_t>(vertices.size());
+
+	for (UINT _long = NULL; _long < ndivisions; ++_long)
+	{
+		const float angles[]
+		{
+			longitude_angle * _long,
+			longitude_angle *
+			(((_long + 1) == ndivisions)
+				   // if longitude index is one from ndivisions, 
+				?  //return 0 else return _long+1 (longitude index + 1) 
+				   //
+			NULL : (_long + 1));
+		};
+
+		vertices.emplace_back();
+		vertices.back().position = { .0f, .0f, 1.f };
+
+		for (auto angle : angles)
+		{
+			vertices.emplace_back();
+			const DirectX::XMVECTOR vertex =
+				DirectX::XMVector3Transform
+				(
+					base,
+					DirectX::XMMatrixRotationZ()
+				);
+
+			DirectX::XMStoreFloat3(&vertices.back().position, vertex);
+		}
+	}
+	const unsigned short base_center_idx = static_cast<uint16_t>(vertices.size());
+	const unsigned short base_edge_idx = static_cast<uint16_t>(vertices.size());
+	vertices.emplace_back();
+	vertices.back().position = { .0f, .0f, -1.f };
+
+	for (unsigned int _long = NULL; _long < ndivisions; ++_long)
+	{
+		vertices.emplace_back();
+		DirectX::XMVECTOR vertex =
+			DirectX::XMVector3Transform
+			(
+				base,
+				DirectX::XMMatrixRotationZ(longitude_angle * _long)
+			);
+
+		DirectX::XMStoreFloat3(&vertices.back().position, vertex);
+	}
+	
+	vector<uint16_t> indices;
+
+	//indices of cone
+
+	for (uint16_t idx = NULL; idx < ndivisions * 3; ++idx)
+	{
+		indices.emplace_back(idx + cone_idx);
+	}
+
+	//indices of base
+
+	for (uint16_t _long = NULL; _long < ndivisions; ++_long)
+	{
+		indices.emplace_back(base_center_idx);
+		indices.emplace_back((1 + _long)% ndivisions + base_edge_idx);
+		indices.emplace_back(_long + base_edge_idx);
+	}
+
+	return { std::move(vertices), std::move(indices) };
 }
