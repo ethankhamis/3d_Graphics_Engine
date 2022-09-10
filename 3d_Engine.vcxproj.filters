@@ -181,6 +181,21 @@
     <Filter Include="Tools\Timer">
       <UniqueIdentifier>{07d17780-79a6-4c46-b0f1-c3dcd6709b78}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cone">
+      <UniqueIdentifier>{6016d8cb-969e-4559-8470-69456f5a60ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Primatives + Binds\Colour_Oriented\Cone\PhongShaded">
+      <UniqueIdentifier>{bf02cfed-c277-47d3-b2cb-d7e4b5cd8590}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Phong Shading\used for cylinder">
+      <UniqueIdentifier>{1e810d06-ba6c-4287-a867-e51e586eca1c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Phong Shading\used for cube">
+      <UniqueIdentifier>{1b645640-ff21-4b5c-b9aa-c4b47bf35c48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shading\Phong Shading\used for cone">
+      <UniqueIdentifier>{2b9b89f6-89ae-44e9-9be5-b9d48c91d2ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -302,6 +317,9 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timer</Filter>
+    </ClCompile>
+    <ClCompile Include="SolidCone.cpp">
+      <Filter>Primatives + Binds\Colour_Oriented\Cone\PhongShaded</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -476,6 +494,9 @@
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timer</Filter>
     </ClInclude>
+    <ClInclude Include="SolidCone.h">
+      <Filter>Primatives + Binds\Colour_Oriented\Cone\PhongShaded</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="3d_Engine.rc">
@@ -506,14 +527,20 @@
     <FxCompile Include="SolidVS.hlsl">
       <Filter>Shading\Solid Shading</Filter>
     </FxCompile>
+    <FxCompile Include="IndexedPhongPS.hlsl">
+      <Filter>Shading\Phong Shading\used for cylinder</Filter>
+    </FxCompile>
     <FxCompile Include="PhongShaderPS.hlsl">
-      <Filter>Shading\Phong Shading</Filter>
+      <Filter>Shading\Phong Shading\used for cube</Filter>
     </FxCompile>
     <FxCompile Include="PhongShaderVS.hlsl">
-      <Filter>Shading\Phong Shading</Filter>
+      <Filter>Shading\Phong Shading\used for cube</Filter>
     </FxCompile>
-    <FxCompile Include="IndexedPhongPS.hlsl">
-      <Filter>Shading\Phong Shading</Filter>
+    <FxCompile Include="BlendedPhongShaderPS.hlsl">
+      <Filter>Shading\Phong Shading\used for cone</Filter>
+    </FxCompile>
+    <FxCompile Include="BlendedPhongShaderVS.hlsl">
+      <Filter>Shading\Phong Shading\used for cone</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

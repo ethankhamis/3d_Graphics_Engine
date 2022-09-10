@@ -12,8 +12,8 @@ PhongShadingCube::PhongShadingCube(Graphics& gfx, std::mt19937& rng, std::unifor
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
-			DirectX::XMFLOAT3 n;
+			DirectX::XMFLOAT3 position;
+			DirectX::XMFLOAT3 normal;
 		};
 		auto model = Cube::Create_Independentf<Vertex>();
 		model.ApplyNormalsIndependent();

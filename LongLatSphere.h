@@ -20,40 +20,39 @@ struct Sphere
 template<class Vertex>
 inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude, int Division_Longitude)
 {
-	namespace dx = DirectX;
 	assert(Division_Latitude >= 3);
 	assert(Division_Longitude >= 3);
 
 	constexpr float radius = 1.0f;
-	const auto base = dx::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
+	const auto base = DirectX::XMVectorSet(0.0f, 0.0f, radius, 0.0f);
 	const float lattitudeAngle = static_cast<float>(PI / Division_Latitude);
 	const float longitudeAngle = static_cast<float>(2.0f * PI / Division_Longitude);
 
 	std::vector<Vertex> vertices;
 	for (int iLat = 1; iLat < Division_Latitude; iLat++)
 	{
-		const auto latBase = dx::XMVector3Transform(
+		const auto latBase = DirectX::XMVector3Transform(
 			base,
-			dx::XMMatrixRotationX(lattitudeAngle * iLat)
+			DirectX::XMMatrixRotationX(lattitudeAngle * iLat)
 		);
 		for (int iLong = 0; iLong < Division_Longitude; iLong++)
 		{
 			vertices.emplace_back();
-			auto v = dx::XMVector3Transform(
+			auto v = DirectX::XMVector3Transform(
 				latBase,
-				dx::XMMatrixRotationZ(longitudeAngle * iLong)
+				DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 			);
-			dx::XMStoreFloat3(&vertices.back().pos, v);
+			DirectX::XMStoreFloat3(&vertices.back().position, v);
 		}
 	}
 
 	// add the cap vertices
-	const auto iNorthPole = (unsigned short)vertices.size();
+	const UINT16 iNorthPole = (unsigned short)vertices.size();
 	vertices.emplace_back();
-	dx::XMStoreFloat3(&vertices.back().pos, base);
-	const auto iSouthPole = (unsigned short)vertices.size();
+	DirectX::XMStoreFloat3(&vertices.back().position, base);
+	const UINT16 iSouthPole = (unsigned short)vertices.size();
 	vertices.emplace_back();
-	dx::XMStoreFloat3(&vertices.back().pos, dx::XMVectorNegate(base));
+	DirectX::XMStoreFloat3(&vertices.back().position, DirectX::XMVectorNegate(base));
 
 	const auto calcIdx = [Division_Latitude, Division_Longitude](unsigned short iLat, unsigned short iLong)
 	{ return iLat * Division_Longitude + iLong; };

@@ -57,7 +57,7 @@ BindSolidPlane::BindSolidPlane(Graphics& gfx, std::mt19937& rng, std::uniform_re
 
 	struct Vertex
 	{
-		DirectX::XMFLOAT3 pos;
+		DirectX::XMFLOAT3 position;
 	};
 	
 	auto model = Plane::Create_Advanced<Vertex>(vDiv(rng), hDiv(rng));

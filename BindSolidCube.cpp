@@ -27,7 +27,7 @@ BindSolidCube::BindSolidCube(Graphics& gfx,
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 position;
 		};
 		auto model = Cube::Create<Vertex>();
 

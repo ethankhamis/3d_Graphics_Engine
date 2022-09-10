@@ -24,7 +24,7 @@ TexturedPlane::TexturedPlane(Graphics& gfx, std::mt19937 rng, std::uniform_real_
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 position;
 			struct
 			{
 				float u;

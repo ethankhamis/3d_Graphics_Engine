@@ -24,7 +24,7 @@ SemiSkinnedCube::SemiSkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 position;
 			struct
 			{
 				float u;

@@ -23,7 +23,7 @@ SkinnedCube::SkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_dis
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 position;
 			struct
 			{
 				float u;

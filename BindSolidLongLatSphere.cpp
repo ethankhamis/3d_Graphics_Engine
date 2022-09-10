@@ -10,7 +10,7 @@ SolidLongLatSphere::SolidLongLatSphere(Graphics& gfx, float rad)
 	{
 		struct Vertex
 		{
-			DirectX::XMFLOAT3 pos;
+			DirectX::XMFLOAT3 position;
 		};
 
 		auto model = Sphere::Create<Vertex>();

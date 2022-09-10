@@ -52,7 +52,7 @@ inline IndexedTriangleList<Vertex> Plane::Create_Advanced(uint16_t divisions_hor
 					DirectX::XMVectorSet(static_cast<float>(hor) * sizeof_division_x,
 						vertical_pos, 0.0f, 0.0f)
 				);
-				DirectX::XMStoreFloat3(&vertices[idx].pos, vertex);
+				DirectX::XMStoreFloat3(&vertices[idx].position, vertex);
 			}
 
 		}
