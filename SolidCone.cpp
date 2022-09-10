@@ -30,8 +30,8 @@ SolidCone::SolidCone(Graphics& gfx, std::mt19937& rng, std::uniform_real_distrib
 			vertex.colour =
 			{
 				static_cast<char>(255),
-				static_cast<char>(255),
-				static_cast<char>(255)
+				static_cast<char>(0),
+				static_cast<char>(0)
 			};
 		}
 		for (UINT idx = 0; idx < ntessalated; idx++)
@@ -39,8 +39,8 @@ SolidCone::SolidCone(Graphics& gfx, std::mt19937& rng, std::uniform_real_distrib
 			model.vertices[idx*3].colour = //tip
 			{
 				static_cast<char>(255),
-				static_cast<char>(0),
-				static_cast<char>(0)
+				static_cast<char>(255),
+				static_cast<char>(255)
 			};
 		}
 
