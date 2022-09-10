@@ -8,15 +8,6 @@ Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribut
 {
 	if (!is_static_init())
 	{
-		struct Vertex
-		{
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT3 normal;
-		};
-
-		auto model = Prism::Create_IndependentNormals<Vertex>(tdist(rng));
-
-		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
 		auto pvs = std::make_unique<VertexShader>(gfx, L"PhongShaderVS.cso");
 		auto pvsbc = pvs->FetchByteCode();
@@ -24,7 +15,6 @@ Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribut
 
 		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"IndexedPhongPS.cso"));
 
-		ApplyStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
 		{
@@ -50,10 +40,15 @@ Cylinder::Cylinder(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribut
 		} matConst;
 		ApplyStaticBind(std::make_unique<PixelConstantBuffer<PSMaterialConstant>>(gfx, matConst, 1u));
 	}
-	else
+	struct Vertex
 	{
-		ApplyIndexFromStatic();
-	}
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 normal;
+	};
+
+	const IndexedTriangleList<Vertex> model = Prism::Create_IndependentNormals<Vertex>(tdist(rng));
+	ApplyBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	ApplyIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 	

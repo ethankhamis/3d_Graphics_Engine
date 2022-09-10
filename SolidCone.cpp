@@ -11,51 +11,12 @@ SolidCone::SolidCone(Graphics& gfx, std::mt19937& rng, std::uniform_real_distrib
 {
 	if (!is_static_init())
 	{
-		struct Vertex
-		{
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT3 normal;
-			std::array<char, 4> colour;
-			char padding;
-		};
-
-		const int ntessalated = tdist(rng);
-
-		IndexedTriangleList<Vertex> model = Cone::Create_Advanced_IndependentFaces<Vertex>(ntessalated);
-
-		//set mesh colours
-
-		for (auto& vertex : model.vertices)
-		{
-			vertex.colour =
-			{
-				static_cast<char>(255),
-				static_cast<char>(0),
-				static_cast<char>(0)
-			};
-		}
-		for (UINT idx = 0; idx < ntessalated; idx++)
-		{
-			model.vertices[idx*3].colour = //tip
-			{
-				static_cast<char>(255),
-				static_cast<char>(255),
-				static_cast<char>(255)
-			};
-		}
-
-		model.Transform(DirectX::XMMatrixScaling(1.f, 1.f, .8f));
-
-		model.ApplyNormalsIndependent();
-
-		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
 		std::unique_ptr<VertexShader> pvs = std::make_unique<VertexShader>(gfx, L"BlendedPhongShaderVS.cso");
 		ID3DBlob* pvsbc = pvs->FetchByteCode();
 		ApplyStaticBind(std::move(pvs));
 		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"BlendedPhongShaderPS.cso"));
 
-		ApplyStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> input_element_desc =
 		{
@@ -81,9 +42,46 @@ SolidCone::SolidCone(Graphics& gfx, std::mt19937& rng, std::uniform_real_distrib
 		);
 
 	}
-	else
+
+
+	struct Vertex
 	{
-		ApplyIndexFromStatic();
+		DirectX::XMFLOAT3 position;
+		DirectX::XMFLOAT3 normal;
+		std::array<char, 4> colour;
+		char padding;
+	};
+
+	const int ntessalated = tdist(rng);
+
+	IndexedTriangleList<Vertex> model = Cone::Create_Advanced_IndependentFaces<Vertex>(ntessalated);
+
+	//set mesh colours
+
+	for (auto& vertex : model.vertices)
+	{
+		vertex.colour =
+		{
+			static_cast<char>(255),
+			static_cast<char>(0),
+			static_cast<char>(0)
+		};
 	}
+	for (UINT idx = 0; idx < ntessalated; idx++)
+	{
+		model.vertices[idx * 3].colour = //tip
+		{
+			static_cast<char>(255),
+			static_cast<char>(255),
+			static_cast<char>(255)
+		};
+	}
+
+	model.Transform(DirectX::XMMatrixScaling(1.f, 1.f, .8f));
+
+	model.ApplyNormalsIndependent();
+
+	ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
+	ApplyIndexBuffer(std::make_unique<IndexBuffer>(gfx, model.indices));
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 }
