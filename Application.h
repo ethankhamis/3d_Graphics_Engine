@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Spawn.h"
 #include "ImGUIManager.h"
+#include <set>
 
 struct Application
 {
@@ -21,9 +22,16 @@ private:
 private:
 	void ExecFrame();
 private:
+	void SpawnSimulationWindow() noexcept;
+	void SpawnCubeWindowManagerWindow() noexcept;
+	void SpawnCubeWindows();
+private:
 	std::vector<std::unique_ptr<struct Drawable>> drawables;
-	static constexpr unsigned int nDrawables = 0;
+	std::vector<struct PhongShadingCube*> cubes;
+private:
+	static constexpr unsigned int nDrawables = 50;
 	float speed = 1.f;
 private:
-	bool show_demo = true;
+	std::optional<int> comboCubeIndex;
+	std::set<int> cubeControlIds;
 };

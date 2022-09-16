@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DrawableBase.h"
+#include "MathematicalConstants.h"
 
 /*testcase taken from ChilliTomatoNoodle*/
 template<class Object>
@@ -31,12 +32,12 @@ struct TestObject : public DrawableBase<Object>
 
 	void Update(float deltaTime) noexcept
 	{
-		roll += droll * deltaTime;
-		pitch += dpitch * deltaTime;
-		yaw += dyaw * deltaTime;
-		theta += dtheta * deltaTime;
-		phi += dphi * deltaTime;
-		chi += dchi * deltaTime;
+		roll   = wrap_Radians( roll + droll * deltaTime);
+		pitch  = wrap_Radians( pitch + dpitch * deltaTime);
+		yaw    = wrap_Radians( yaw + dyaw * deltaTime);
+		theta  = wrap_Radians( theta + dtheta * deltaTime);
+		phi    = wrap_Radians( phi + dphi * deltaTime);
+		chi    = wrap_Radians( chi + dchi * deltaTime);
 	}
 	DirectX::XMMATRIX FetchTransformMat() const noexcept
 	{
@@ -48,7 +49,7 @@ struct TestObject : public DrawableBase<Object>
 			DirectX::XMMatrixRotationRollPitchYaw(theta, phi, chi);
 	}
 
-private:
+protected:
 	// positional
 	float r;
 	float roll = 0.0f;

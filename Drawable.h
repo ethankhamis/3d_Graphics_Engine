@@ -17,10 +17,21 @@ public: // standard member functions
 	void Render(Graphics& gfx) const noexcept (!Debug); // noexcept unless debugging (preprocessor def'd)
 	virtual void Update(float DeltaTime) noexcept = 0;
 	virtual ~Drawable() = default;
-	
 protected: // member functions involving adding
 	void ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
 	void ApplyBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
+	template<class Type>
+	Type* QueryBindableObj() noexcept
+	{
+		for (std::unique_ptr<Bindable>& pbind : allBinds)
+		{
+			if (auto pType = dynamic_cast<Type*>(pbind.get()))
+			{
+				return pType;
+			}
+		}
+		return nullptr;
+	}
 private:
 	virtual const std::vector<std::unique_ptr<Bindable>>& FetchStaticBinds() const noexcept = 0;
 private:
