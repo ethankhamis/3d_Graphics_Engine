@@ -184,7 +184,7 @@ private:
 				return std::make_unique<SolidCone>(
 					gfx, rng, adist, ddist, odist, rdist, tdist
 					);
-
+					
 			case static_cast<int>(Geometry::PhongShadedTexturedCube):
 				return std::make_unique<SkinnedCube>
 					(gfx, rng, adist, ddist, odist, rdist);

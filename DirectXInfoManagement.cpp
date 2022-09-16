@@ -52,13 +52,14 @@ std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 	{
 		HRESULT hr;
 		SIZE_T messageLength;
+
 		// get size of message i in bytes
-		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
+		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
 		// allocate memory for message
 		std::unique_ptr bytes = std::make_unique<byte[]>(messageLength);
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
 		// get the message and push description into std::vector
-		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageA(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
+		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
 
 		messages.emplace_back(pMessage->pDescription);
 	}

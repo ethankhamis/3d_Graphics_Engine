@@ -10,6 +10,11 @@
 #include "Spawn.h"
 #include "imgui/imgui.h"
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+
 
 GDIpManager gdipm;
 
@@ -60,7 +65,6 @@ void Application::ExecFrame()
 
 	ImGui::End();
 	
-
 	window.grfx().EndFrame();
 }
 
