@@ -22,9 +22,9 @@ Application::Application()
 	:window(1000, 750, L"6~3D"),
 	spawn(window.grfx())
 {
-	for (int i = 0; i < nDrawables; i++)
+	//for (int i = 0; i < nDrawables; i++)
 	{
-		drawables.emplace_back(spawn.Chosen(5));
+		//drawables.emplace_back(spawn.Chosen(5));
 	}
 	
 	for (std::unique_ptr<Drawable>& pDrawable : drawables)

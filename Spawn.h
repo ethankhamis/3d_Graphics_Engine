@@ -16,6 +16,7 @@
 #include "PointLight.h"
 #include "imgui/imgui.h"
 
+#include "randomTest.h"
 enum struct Geometry;
 
 template<typename T>
@@ -49,6 +50,7 @@ struct Spawn
 		PhongShadedCylinder,
 		PhongShadedCone,
 		PhongShadedTexturedCube,
+		PhongShadedMonkey,
 		
 
 
@@ -109,6 +111,10 @@ public:
 			{
 				drawables.emplace_back(Chosen(Geometry::PhongShadedTexturedCube));
 			}
+			if (ImGui::Button("Spawn Phong Shaded Monkey"))
+			{
+				drawables.emplace_back(Chosen(Geometry::PhongShadedMonkey));
+			}
 
 		}
 		ImGui::End();
@@ -136,7 +142,7 @@ private:
 	template<Switchable _switch>
 		std::unique_ptr<Drawable> Spawner(_switch s)
 		{
-			
+			const DirectX::XMFLOAT3 matrix = { 1 , NULL , NULL };
 			switch (static_cast<int>(s))
 			{
 				/*
@@ -171,7 +177,6 @@ private:
 					);
 				*/
 			case static_cast<int>(Geometry::PhongShadedCube):
-				const DirectX::XMFLOAT3 matrix = { 1 , 0 , 0 };
 				return std::make_unique<PhongShadingCube>
 					(gfx, rng, adist, ddist, odist, rdist, bdist,matrix);
 					
@@ -188,6 +193,10 @@ private:
 			case static_cast<int>(Geometry::PhongShadedTexturedCube):
 				return std::make_unique<SkinnedCube>
 					(gfx, rng, adist, ddist, odist, rdist);
+
+			case static_cast<int>(Geometry::PhongShadedMonkey):
+				return std::make_unique<RandomTest>
+					(gfx, rng, adist, ddist, odist, rdist, matrix, 1.5f);
 
 			default:
 				assert(false && "bad drawable type in factory");

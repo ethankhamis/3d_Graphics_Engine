@@ -178,6 +178,7 @@
     <ClCompile Include="PixelShader.cpp" />
     <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="PrimitiveTopology.cpp" />
+    <ClCompile Include="randomTest.cpp" />
     <ClCompile Include="Sampler.cpp" />
     <ClCompile Include="SemiSkinnedCube.cpp" />
     <ClCompile Include="SolidCone.cpp" />
@@ -268,6 +269,7 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="PointLight.h" />
     <ClInclude Include="Prism.h" />
+    <ClInclude Include="randomTest.h" />
     <ClInclude Include="Sampler.h" />
     <ClInclude Include="SemiSkinnedCube.h" />
     <ClInclude Include="SolidCone.h" />
