@@ -6,6 +6,7 @@
 #include "PhongShadingCube.h"
 //#include "TexturedPlane.h"
 #include "SkinnedCube.h"
+#include "SemiSkinnedCube.h"
 #include "SolidCone.h"
 #include "Cylinder.h"
 #include "MathematicalConstants.h"
@@ -49,8 +50,9 @@ struct Spawn
 		PhongShadedCube,
 		PhongShadedCylinder,
 		PhongShadedCone,
-		PhongShadedTexturedCube,
-		PhongShadedMonkey,
+		MultiFacedPhongShadedTexturedCube,
+		UniFacedPhongShadedTexturedCube,
+		PhongShadedMonkey = 11,
 		
 
 
@@ -107,9 +109,13 @@ public:
 			{
 				drawables.emplace_back(Chosen(Geometry::PhongShadedCone));
 			}
-			if (ImGui::Button("Spawn Phong Shaded Textured Cube"))
+			if (ImGui::Button("Spawn Phong Shaded Textured Cube (multi-faced)"))
 			{
-				drawables.emplace_back(Chosen(Geometry::PhongShadedTexturedCube));
+				drawables.emplace_back(Chosen(Geometry::MultiFacedPhongShadedTexturedCube));
+			}
+			if (ImGui::Button("Spawn Phong Shaded Textured Cube (uni-faced)"))
+			{
+				drawables.emplace_back(Chosen(Geometry::UniFacedPhongShadedTexturedCube));
 			}
 			if (ImGui::Button("Spawn Phong Shaded Monkey"))
 			{
@@ -190,8 +196,12 @@ private:
 					gfx, rng, adist, ddist, odist, rdist, tdist
 					);
 					
-			case static_cast<int>(Geometry::PhongShadedTexturedCube):
+			case static_cast<int>(Geometry::MultiFacedPhongShadedTexturedCube):
 				return std::make_unique<SkinnedCube>
+					(gfx, rng, adist, ddist, odist, rdist);
+
+			case static_cast<int>(Geometry::UniFacedPhongShadedTexturedCube):
+				return std::make_unique<SemiSkinnedCube>
 					(gfx, rng, adist, ddist, odist, rdist);
 
 			case static_cast<int>(Geometry::PhongShadedMonkey):

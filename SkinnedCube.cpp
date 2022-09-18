@@ -17,13 +17,13 @@ SkinnedCube::SkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_real_dis
 		{
 			DirectX::XMFLOAT3 position;
 			DirectX::XMFLOAT3 normal;
-			DirectX::XMFLOAT2 tc;
+			DirectX::XMFLOAT2 tex;
 		};
-		IndexedTriangleList<Vertex> model = Cube::Create_Skinned_Independentf<Vertex>();
+		IndexedTriangleList<Vertex> model = Cube::Create_Skinned<Vertex>();
 		model.ApplyNormalsIndependent();
 		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 
-		ApplyStaticBind(std::make_unique<Texture>(gfx, Surface::WithFile(L"Images\\eren.png")));
+		ApplyStaticBind(std::make_unique<Texture>(gfx, Surface::WithFile(L"Images\\cube.png")));
 		ApplyStaticBind(std::make_unique<Sampler>(gfx));
 		auto pvs = std::make_unique<VertexShader>(gfx, L"TexturedPhongShaderVS.cso");
 		auto pvsbc = pvs->FetchByteCode();

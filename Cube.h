@@ -147,30 +147,30 @@ inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side
 {
 	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
 
-	IndexedTriangleList_.vertices[0].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[1].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[2].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[3].tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[4].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[5].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[6].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[7].tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[8].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[9].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[10].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[11].tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[12].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[13].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[14].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[15].tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[16].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[17].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[18].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[19].tc = { 1.f,1.f };
-	IndexedTriangleList_.vertices[20].tc = { 0.f,0.f };
-	IndexedTriangleList_.vertices[21].tc = { 1.f,0.f };
-	IndexedTriangleList_.vertices[22].tc = { 0.f,1.f };
-	IndexedTriangleList_.vertices[23].tc = { 1.f,1.f };
+	IndexedTriangleList_.vertices[0].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[1].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[2].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[3].tex = { 1.f,1.f };
+	IndexedTriangleList_.vertices[4].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[5].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[6].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[7].tex = { 1.f,1.f };
+	IndexedTriangleList_.vertices[8].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[9].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[10].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[11].tex = { 1.f,1.f };
+	IndexedTriangleList_.vertices[12].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[13].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[14].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[15].tex = { 1.f,1.f };
+	IndexedTriangleList_.vertices[16].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[17].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[18].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[19].tex = { 1.f,1.f };
+	IndexedTriangleList_.vertices[20].tex = { 0.f,0.f };
+	IndexedTriangleList_.vertices[21].tex = { 1.f,0.f };
+	IndexedTriangleList_.vertices[22].tex = { 0.f,1.f };
+	IndexedTriangleList_.vertices[23].tex = { 1.f,1.f };
 
 	return IndexedTriangleList_;
 }
