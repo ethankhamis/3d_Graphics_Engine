@@ -5,6 +5,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include "DynamicVertex.h"
 
 RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, DirectX::XMFLOAT3 material, float scale)
 	:
@@ -13,12 +14,13 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 
 	if (!is_static_init())
 	{
-		struct Vertex
-		{
-			DirectX::XMFLOAT3 position;
-			DirectX::XMFLOAT3 normal;
-		};
-
+		using experimental::VertexLayout;
+		experimental::VertexBuffer vertexBuffer(
+			std::move(
+			VertexLayout{}
+			.Append(VertexLayout::Position3D)
+			.Append(VertexLayout::Normal)
+		));
 		Assimp::Importer imp;
 		const auto pModel = imp.ReadFile("models\\monkey.obj",
 			aiProcess_Triangulate |
@@ -26,14 +28,13 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 		);
 		const auto pMesh = pModel->mMeshes[0];
 
-		std::vector<Vertex> vertices;
-		vertices.reserve(pMesh->mNumVertices);
+		
 		for (unsigned int i = 0; i < pMesh->mNumVertices; i++)
 		{
-			vertices.push_back({
-				{ pMesh->mVertices[i].x * scale,pMesh->mVertices[i].y * scale,pMesh->mVertices[i].z * scale },
-				*reinterpret_cast<DirectX::XMFLOAT3*>(&pMesh->mNormals[i])
-				});
+			vertexBuffer.Emplace_Back(
+				float3{ pMesh->mVertices[i].x * scale,pMesh->mVertices[i].y * scale,pMesh->mVertices[i].z * scale },
+				*reinterpret_cast<float3*>(&pMesh->mNormals[i])
+				);
 		}
 
 		std::vector<unsigned short> indices;
@@ -47,7 +48,7 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 			indices.push_back(face.mIndices[2]);
 		}
 
-		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, vertices));
+		ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, vertexBuffer));
 
 		ApplyStaticIndexBuffer(std::make_unique<IndexBuffer>(gfx, indices));
 
@@ -57,12 +58,8 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 
 		ApplyStaticBind(std::make_unique<PixelShader>(gfx, L"PhongShaderPS.cso"));
 
-		const std::vector<D3D11_INPUT_ELEMENT_DESC> ied =
-		{
-			{ "Position",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0 },
-			{ "Normal",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA,0 },
-		};
-		ApplyStaticBind(std::make_unique<InputLayout>(gfx, ied, pvsbc));
+		
+		ApplyStaticBind(std::make_unique<InputLayout>(gfx, vertexBuffer.FetchLayout().FetchD3DLayout(), pvsbc));
 
 		ApplyStaticBind(std::make_unique<PrimTopology>(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 

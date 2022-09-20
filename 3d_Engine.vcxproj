@@ -289,7 +289,9 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="TransformConstBuffer.h" />
+    <ClInclude Include="TypeDecl.h" />
     <ClInclude Include="VertexBuffer.h" />
+    <ClInclude Include="DynamicVertex.h" />
     <ClInclude Include="VertexShader.h" />
     <ClInclude Include="Win.h" />
     <ClInclude Include="WinDef.h" />

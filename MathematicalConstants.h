@@ -1,6 +1,7 @@
 #pragma once
 #include <cmath>
 #include <concepts>
+#include <DirectXMath.h>
 
 #define PI 3.141592654
 #define PI_LONG 3.14159265358979323846 
@@ -13,6 +14,12 @@
 
 #define EULERS_CONSTANT 0.57721
 #define EULERS_CONSTANT_LONG 0.5772156649
+
+
+typedef DirectX::XMFLOAT2 float2;
+typedef DirectX::XMFLOAT3 float3;
+typedef DirectX::XMFLOAT4 float4;
+typedef DirectX::XMVECTOR vec32_t;
 
 template<typename T>
 concept Numeric_T = requires (T a)

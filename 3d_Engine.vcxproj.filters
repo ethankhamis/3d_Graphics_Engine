@@ -208,6 +208,9 @@
     <Filter Include="Shading\Phong Shading\used for cube\untextured + used for all">
       <UniqueIdentifier>{e7a0ccd7-e198-483e-a529-214433ee11a0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Dynamics">
+      <UniqueIdentifier>{a11f1638-867a-4a41-9132-201a0f4f5967}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -634,6 +637,12 @@
     </ClInclude>
     <ClInclude Include="randomTest.h">
       <Filter>Primatives + Binds\Test Cases</Filter>
+    </ClInclude>
+    <ClInclude Include="DynamicVertex.h">
+      <Filter>Dynamics</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeDecl.h">
+      <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

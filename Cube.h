@@ -20,6 +20,9 @@ struct Cube
 	static IndexedTriangleList<Vertex> Create_Independentf(float _side = 0.5f);
 
 	template<class Vertex>
+	static IndexedTriangleList<Vertex> Create_SemiSkinned_Independentf(float _side = .5f);
+
+	template<class Vertex>
 	static IndexedTriangleList<Vertex> Create_Skinned_Independentf(float _side = .5f);
 };
 
@@ -143,7 +146,7 @@ inline IndexedTriangleList<Vertex> Cube::Create_Independentf(float _side)
 }
 
 template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side)
+inline IndexedTriangleList<Vertex> Cube::Create_SemiSkinned_Independentf(float _side)
 {
 	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
 
@@ -175,43 +178,35 @@ inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side
 	return IndexedTriangleList_;
 }
 
-/*
 template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_SemiSkinned()
+inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side)
 {
+	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
 
-	constexpr float side = 0.5f;
+	IndexedTriangleList_.vertices[0].tex = { 2.0f / 3.0f,0.0f / 4.0f };
+	IndexedTriangleList_.vertices[1].tex = { 1.0f / 3.0f,0.0f / 4.0f };
+	IndexedTriangleList_.vertices[2].tex = { 2.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[3].tex = { 1.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[4].tex = { 2.0f / 3.0f,3.0f / 4.0f };
+	IndexedTriangleList_.vertices[5].tex = { 1.0f / 3.0f,3.0f / 4.0f };
+	IndexedTriangleList_.vertices[6].tex = { 2.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[7].tex = { 1.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[8].tex = { 2.0f / 3.0f,4.0f / 4.0f };
+	IndexedTriangleList_.vertices[9].tex = { 1.0f / 3.0f,4.0f / 4.0f };
+	IndexedTriangleList_.vertices[10].tex = { 3.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[11].tex = { 3.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[12].tex = { 0.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[13].tex = { 0.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[14].tex = { 2.0f / 3.0f,0.0f / 4.0f };
+	IndexedTriangleList_.vertices[15].tex = { 1.0f / 3.0f,0.0f / 4.0f };
+	IndexedTriangleList_.vertices[16].tex = { 2.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[17].tex = { 1.0f / 3.0f,1.0f / 4.0f };
+	IndexedTriangleList_.vertices[18].tex = { 2.0f / 3.0f,3.0f / 4.0f };
+	IndexedTriangleList_.vertices[19].tex = { 1.0f / 3.0f,3.0f / 4.0f };
+	IndexedTriangleList_.vertices[20].tex = { 2.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[21].tex = { 1.0f / 3.0f,2.0f / 4.0f };
+	IndexedTriangleList_.vertices[22].tex = { 2.0f / 3.0f,4.0f / 4.0f };
+	IndexedTriangleList_.vertices[23].tex = { 1.0f / 3.0f,4.0f / 4.0f };
 
-
-	vector<Vertex> vertices(8);
-	vertices[0].position = { -side, -side, -side };
-	vertices[0].tex = { 0.0f,0.0f };
-	vertices[1].position = { side, -side, -side };
-	vertices[1].tex = { 1.0f,0.0f };
-	vertices[2].position = { -side, side, -side };
-	vertices[2].tex = { 0.0f,1.0f };
-	vertices[3].position = { side, side, -side };
-	vertices[3].tex = { 1.0f,1.0f };
-	vertices[4].position = { -side, -side, side };
-	vertices[4].tex = { 0.0f,0.0f };
-	vertices[5].position = { side, -side, side };
-	vertices[5].tex = { 1.0f,0.0f };
-	vertices[6].position = { -side, side, side };
-	vertices[6].tex = { 0.0f,1.0f };
-	vertices[7].position = { side, side, side };
-	vertices[7].tex = { 1.0f,1.0f };
-
-
-
-
-
-	return{
-		std::move(vertices),{
-			0,2,1, 2,3,1,
-			1,3,5, 3,7,5,
-			2,6,3, 3,6,7,
-			4,5,7, 4,7,6,
-			0,4,2, 2,4,6,
-			0,1,4, 1,5,4}};
-	}
-	*/
+	return IndexedTriangleList_;
+}

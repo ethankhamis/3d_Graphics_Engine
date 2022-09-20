@@ -18,7 +18,7 @@ SemiSkinnedCube::SemiSkinnedCube(Graphics& gfx, std::mt19937& rng, std::uniform_
 				DirectX::XMFLOAT3 normal;
 				DirectX::XMFLOAT2 tex;
 			};
-			IndexedTriangleList<Vertex> model = Cube::Create_Skinned_Independentf<Vertex>();
+			IndexedTriangleList<Vertex> model = Cube::Create_SemiSkinned_Independentf<Vertex>();
 			model.ApplyNormalsIndependent();
 			ApplyStaticBind(std::make_unique<VertexBuffer>(gfx, model.vertices));
 

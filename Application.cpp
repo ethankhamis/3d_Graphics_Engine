@@ -9,11 +9,11 @@
 #include "Surface.h"
 #include "Spawn.h"
 #include "imgui/imgui.h"
+#include "DynamicVertex.h"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-
 
 
 GDIpManager gdipm;
@@ -26,7 +26,6 @@ Application::Application()
 	{
 		//drawables.emplace_back(spawn.Chosen(5));
 	}
-	
 	for (std::unique_ptr<Drawable>& pDrawable : drawables)
 	{
 		if (PhongShadingCube* pPhongShadedCube = dynamic_cast<PhongShadingCube*>(pDrawable.get()))
