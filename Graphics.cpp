@@ -81,7 +81,7 @@ Graphics::Graphics(HWND hWnd)
 	// bind depth state
 	pDeviceContext->OMSetDepthStencilState(pDSState.Get(), 1u);
 
-	// create depth stensil texture
+	// create depth stencil texture
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
 	descDepth.Width = 1000u;
@@ -95,7 +95,7 @@ Graphics::Graphics(HWND hWnd)
 	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	GFX_THROW_INFO(pDevice->CreateTexture2D(&descDepth, nullptr, &pDepthStencil));
 
-	// create view of depth stensil texture
+	// create view of depth stencil texture
 	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 	descDSV.Format = DXGI_FORMAT_D32_FLOAT;
 	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
@@ -104,7 +104,7 @@ Graphics::Graphics(HWND hWnd)
 		pDepthStencil.Get(), &descDSV, &pDepthStencilView
 	));
 
-	// bind depth stensil view to OM
+	// bind depth stencil view to OM
 	pDeviceContext->OMSetRenderTargets(1u, pTargetView.GetAddressOf(), pDepthStencilView.Get());
 
 	// configure viewport

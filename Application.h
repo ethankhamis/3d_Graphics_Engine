@@ -3,6 +3,7 @@
 #include "Timer.h"
 #include "Camera.h"
 #include "Spawn.h"
+#include "Model.h"
 #include "ImGUIManager.h"
 #include <set>
 
@@ -19,19 +20,8 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
+	Model nanosuit{ window.grfx(), "Models\\objBuilding.obj" };
 private:
 	void ExecFrame();
-private:
-	void SpawnSimulationWindow() noexcept;
-	void SpawnCubeWindowManagerWindow() noexcept;
-	void SpawnCubeWindows();
-private:
-	std::vector<std::unique_ptr<struct Drawable>> drawables;
-	std::vector<struct PhongShadingCube*> cubes;
-private:
-	static constexpr unsigned int nDrawables = 50;
 	float speed = 1.f;
-private:
-	std::optional<int> comboCubeIndex;
-	std::set<int> cubeControlIds;
 };

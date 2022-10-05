@@ -211,6 +211,9 @@
     <Filter Include="Dynamics">
       <UniqueIdentifier>{a11f1638-867a-4a41-9132-201a0f4f5967}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Model">
+      <UniqueIdentifier>{4e50fcac-3616-4599-9e0d-6282c90bfdb2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -338,6 +341,9 @@
     </ClCompile>
     <ClCompile Include="randomTest.cpp">
       <Filter>Primatives + Binds\Test Cases</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>Model</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -643,6 +649,9 @@
     </ClInclude>
     <ClInclude Include="TypeDecl.h">
       <Filter>Performance &amp; Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

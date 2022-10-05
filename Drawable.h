@@ -15,7 +15,7 @@ public:
 public: // standard member functions
 	virtual DirectX::XMMATRIX FetchTransformMat() const noexcept = 0; //make abstract
 	void Render(Graphics& gfx) const noexcept (!Debug); // noexcept unless debugging (preprocessor def'd)
-	virtual void Update(float DeltaTime) noexcept = 0;
+	virtual void Update(float DeltaTime) noexcept{}
 	virtual ~Drawable() = default;
 protected: // member functions involving adding
 	void ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
