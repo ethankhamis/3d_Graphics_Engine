@@ -101,6 +101,11 @@ struct Model
 
 		pRoot = ParseNode(*pScene->mRootNode);
 	}
+
+	void Render(Graphics& gfx, DirectX::FXMMATRIX transform) const
+	{
+		pRoot->Render(gfx, transform);
+	}
 	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	{
 		namespace dx = DirectX;
@@ -184,10 +189,7 @@ struct Model
 
 		return pNode;
 	}
-	void Render(Graphics& gfx) const
-	{
-		pRoot->Render(gfx, DirectX::XMMatrixIdentity());
-	}
+
 private:
 	unique_ptr<Node> pRoot;
 	vector<unique_ptr<Mesh>> pMeshes;
