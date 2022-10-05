@@ -285,15 +285,6 @@
     <ClCompile Include="Sampler.cpp">
       <Filter>Texture-Related\Sampler</Filter>
     </ClCompile>
-    <ClCompile Include="TexturedPlane.cpp">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
-    </ClCompile>
-    <ClCompile Include="SemiSkinnedCube.cpp">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
-    </ClCompile>
-    <ClCompile Include="BindSolidPlane.cpp">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Plane</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui_demo.cpp">
       <Filter>Made By IMGUI</Filter>
     </ClCompile>
@@ -321,28 +312,13 @@
     <ClCompile Include="PointLight.cpp">
       <Filter>Tools\PointLight</Filter>
     </ClCompile>
-    <ClCompile Include="BindSolidCube.cpp">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cube\NoLighting</Filter>
-    </ClCompile>
-    <ClCompile Include="PhongShadingCube.cpp">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cube\PhongShading</Filter>
-    </ClCompile>
-    <ClCompile Include="Cylinder.cpp">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cylinder</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="SolidCone.cpp">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cone\PhongShaded</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinnedCube.cpp">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded</Filter>
     </ClCompile>
     <ClCompile Include="randomTest.cpp">
       <Filter>Primatives + Binds\Test Cases</Filter>
     </ClCompile>
-    <ClCompile Include="Model.cpp">
+    <ClCompile Include="Mesh.cpp">
       <Filter>Model</Filter>
     </ClCompile>
   </ItemGroup>
@@ -446,15 +422,6 @@
     <ClInclude Include="Sampler.h">
       <Filter>Texture-Related\Sampler</Filter>
     </ClInclude>
-    <ClInclude Include="TexturedPlane.h">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
-    </ClInclude>
-    <ClInclude Include="SemiSkinnedCube.h">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube\SemiSkinned</Filter>
-    </ClInclude>
-    <ClInclude Include="BindSolidPlane.h">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Plane</Filter>
-    </ClInclude>
     <ClInclude Include="IndexedTriangleList.h">
       <Filter>Primatives + Binds\Primative</Filter>
     </ClInclude>
@@ -497,29 +464,14 @@
     <ClInclude Include="PointLight.h">
       <Filter>Tools\PointLight</Filter>
     </ClInclude>
-    <ClInclude Include="BindSolidCube.h">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cube\NoLighting</Filter>
-    </ClInclude>
-    <ClInclude Include="PhongShadingCube.h">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cube\PhongShading</Filter>
-    </ClInclude>
     <ClInclude Include="Prism.h">
       <Filter>Primatives + Binds\Primative\Prism</Filter>
     </ClInclude>
     <ClInclude Include="ObjTestCase.h">
       <Filter>Primatives + Binds\Test Cases</Filter>
     </ClInclude>
-    <ClInclude Include="Cylinder.h">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cylinder</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="SolidCone.h">
-      <Filter>Primatives + Binds\Binds\Colour_Oriented\Cone\PhongShaded</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinnedCube.h">
-      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded</Filter>
     </ClInclude>
     <ClInclude Include="assimp\include\assimp\ai_assert.h">
       <Filter>Others\Header Files</Filter>
@@ -650,8 +602,11 @@
     <ClInclude Include="TypeDecl.h">
       <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="Model.h">
+    <ClInclude Include="Mesh.h">
       <Filter>Model</Filter>
+    </ClInclude>
+    <ClInclude Include="debugdefs.h">
+      <Filter>Performance &amp; Helpers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

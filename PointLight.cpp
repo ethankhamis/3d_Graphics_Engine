@@ -1,6 +1,6 @@
 #include "PointLight.h"
 #include "imgui/imgui.h"
-
+#include "MathematicalConstants.h"
 PointLight::PointLight(Graphics& gfx, float rad)
 :
 	mesh(gfx,rad),
@@ -49,7 +49,7 @@ void PointLight::Reset() noexcept
 	};
 }
 
-void PointLight::Render(Graphics& gfx) const noexcept(!Debug)
+void PointLight::Render(Graphics& gfx) const noexcept_unless
 {
 	mesh.SetPosition(constbuffer_data.pos);
 	mesh.Render(gfx);
@@ -58,7 +58,7 @@ void PointLight::Render(Graphics& gfx) const noexcept(!Debug)
 void PointLight::Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept
 {
 	PointLight::PointLightCBuf constbuffer_data_Copy = constbuffer_data;
-	const auto pos = DirectX::XMLoadFloat3(&constbuffer_data.pos);
+	const vec32_t pos = DirectX::XMLoadFloat3(&constbuffer_data.pos);
 	DirectX::XMStoreFloat3(&constbuffer_data_Copy.pos, DirectX::XMVector3Transform(pos, view));
 	cbuf.Update(gfx, constbuffer_data_Copy);
 	cbuf.Bind(gfx);

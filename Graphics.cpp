@@ -6,6 +6,7 @@
 #include "ThrowMacros.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
+#include "debugdefs.h"
 
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "D3DCompiler.lib")
@@ -162,7 +163,7 @@ void Graphics::ClearBuffer(float R, float G, float B) noexcept
 }
 
 
-void Graphics::RenderIndexed(UINT count) noexcept(!Debug)
+void Graphics::RenderIndexed(UINT count) noexcept_unless
 {
 	GFX_THROW_INFO_ONLY(pDeviceContext->DrawIndexed(count, 0u, 0u));
 }
@@ -226,26 +227,6 @@ const wchar_t* Graphics::HResultException::whatw() const noexcept
 
 	std::wstring ErrorType = FetchErrorType();
 
-	/*
-	wss << FetchErrorType();
-	wss << std::endl;
-	wss << L"{Error Code} 0x";
-	wss << std::hex;
-	wss << std::uppercase;
-	wss << FetchErrorCode();
-	wss << std::dec;
-	wss << L" (";
-	wss << static_cast<unsigned long>(FetchErrorCode());
-	wss << L")";
-	wss << std::endl;
-	wss << L"{Error String} ";
-	wss << FetchErrorWString();
-	wss << std::endl;
-	wss << L"{Description} ";
-	wss << FetchErrorDescription();
-	wss << std::endl;
-	wss << FetchLine();
-	*/
 	wss << ErrorType
 		<<
 		std::endl

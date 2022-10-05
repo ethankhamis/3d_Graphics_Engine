@@ -5,6 +5,7 @@
 #include <memory>
 #include "ExceptionHandler.h"
 #include "Colour.h"
+#include "debugdefs.h"
 
 struct Surface
 {
@@ -26,8 +27,8 @@ public:
 	~Surface();
 public:
 	void Wipe(Colour fillValue) noexcept;
-	void ApplyPixel(unsigned int x, unsigned int y, Colour c) noexcept(!Debug);
-	Colour FetchPixel(unsigned int x, unsigned int y) const noexcept(!Debug);
+	void ApplyPixel(unsigned int x, unsigned int y, Colour c) noexcept_unless;
+	Colour FetchPixel(unsigned int x, unsigned int y) const noexcept_unless;
 	unsigned int FetchWidth() const noexcept;
 	unsigned int FetchHeight() const noexcept;
 	Colour* FetchpBuffer() noexcept;
@@ -35,7 +36,7 @@ public:
 	const Colour* FetchpBufferConst() const noexcept;
 	static Surface WithFile(const std::wstring& filename);
 	void SaveFile(const std::wstring& filename) const;
-	void Copy(const Surface& src) noexcept(!Debug);
+	void Copy(const Surface& src) noexcept_unless;
 private:
 	void gfxAsserts(unsigned int x, unsigned int y) const;
 private:

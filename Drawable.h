@@ -1,9 +1,13 @@
 #pragma once
 #include <DirectXMath.h>
 #include "Graphics.h"
+#include "debugdefs.h"
 
-struct Bindable;
-
+namespace Bind
+{
+	struct Bindable;
+	struct IndexBuffer;
+}
 struct Drawable
 {
 	template<class T>
@@ -14,16 +18,14 @@ public:
 
 public: // standard member functions
 	virtual DirectX::XMMATRIX FetchTransformMat() const noexcept = 0; //make abstract
-	void Render(Graphics& gfx) const noexcept (!Debug); // noexcept unless debugging (preprocessor def'd)
+	void Render(Graphics& gfx) const noexcept_unless; // noexcept unless debugging (preprocessor def'd)
 	virtual void Update(float DeltaTime) noexcept{}
 	virtual ~Drawable() = default;
 protected: // member functions involving adding
-	void ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug);
-	void ApplyBind(std::unique_ptr<Bindable> bind) noexcept (!Debug);
 	template<class Type>
 	Type* QueryBindableObj() noexcept
 	{
-		for (std::unique_ptr<Bindable>& pbind : allBinds)
+		for (std::unique_ptr<Bind::Bindable>& pbind : allBinds)
 		{
 			if (auto pType = dynamic_cast<Type*>(pbind.get()))
 			{
@@ -32,9 +34,11 @@ protected: // member functions involving adding
 		}
 		return nullptr;
 	}
+	void ApplyIndexBuffer(std::unique_ptr<Bind::IndexBuffer> indexBuffer) noexcept_unless;
+	void ApplyBind(std::unique_ptr<Bind::Bindable> bind) noexcept_unless;
 private:
-	virtual const std::vector<std::unique_ptr<Bindable>>& FetchStaticBinds() const noexcept = 0;
+	virtual const std::vector<std::unique_ptr<Bind::Bindable>>& FetchStaticBinds() const noexcept = 0;
 private:
-	const struct IndexBuffer* pIndexBuffer = nullptr;
-	std::vector<std::unique_ptr<Bindable>> allBinds;
+	const Bind::IndexBuffer* pIndexBuffer = nullptr;
+	std::vector<std::unique_ptr<Bind::Bindable>> allBinds;
 };

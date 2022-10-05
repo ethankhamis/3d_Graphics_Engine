@@ -25,7 +25,7 @@ struct IndexedTriangleList
 		}
 	}
 
-	void ApplyNormalsIndependent() noexcept(Debug)
+	void ApplyNormalsIndependent() noexcept_unless
 	{
 		using namespace DirectX;
 		assert(indices.size() % 3 == 0 && indices.size() > 0);

@@ -3,20 +3,23 @@
 #include "ConstBuffer(s).h"
 #include "Drawable.h"
 
-struct TransformConstBuffer : public Bindable
+namespace Bind
 {
-private:
-	struct allTransforms
+	struct TransformConstBuffer : public Bindable
 	{
-		DirectX::XMMATRIX modelViewProject;
-		DirectX::XMMATRIX model;
+	private:
+		struct allTransforms
+		{
+			DirectX::XMMATRIX modelViewProject;
+			DirectX::XMMATRIX model;
+		};
+	public:
+		TransformConstBuffer(Graphics& gfx, const Drawable& parent, UINT slot = 0u) noexcept;
+	public:
+		void Bind(Graphics& gfx) noexcept override;
+	private:
+		static  std::unique_ptr<VConstantBuffer<allTransforms>> pVConstBuffer;
+	private:
+		const Drawable& parent;
 	};
-public:
-	TransformConstBuffer(Graphics& gfx, const Drawable& parent, UINT slot = 0u) noexcept;
-public:
-	void Bind(Graphics& gfx) noexcept override;
-private:
-	static  std::unique_ptr<VConstantBuffer<allTransforms>> pVConstBuffer;
-private:
-	const Drawable& parent;
-};
+}

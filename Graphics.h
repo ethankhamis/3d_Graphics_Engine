@@ -10,10 +10,16 @@
 #include "ExceptionHandler.h"
 #include <wrl.h>
 #include <vector>
+#include "debugdefs.h"
+
+namespace Bind
+{
+	struct Bindable;
+}
 
 struct Graphics
 {
-	friend struct Bindable;
+	friend Bind::Bindable;
 public:
 	Graphics( HWND hWnd );
 	Graphics(const Graphics&) = delete;
@@ -23,7 +29,7 @@ public:
 	void EndFrame();
 	void ClearBuffer(float R, float G, float B) noexcept;
 public:
-	void RenderIndexed(UINT count) noexcept (!Debug);
+	void RenderIndexed(UINT count) noexcept_unless;
 public:
 	void ApplyProjection(DirectX::FXMMATRIX pj) noexcept;
 	DirectX::XMMATRIX FetchProjection() const noexcept;

@@ -6,8 +6,9 @@
 #include <cassert>
 #include "TypeDecl.h"
 #include "Graphics.h"
+#include "debugdefs.h"
 
-namespace experimental {
+namespace DynamicVertex {
 
 
 	typedef colours::BGRAColour BGRAColour;
@@ -67,7 +68,7 @@ namespace experimental {
 		};
 		template<> struct Map<BGRAColour>
 		{
-			using SysType = experimental::BGRAColour;
+			using SysType = DynamicVertex::BGRAColour;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Colour";
 		};
@@ -82,7 +83,7 @@ namespace experimental {
 				memberType(type),
 				offset(offset)
 			{}
-			unsigned int FetchOffsetAfterCurrent() const noexcept(!Debug)
+			unsigned int FetchOffsetAfterCurrent() const noexcept_unless
 			{
 				return (offset + size());
 			}
@@ -90,11 +91,11 @@ namespace experimental {
 			{
 				return offset;
 			}
-			unsigned int size() const noexcept(!Debug)
+			unsigned int size() const noexcept_unless
 			{
 				return size_BYTES(memberType);
 			}
-			static constexpr unsigned int size_BYTES(MemberType type) noexcept(!Debug)
+			static constexpr unsigned int size_BYTES(MemberType type) noexcept_unless
 			{
 				switch (type)
 				{
@@ -117,7 +118,7 @@ namespace experimental {
 				return 0u;
 			}
 
-			D3D11_INPUT_ELEMENT_DESC FetchDescription() const noexcept(!Debug)
+			D3D11_INPUT_ELEMENT_DESC FetchDescription() const noexcept_unless
 			{
 				switch (memberType)
 				{
@@ -141,7 +142,7 @@ namespace experimental {
 			}
 		private:
 			template<MemberType memtype>
-			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateD3DDesc(uint32_t offset) noexcept(!Debug)
+			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateD3DDesc(uint32_t offset) noexcept_unless
 			{
 				return{ Map<memtype>::semantic,0,Map<memtype>::dxgiFormat,0,static_cast<uint32_t>(offset), D3D11_INPUT_PER_VERTEX_DATA,0 };
 			}
@@ -156,7 +157,7 @@ namespace experimental {
 		};
 	public:
 		template<MemberType elem_t>
-		const Member& Resolve() const noexcept(!Debug)
+		const Member& Resolve() const noexcept_unless
 		{
 			for (const VertexLayout::Member& e : elements)
 			{
@@ -168,16 +169,16 @@ namespace experimental {
 			assert("Could not resolve element type" && false);
 			return elements.front();
 		}
-		const Member& ResolveByIndex(unsigned int idx) const noexcept(!Debug)
+		const Member& ResolveByIndex(unsigned int idx) const noexcept_unless
 		{
 			return elements[idx];
 		}
-		VertexLayout& Append(MemberType memtype) noexcept(!Debug)
+		VertexLayout& Append(MemberType memtype) noexcept_unless
 		{
 			elements.emplace_back(memtype, size());
 			return *this;
 		}
-		unsigned int size() const noexcept(!Debug)
+		unsigned int size() const noexcept_unless
 		{
 			if (elements.empty())
 			{
@@ -192,7 +193,7 @@ namespace experimental {
 		{
 			return elements.size();
 		}
-		std::vector<D3D11_INPUT_ELEMENT_DESC> FetchD3DLayout() const noexcept(!Debug)
+		std::vector<D3D11_INPUT_ELEMENT_DESC> FetchD3DLayout() const noexcept_unless
 		{
 			std::vector<D3D11_INPUT_ELEMENT_DESC> description;
 			description.reserve(FetchMemberCount());
@@ -213,11 +214,11 @@ namespace experimental {
 		friend struct VertexBuffer;
 	public:
 		template<VertexLayout::MemberType elem_t>
-		auto& Attribute() noexcept(!Debug);
+		auto& Attribute() noexcept_unless;
 		template<typename T>
-		void SetAttributeByIndex(unsigned int idx, T&& val) noexcept(!Debug);
+		void SetAttributeByIndex(unsigned int idx, T&& val) noexcept_unless;
 	protected:
-		Vertex(const VertexLayout& layout, char* pVertexData) noexcept(!Debug)
+		Vertex(const VertexLayout& layout, char* pVertexData) noexcept_unless
 			:
 			pVertexData(pVertexData),
 			layout(layout)
@@ -227,7 +228,7 @@ namespace experimental {
 	private:
 		// helper to reduce code duplication in SetAttributeByIndex
 		template<VertexLayout::MemberType DestinationLayout_t, typename Source_t>
-		void ApplyNewAttribute(char* pAttribute, Source_t&& val) noexcept(!Debug)
+		void ApplyNewAttribute(char* pAttribute, Source_t&& val) noexcept_unless
 		{
 			using Destination = typename VertexLayout::Map<DestinationLayout_t>::SysType;
 			if constexpr (std::is_assignable<Destination, Source_t>::value)
@@ -240,7 +241,7 @@ namespace experimental {
 			}
 		}
 		template<typename First, typename ...Others>
-		void SetAttributeByIndex(unsigned int idx, First&& first, Others&&... others) noexcept(!Debug)
+		void SetAttributeByIndex(unsigned int idx, First&& first, Others&&... others) noexcept_unless
 		{
 			SetAttributeByIndex(idx, std::forward<First>(first));
 			SetAttributeByIndex(idx + 1, std::forward<Others>(others)...);
@@ -252,12 +253,12 @@ namespace experimental {
 
 	struct ConstantVertex
 	{
-		ConstantVertex(const Vertex& _vertex) noexcept(!Debug)
+		ConstantVertex(const Vertex& _vertex) noexcept_unless
 			:vertex(_vertex)
 		{
 		}
 		template<VertexLayout::MemberType Elem_t>
-		const auto& Attribute() const noexcept(!Debug)
+		const auto& Attribute() const noexcept_unless
 		{
 			return const_cast<Vertex&>(vertex).Attribute<Elem_t>();
 		}
@@ -268,57 +269,57 @@ namespace experimental {
 	struct VertexBuffer
 	{
 	public:
-		VertexBuffer(VertexLayout layout) noexcept(!Debug)
+		VertexBuffer(VertexLayout layout) noexcept_unless
 			: layout(std::move(layout)) { }
 		const VertexLayout& FetchLayout() const noexcept
 		{
 			return layout;
 		}
-		const char* FetchData() const noexcept(!Debug)
+		const char* FetchData() const noexcept_unless
 		{
 			return buffer.data();
 		}
-		unsigned int size() const noexcept(!Debug)
+		unsigned int size() const noexcept_unless
 		{
 			return buffer.size() / layout.size();
 		}
-		uint32_t size_bytes() const noexcept(!Debug)
+		uint32_t size_bytes() const noexcept_unless
 		{
 			return buffer.size();
 		}
 		template<typename ...Args>
-		void Emplace_Back(Args&&... arguments) noexcept(!Debug)
+		void Emplace_Back(Args&&... arguments) noexcept_unless
 		{
 			assert(sizeof...(arguments) == layout.FetchMemberCount() &&
 				"Argument count not matching with number of elements in vertex");
 			buffer.resize(buffer.size() + layout.size());
 			FetchBack().SetAttributeByIndex(0u, std::forward<Args>(arguments)...);
 		}
-		Vertex FetchBack() noexcept(!Debug)
+		Vertex FetchBack() noexcept_unless
 		{
 			assert(buffer.size() != 0u);
 
 			return Vertex{ layout, buffer.data() + buffer.size() - layout.size() };
 		}
-		Vertex FetchFront() noexcept(!Debug)
+		Vertex FetchFront() noexcept_unless
 		{
 			assert(buffer.size() != 0u);
 			return Vertex{ layout, buffer.data() };
 		}
-		Vertex operator[](unsigned int idx) noexcept(!Debug)
+		Vertex operator[](unsigned int idx) noexcept_unless
 		{
 			assert(idx < size());
 			return Vertex{ layout, buffer.data() + layout.size() * idx };
 		}
-		ConstantVertex FetchBack() const noexcept(!Debug)
+		ConstantVertex FetchBack() const noexcept_unless
 		{
 			return const_cast<VertexBuffer*>(this)->FetchBack();
 		}
-		ConstantVertex FetchFront() const noexcept(!Debug)
+		ConstantVertex FetchFront() const noexcept_unless
 		{
 			return const_cast<VertexBuffer*>(this)->FetchFront();
 		}
-		ConstantVertex operator[](unsigned int idx) const noexcept(!Debug)
+		ConstantVertex operator[](unsigned int idx) const noexcept_unless
 		{
 			return const_cast<VertexBuffer&>(*this)[idx];
 		}
@@ -329,14 +330,14 @@ namespace experimental {
 
 
 	template<VertexLayout::MemberType elem_t>
-	inline auto& Vertex::Attribute() noexcept(!Debug)
+	inline auto& Vertex::Attribute() noexcept_unless
 	{
 		auto pAttribute = pVertexData + layout.Resolve<elem_t>().FetchOffset();
 		return *reinterpret_cast<typename VertexLayout::Map<elem_t>::SysType*>(pAttribute);
 	}
 
 	template<typename T>
-	inline void Vertex::SetAttributeByIndex(unsigned int idx, T&& val)/*universal ref*/ noexcept(!Debug)
+	inline void Vertex::SetAttributeByIndex(unsigned int idx, T&& val)/*universal ref*/ noexcept_unless
 	{
 		const auto& member = layout.ResolveByIndex(idx);
 		auto pAttribute = pVertexData + member.FetchOffset();

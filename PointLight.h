@@ -2,6 +2,7 @@
 #include "Graphics.h"
 #include "BindSolidLongLatSphere.h"
 #include "ConstBuffer(s).h"
+#include "debugdefs.h"
 
 class PointLight
 {
@@ -9,7 +10,7 @@ public:
 	PointLight(Graphics& gfx, float radius = 0.5f);
 	void ControlWnd() noexcept;
 	void Reset() noexcept;
-	void Render(Graphics& gfx) const noexcept(!Debug);
+	void Render(Graphics& gfx) const noexcept_unless;
 	void Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept;
 private:
 	struct PointLightCBuf
@@ -25,5 +26,5 @@ private:
 private:
 	PointLightCBuf constbuffer_data;
 	mutable SolidLongLatSphere mesh;
-	mutable PixelConstantBuffer<PointLightCBuf> cbuf;
+	mutable Bind::PixelConstantBuffer<PointLightCBuf> cbuf;
 };

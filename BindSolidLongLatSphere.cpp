@@ -6,6 +6,7 @@
 
 SolidLongLatSphere::SolidLongLatSphere(Graphics& gfx, float rad)
 {
+	using namespace Bind;
 	if (!is_static_init())
 	{
 		struct Vertex

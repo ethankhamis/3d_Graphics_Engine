@@ -7,6 +7,8 @@
 #include <assimp/postprocess.h>
 #include "DynamicVertex.h"
 
+using namespace Bind;
+
 RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distribution<float>& adist, std::uniform_real_distribution<float>& ddist, std::uniform_real_distribution<float>& odist, std::uniform_real_distribution<float>& rdist, DirectX::XMFLOAT3 material, float scale)
 	:
 	TestObject(gfx,rng,adist,ddist,odist,rdist)
@@ -14,8 +16,8 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 
 	if (!is_static_init())
 	{
-		using experimental::VertexLayout;
-		experimental::VertexBuffer vertexBuffer(
+		using DynamicVertex::VertexLayout;
+		DynamicVertex::VertexBuffer vertexBuffer(
 			std::move(
 			VertexLayout{}
 			.Append(VertexLayout::Position3D)

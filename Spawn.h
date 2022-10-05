@@ -3,12 +3,9 @@
 //#include "BindSolidLongLatSphere.h"
 //#include "BindSolidCube.h"
 //#include "BindSolidPlane.h"
-#include "PhongShadingCube.h"
+//#include "PhongShadingCube.h"
 //#include "TexturedPlane.h"
-#include "SkinnedCube.h"
-#include "SemiSkinnedCube.h"
-#include "SolidCone.h"
-#include "Cylinder.h"
+
 #include "MathematicalConstants.h"
 #include <memory>
 #include <concepts>
@@ -183,26 +180,31 @@ private:
 					);
 				*/
 			case static_cast<int>(Geometry::PhongShadedCube):
-				return std::make_unique<PhongShadingCube>
-					(gfx, rng, adist, ddist, odist, rdist, bdist,matrix);
+				//return std::make_unique<PhongShadingCube>
+				//	(gfx, rng, adist, ddist, odist, rdist, bdist,matrix)
+				;
 					
 			case static_cast<int>(Geometry::PhongShadedCylinder):
-				return std::make_unique<Cylinder>(
-					gfx, rng, adist, ddist, odist,
-					rdist, bdist, tdist);
+				//return std::make_unique<Cylinder>(
+				//	gfx, rng, adist, ddist, odist,
+					//rdist, bdist, tdist)
+					;
 
 			case static_cast<int>(Geometry::PhongShadedCone):
-				return std::make_unique<SolidCone>(
-					gfx, rng, adist, ddist, odist, rdist, tdist
-					);
+				//return std::make_unique<SolidCone>(
+				//	gfx, rng, adist, ddist, odist, rdist, tdist
+				//	)
+					;
 					
 			case static_cast<int>(Geometry::MultiFacedPhongShadedTexturedCube):
-				return std::make_unique<SkinnedCube>
-					(gfx, rng, adist, ddist, odist, rdist);
+				//return std::make_unique<SkinnedCube>
+				//	(gfx, rng, adist, ddist, odist, rdist)
+					;
 
 			case static_cast<int>(Geometry::UniFacedPhongShadedTexturedCube):
-				return std::make_unique<SemiSkinnedCube>
-					(gfx, rng, adist, ddist, odist, rdist);
+				//return std::make_unique<SemiSkinnedCube>
+					//(gfx, rng, adist, ddist, odist, rdist)
+					;
 
 			case static_cast<int>(Geometry::PhongShadedMonkey):
 				return std::make_unique<RandomTest>

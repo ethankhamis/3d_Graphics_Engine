@@ -5,8 +5,9 @@
 #include "IndexBuffer.h"
 #include <cassert>
 
+using namespace Bind;
 
-void Drawable::Render(Graphics& gfx) const noexcept(!Debug)
+void Drawable::Render(Graphics& gfx) const noexcept_unless
 {
 	for (auto& bind : allBinds){ bind->Bind(gfx); }
 	for (auto& bind : FetchStaticBinds()) { bind->Bind(gfx); }
@@ -14,7 +15,7 @@ void Drawable::Render(Graphics& gfx) const noexcept(!Debug)
 	gfx.RenderIndexed(pIndexBuffer->FetchCount());
 }
 
-void Drawable::ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer) noexcept (!Debug)
+void Drawable::ApplyIndexBuffer(std::unique_ptr<IndexBuffer> indexBuffer) noexcept_unless
 {
 	assert("Adding Index Buffer (2nd Attempt)" &&
 		pIndexBuffer == nullptr);
@@ -22,7 +23,7 @@ void Drawable::ApplyIndexBuffer(std::unique_ptr<struct IndexBuffer> indexBuffer)
 	allBinds.push_back(std::move(indexBuffer));
 }
 
-void Drawable::ApplyBind(std::unique_ptr<Bindable> bind) noexcept(!Debug)
+void Drawable::ApplyBind(std::unique_ptr<Bind::Bindable> bind) noexcept_unless
 {
 	assert("MUST USE FUNC 'ApplyIndexBuffer' when binding index buffer" && typeid(*bind) != typeid(IndexBuffer));
 	allBinds.push_back(std::move(bind));
