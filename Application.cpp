@@ -40,7 +40,7 @@ void Application::ExecFrame()
 		*
 	DirectX::XMMatrixTranslation(pos.x,pos.y,pos.z);
 
-	nanosuit.Render(window.grfx(),transform);
+	building.Render(window.grfx(),transform);
 
 	spawn.FetchLight()->Render(window.grfx());
 
