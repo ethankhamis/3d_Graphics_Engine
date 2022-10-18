@@ -14,7 +14,7 @@ using std::vector;
 struct Mesh : public DrawableBase<Mesh>
 {
 	Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs);
-	void Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept;
+	void Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless;
 	DirectX::XMMATRIX FetchTransformMat() const noexcept override;
 private:
 	mutable DirectX::XMFLOAT4X4 transform;
@@ -24,16 +24,17 @@ struct Node
 {
 	friend struct Model;
 
-	Node(vector<Mesh*> pMeshes, const DirectX::XMMATRIX& transform) noexcept_unless
+	Node(const std::string& name,vector<Mesh*> pMeshes, const DirectX::XMMATRIX& transform) noexcept_unless
 		:
-		pMeshes(std::move(pMeshes))
+		pMeshes(std::move(pMeshes)),
+			name(name)
 	{
 		DirectX::XMStoreFloat4x4(&this->transform, transform);
 	}
 		void Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless
 		{
 			const matrix built = DirectX::XMLoadFloat4x4(&transform) * accumulatedTransform;
-			for (const auto pm : pMeshes)
+			for (Mesh* const pm : pMeshes)
 			{
 				pm->Render(gfx, built);
 			}
@@ -42,6 +43,7 @@ struct Node
 				pChild->Render(gfx, built);
 			}
 		}
+		void RenderTree() const noexcept;
 private:
 	void AddChild(unique_ptr<Node> pChild) noexcept_unless
 	{
@@ -52,19 +54,43 @@ private:
 	vector<Mesh*> pMeshes;
 	vector<unique_ptr<Node>> pChildren;
 	DirectX::XMFLOAT4X4 transform;
+	std::string name;
 };
 
 struct Model
 {
 	Model(Graphics& gfx, const std::string fileName);
-	void Render(Graphics& gfx, DirectX::FXMMATRIX transform) const
+	void Render(Graphics& gfx) const noexcept_unless
 	{
+		
+		const matrix transform =
+			DirectX::XMMatrixRotationRollPitchYaw
+			(
+				object_var.orientation.roll,
+				object_var.orientation.pitch,
+				object_var.orientation.yaw
+			)
+			*
+			DirectX::XMMatrixTranslation(
+				object_var.position.x,
+				object_var.position.y,
+				object_var.position.z
+			);
+
 		pRoot->Render(gfx, transform);
 	}
+private:
 	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh);
-	unique_ptr<Node> ParseNode(const aiNode& node);
-
+	unique_ptr<Node> ParseNode(const aiNode& node) noexcept;
+public:
+	void PresentWindow(const char* Window = nullptr) noexcept;
 private:
 	unique_ptr<Node> pRoot;
 	vector<unique_ptr<Mesh>> pMeshes;
+private:
+	struct
+	{
+		object_variables::orientation orientation;
+		object_variables::position position;
+	}object_var;
 };

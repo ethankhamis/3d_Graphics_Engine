@@ -214,6 +214,9 @@
     <Filter Include="Model">
       <UniqueIdentifier>{4e50fcac-3616-4599-9e0d-6282c90bfdb2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Others\Header Files\Not Created by Me">
+      <UniqueIdentifier>{43866bd2-45f6-4785-9cd3-d63a2c61cf70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -473,126 +476,6 @@
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timer</Filter>
     </ClInclude>
-    <ClInclude Include="assimp\include\assimp\ai_assert.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\anim.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\camera.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\cexport.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\cfileio.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\cimport.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\color4.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Compiler\poppack1.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Compiler\pstdint.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Compiler\pushpack1.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\config.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\DefaultIOStream.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\DefaultIOSystem.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\DefaultLogger.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Defines.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\defs.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Exporter.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Importer.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\importerdesc.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\IOStream.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\IOSystem.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\light.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\Logger.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\LogStream.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\material.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\matrix3x3.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\matrix4x4.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\mesh.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\metadata.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\NullLogger.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\postprocess.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\ProgressHandler.hpp">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\quaternion.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\scene.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\SceneCombiner.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\texture.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\types.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\vector2.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\vector3.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="assimp\include\assimp\version.h">
-      <Filter>Others\Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="randomTest.h">
       <Filter>Primatives + Binds\Test Cases</Filter>
     </ClInclude>
@@ -607,6 +490,126 @@
     </ClInclude>
     <ClInclude Include="debugdefs.h">
       <Filter>Performance &amp; Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\ai_assert.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\anim.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\camera.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\cexport.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\cfileio.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\cimport.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\color4.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\config.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\DefaultIOStream.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\DefaultIOSystem.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\DefaultLogger.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\matrix3x3.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\IOStream.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Defines.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\defs.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Exporter.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Importer.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\importerdesc.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\IOSystem.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\light.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Logger.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\LogStream.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\matrix4x4.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\NullLogger.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\metadata.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Compiler\poppack1.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\mesh.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\postprocess.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\material.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\quaternion.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\ProgressHandler.hpp">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Compiler\pstdint.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\SceneCombiner.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\vector3.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\vector2.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\types.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\texture.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\scene.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\Compiler\pushpack1.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="assimp\include\assimp\version.h">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -662,25 +665,25 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp\include\assimp\color4.inl">
-      <Filter>Others\Header Files</Filter>
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
     <None Include="assimp\include\assimp\material.inl">
-      <Filter>Others\Header Files</Filter>
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
     <None Include="assimp\include\assimp\matrix3x3.inl">
-      <Filter>Others\Header Files</Filter>
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
     <None Include="assimp\include\assimp\matrix4x4.inl">
-      <Filter>Others\Header Files</Filter>
-    </None>
-    <None Include="assimp\include\assimp\quaternion.inl">
-      <Filter>Others\Header Files</Filter>
-    </None>
-    <None Include="assimp\include\assimp\vector2.inl">
-      <Filter>Others\Header Files</Filter>
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
     <None Include="assimp\include\assimp\vector3.inl">
-      <Filter>Others\Header Files</Filter>
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </None>
+    <None Include="assimp\include\assimp\vector2.inl">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
+    </None>
+    <None Include="assimp\include\assimp\quaternion.inl">
+      <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
   </ItemGroup>
 </Project>

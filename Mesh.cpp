@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include "imgui/imgui.h"
 
 Mesh::Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs)
 {
@@ -23,7 +24,7 @@ Mesh::Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs)
 	ApplyBind(make_unique<Bind::TransformConstBuffer>(gfx, *this));
 }
 
-void Mesh::Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept
+void Mesh::Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless
 {
 	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
 	Drawable::Render(gfx);
@@ -112,7 +113,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	return make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 
-unique_ptr<Node> Model::ParseNode(const aiNode& node)
+unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 {
 	namespace DirectX = DirectX;
 	const matrix transform = DirectX::XMMatrixTranspose(
@@ -129,11 +130,45 @@ unique_ptr<Node> Model::ParseNode(const aiNode& node)
 		curMeshPtrs.push_back(pMeshes.at(meshIdx).get());
 	}
 
-	std::unique_ptr<Node> pNode = make_unique<Node>(std::move(curMeshPtrs), transform);
+	std::unique_ptr<Node> pNode = make_unique<Node>(node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t idx = 0; idx < node.mNumChildren; idx++)
 	{
 		pNode->AddChild(ParseNode(*node.mChildren[idx]));
 	}
 
 	return pNode;
+}
+
+void Model::PresentWindow(const char* Window) noexcept
+{
+	if (!Window)
+		Window = "Model";
+	using namespace ImGui;
+	if (Begin(Window))
+	{
+		Columns(2, nullptr);
+		pRoot->RenderTree();
+
+		NextColumn();
+		Text("Orientation");
+		SliderAngle("Roll", &object_var.orientation.roll, -180.0f, 180.0f);
+		SliderAngle("Pitch", &object_var.orientation.pitch, -180.0f, 180.0f);
+		SliderAngle("Yaw", &object_var.orientation.yaw, -180.0f, 180.0f);
+		Text("Position");
+		SliderFloat("X", &object_var.position.x, -20.0f, 20.0f);
+		SliderFloat("Y", &object_var.position.y, -20.0f, 20.0f);
+		SliderFloat("Z", &object_var.position.z, -20.0f, 20.0f);
+	}
+	End();
+}
+
+void Node::RenderTree() const noexcept // recursively render child nodes
+{
+	using namespace ImGui;
+	if (TreeNode(name.c_str()))
+	{
+		for (const std::unique_ptr<Node>& pChild : pChildren)
+			pChild->RenderTree();
+		TreePop();
+	}
 }
