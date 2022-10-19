@@ -21,6 +21,7 @@ typedef DirectX::XMFLOAT3 float3;
 typedef DirectX::XMFLOAT4 float4;
 typedef DirectX::XMVECTOR vec32_t;
 typedef DirectX::XMMATRIX matrix;
+typedef DirectX::XMFLOAT4X4 float4x4;
 
 template<typename T>
 concept Numeric_T = requires (T a)

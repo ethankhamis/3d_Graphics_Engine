@@ -50,7 +50,7 @@ private:
 		assert(pChild);
 		pChildren.push_back(std::move(pChild));
 	}
-
+private:
 	vector<Mesh*> pMeshes;
 	vector<unique_ptr<Node>> pChildren;
 	DirectX::XMFLOAT4X4 transform;
@@ -60,25 +60,8 @@ private:
 struct Model
 {
 	Model(Graphics& gfx, const std::string fileName);
-	void Render(Graphics& gfx) const noexcept_unless
-	{
-		
-		const matrix transform =
-			DirectX::XMMatrixRotationRollPitchYaw
-			(
-				object_var.orientation.roll,
-				object_var.orientation.pitch,
-				object_var.orientation.yaw
-			)
-			*
-			DirectX::XMMatrixTranslation(
-				object_var.position.x,
-				object_var.position.y,
-				object_var.position.z
-			);
-
-		pRoot->Render(gfx, transform);
-	}
+	~Model() noexcept;
+	void Render(Graphics& gfx) const noexcept_unless;
 private:
 	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh);
 	unique_ptr<Node> ParseNode(const aiNode& node) noexcept;
@@ -87,10 +70,5 @@ public:
 private:
 	unique_ptr<Node> pRoot;
 	vector<unique_ptr<Mesh>> pMeshes;
-private:
-	struct
-	{
-		object_variables::orientation orientation;
-		object_variables::position position;
-	}object_var;
+	unique_ptr<struct ModelWnd> pWnd;
 };

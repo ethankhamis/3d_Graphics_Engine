@@ -35,7 +35,69 @@ DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
 	return DirectX::XMLoadFloat4x4(&transform);
 }
 
+struct ModelWnd
+{
+private:
+	struct
+	{
+		object_variables::orientation orientation;
+		object_variables::position position;
+	}object_var;
+public:
+	matrix FetchTransform() const noexcept
+	{
+		return
+			DirectX::XMMatrixRotationRollPitchYaw
+			(
+				object_var.orientation.roll,
+				object_var.orientation.pitch,
+				object_var.orientation.yaw
+			)
+			*
+			DirectX::XMMatrixTranslation(
+				object_var.position.x,
+				object_var.position.y,
+				object_var.position.z
+			);
+	}
+	void Present(const char* window, const Node& root) noexcept
+	{
+		if (!window)
+			window = "Model";
+		using namespace ImGui;
+		if (Begin(window))
+		{
+			Columns(2, nullptr);
+			root.RenderTree();
+
+
+			NextColumn();
+			Text("Orientation");
+			SliderAngle("Roll", &object_var.orientation.roll, -180.0f, 180.0f);
+			SliderAngle("Pitch", &object_var.orientation.pitch, -180.0f, 180.0f);
+			SliderAngle("Yaw", &object_var.orientation.yaw, -180.0f, 180.0f);
+			Text("Position");
+			SliderFloat("X", &object_var.position.x, -20.0f, 20.0f);
+			SliderFloat("Y", &object_var.position.y, -20.0f, 20.0f);
+			SliderFloat("Z", &object_var.position.z, -20.0f, 20.0f);
+
+			if (Button("Reset"))
+			{
+				object_var.position.x = 0;
+				object_var.position.y = 0;
+				object_var.position.z = 0;
+				object_var.orientation.roll = 0;
+				object_var.orientation.pitch = 0;
+				object_var.orientation.yaw = 0;
+			}
+		}
+		End();
+	}
+};
+
 Model::Model(Graphics& gfx, const std::string fileName)
+:
+	pWnd (make_unique<ModelWnd>() )
 {
 	Assimp::Importer imp;
 	const aiScene* const pScene =
@@ -51,6 +113,13 @@ Model::Model(Graphics& gfx, const std::string fileName)
 	}
 
 	pRoot = ParseNode(*pScene->mRootNode);
+}
+Model::~Model() noexcept
+{}
+
+void Model::Render(Graphics& gfx) const noexcept_unless
+{
+	pRoot->Render(gfx, pWnd->FetchTransform());
 }
 
 unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
@@ -118,7 +187,7 @@ unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 	namespace DirectX = DirectX;
 	const matrix transform = DirectX::XMMatrixTranspose(
 		DirectX::XMLoadFloat4x4(
-			reinterpret_cast<const DirectX::XMFLOAT4X4*>(&node.mTransformation)
+			reinterpret_cast<const float4x4*>(&node.mTransformation)
 		)
 	);
 
@@ -141,35 +210,7 @@ unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 
 void Model::PresentWindow(const char* Window) noexcept
 {
-	if (!Window)
-		Window = "Model";
-	using namespace ImGui;
-	if (Begin(Window))
-	{
-		Columns(2, nullptr);
-		pRoot->RenderTree();
-
-		NextColumn();
-		Text("Orientation");
-		SliderAngle("Roll", &object_var.orientation.roll, -180.0f, 180.0f);
-		SliderAngle("Pitch", &object_var.orientation.pitch, -180.0f, 180.0f);
-		SliderAngle("Yaw", &object_var.orientation.yaw, -180.0f, 180.0f);
-		Text("Position");
-		SliderFloat("X", &object_var.position.x, -20.0f, 20.0f);
-		SliderFloat("Y", &object_var.position.y, -20.0f, 20.0f);
-		SliderFloat("Z", &object_var.position.z, -20.0f, 20.0f);
-
-		if (Button("Reset"))
-		{
-			object_var.position.x = 0;
-			object_var.position.y = 0;
-			object_var.position.z = 0;
-			object_var.orientation.roll = 0;
-			object_var.orientation.pitch = 0;
-			object_var.orientation.yaw = 0;
-		}
-	}
-	End();
+	pWnd->Present(Window, *pRoot);
 }
 
 void Node::RenderTree() const noexcept // recursively render child nodes
@@ -179,6 +220,7 @@ void Node::RenderTree() const noexcept // recursively render child nodes
 	{
 		for (const std::unique_ptr<Node>& pChild : pChildren)
 			pChild->RenderTree();
+
 		TreePop();
 	}
 }
