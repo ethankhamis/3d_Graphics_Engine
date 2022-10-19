@@ -158,6 +158,16 @@ void Model::PresentWindow(const char* Window) noexcept
 		SliderFloat("X", &object_var.position.x, -20.0f, 20.0f);
 		SliderFloat("Y", &object_var.position.y, -20.0f, 20.0f);
 		SliderFloat("Z", &object_var.position.z, -20.0f, 20.0f);
+
+		if (Button("Reset"))
+		{
+			object_var.position.x = 0;
+			object_var.position.y = 0;
+			object_var.position.z = 0;
+			object_var.orientation.roll = 0;
+			object_var.orientation.pitch = 0;
+			object_var.orientation.yaw = 0;
+		}
 	}
 	End();
 }
