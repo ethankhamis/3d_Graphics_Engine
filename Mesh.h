@@ -6,6 +6,7 @@
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
+#include <optional>
 
 using std::unique_ptr;
 using std::make_unique;
@@ -23,28 +24,38 @@ private:
 struct Node
 {
 	friend struct Model;
+	friend struct ModelWnd;
 
 	Node(const std::string& name,vector<Mesh*> pMeshes, const DirectX::XMMATRIX& transform) noexcept_unless
 		:
 		pMeshes(std::move(pMeshes)),
 			name(name)
 	{
-		DirectX::XMStoreFloat4x4(&this->transform, transform);
+		DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
+		DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
 	}
 		void Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless
 		{
-			const matrix built = DirectX::XMLoadFloat4x4(&transform) * accumulatedTransform;
+
+			const matrix transform_built =
+				DirectX::XMLoadFloat4x4(&transform_base) * 
+				DirectX::XMLoadFloat4x4(&transform_applied) *
+				accumulatedTransform;
+
 			for (Mesh* const pm : pMeshes)
 			{
-				pm->Render(gfx, built);
+				pm->Render(gfx, transform_built);
 			}
 			for (const unique_ptr<Node>& pChild : pChildren)
 			{
-				pChild->Render(gfx, built);
+				pChild->Render(gfx, transform_built);
 			}
 		}
-		void RenderTree() const noexcept;
+		void Transform_Apply(DirectX::FXMMATRIX transform) noexcept;
 private:
+	void RenderTree(int& idx_node /*id of node*/,
+		std::optional<int>& idx_selected,
+		Node*& pNode_selected) const noexcept;
 	void AddChild(unique_ptr<Node> pChild) noexcept_unless
 	{
 		assert(pChild);
@@ -53,7 +64,8 @@ private:
 private:
 	vector<Mesh*> pMeshes;
 	vector<unique_ptr<Node>> pChildren;
-	DirectX::XMFLOAT4X4 transform;
+	float4x4 transform_base;
+	float4x4 transform_applied;
 	std::string name;
 };
 

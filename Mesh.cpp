@@ -1,4 +1,5 @@
 #include "Mesh.h"
+#include <unordered_map>
 #include "imgui/imgui.h"
 
 Mesh::Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs)
@@ -38,57 +39,78 @@ DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
 struct ModelWnd
 {
 private:
-	struct
+	struct transform_params
 	{
 		object_variables::orientation orientation;
 		object_variables::position position;
-	}object_var;
+	};
+	std::optional<int> idx_selected;
+	Node* pNode_selected;
+	std::unordered_map<int, transform_params> transform_map;
 public:
 	matrix FetchTransform() const noexcept
 	{
-		return
-			DirectX::XMMatrixRotationRollPitchYaw
-			(
-				object_var.orientation.roll,
-				object_var.orientation.pitch,
-				object_var.orientation.yaw
-			)
-			*
-			DirectX::XMMatrixTranslation(
-				object_var.position.x,
-				object_var.position.y,
-				object_var.position.z
-			);
+		if (!pNode_selected)
+		{
+			const std::unordered_map<int, ModelWnd::transform_params>::mapped_type& transform
+				= transform_map.at(* idx_selected);
+
+				return
+				DirectX::XMMatrixRotationRollPitchYaw
+				(
+					transform.orientation.roll,
+					transform.orientation.pitch,
+					transform.orientation.yaw
+				)
+				*
+				DirectX::XMMatrixTranslation(
+					transform.position.x,
+					transform.position.y,
+					transform.position.z
+				);
+		}
+	}
+	Node* FetchSelectedNode() const noexcept
+	{
+		return pNode_selected;
 	}
 	void Present(const char* window, const Node& root) noexcept
 	{
 		if (!window)
 			window = "Model";
 		using namespace ImGui;
+		int nodeidx=0;
 		if (Begin(window))
 		{
-			Columns(2, nullptr);
-			root.RenderTree();
 
+			Columns(2, nullptr);
+			root.RenderTree(nodeidx, idx_selected, pNode_selected);
 
 			NextColumn();
-			Text("Orientation");
-			SliderAngle("Roll", &object_var.orientation.roll, -180.0f, 180.0f);
-			SliderAngle("Pitch", &object_var.orientation.pitch, -180.0f, 180.0f);
-			SliderAngle("Yaw", &object_var.orientation.yaw, -180.0f, 180.0f);
-			Text("Position");
-			SliderFloat("X", &object_var.position.x, -20.0f, 20.0f);
-			SliderFloat("Y", &object_var.position.y, -20.0f, 20.0f);
-			SliderFloat("Z", &object_var.position.z, -20.0f, 20.0f);
-
-			if (Button("Reset"))
+			if (pNode_selected)
 			{
-				object_var.position.x = 0;
-				object_var.position.y = 0;
-				object_var.position.z = 0;
-				object_var.orientation.roll = 0;
-				object_var.orientation.pitch = 0;
-				object_var.orientation.yaw = 0;
+				auto& transform
+					= transform_map[*idx_selected];
+
+				Text("Orientation");
+				SliderAngle("Roll", &transform.orientation.roll, -180.0f, 180.0f);
+				SliderAngle("Pitch", &transform.orientation.pitch, -180.0f, 180.0f);
+				SliderAngle("Yaw", &transform.orientation.yaw, -180.0f, 180.0f);
+				Text("Position");
+				SliderFloat("X", &transform.position.x, -20.0f, 20.0f);
+				SliderFloat("Y", &transform.position.y, -20.0f, 20.0f);
+				SliderFloat("Z", &transform.position.z, -20.0f, 20.0f);
+
+				if (Button("Reset"))
+				{
+					transform.position.x = 0;
+					transform.position.y = 0;
+					transform.position.z = 0;
+					transform.orientation.roll = 0;
+					transform.orientation.pitch = 0;
+					transform.orientation.yaw = 0;
+				}
+
 			}
 		}
 		End();
@@ -119,7 +141,11 @@ Model::~Model() noexcept
 
 void Model::Render(Graphics& gfx) const noexcept_unless
 {
-	pRoot->Render(gfx, pWnd->FetchTransform());
+	if (auto node = pWnd->FetchSelectedNode())
+	{
+		node->Transform_Apply(pWnd->FetchTransform());
+	}
+	pRoot->Render(gfx, DirectX::XMMatrixIdentity());
 }
 
 unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
@@ -213,14 +239,35 @@ void Model::PresentWindow(const char* Window) noexcept
 	pWnd->Present(Window, *pRoot);
 }
 
-void Node::RenderTree() const noexcept // recursively render child nodes
+void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pNode_selected) const noexcept // recursively render child nodes
 {
-	using namespace ImGui;
-	if (TreeNode(name.c_str()))
-	{
-		for (const std::unique_ptr<Node>& pChild : pChildren)
-			pChild->RenderTree();
+	const int idx_node_current = idx_node; ++idx_node;
+	
+	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+		| ((idx_node_current == idx_selected.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
+		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
+	using namespace ImGui;
+	if (TreeNodeEx((void*)(intptr_t)idx_node_current,node_flags,name.c_str()))
+	{
+		if (IsItemClicked())
+		{
+			idx_selected = idx_node_current;
+			pNode_selected = const_cast<Node*>(this);
+		}
+		for (const std::unique_ptr<Node>& pChild : pChildren)
+		{
+			pChild->RenderTree(idx_node, idx_selected, pNode_selected);
+		}
 		TreePop();
 	}
+}
+
+void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
+{
+	DirectX::XMStoreFloat4x4
+	(
+		&transform_applied,
+		transform
+	);
 }
