@@ -11,7 +11,7 @@ namespace Bind
 	protected: //standard getter functions
 		static ID3D11Device* FetchDevice(Graphics& gfx) noexcept;
 		static ID3D11DeviceContext* FetchDeviceContext(Graphics& gfx) noexcept;
-		static DxGfxInfoMng& FetchInfoManager(Graphics& gfx) noexcept_unless;
+		static DxGfxInfoMng& FetchInfoManager(Graphics& gfx);
 
 	};
 }

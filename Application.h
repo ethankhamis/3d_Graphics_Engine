@@ -20,7 +20,7 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
-	Model building{ window.grfx(), "Models\\nanosuit.obj" };
+	Model building{ window.grfx(), "Models\\boxy.gltf"};
 private:
 	void ExecFrame();
 	void PresentDemoWindow();

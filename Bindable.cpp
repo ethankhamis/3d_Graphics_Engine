@@ -13,7 +13,7 @@ namespace Bind
 		return gfx.pDeviceContext.Get();
 	}
 
-	DxGfxInfoMng& Bindable::FetchInfoManager(Graphics& gfx) noexcept_unless
+	DxGfxInfoMng& Bindable::FetchInfoManager(Graphics& gfx)
 	{
 #ifndef NDEBUG
 		return gfx.infomanager;

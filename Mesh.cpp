@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include <unordered_map>
 #include "imgui/imgui.h"
+#include <sstream>
 
 Mesh::Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs)
 {
@@ -239,6 +240,32 @@ void Model::PresentWindow(const char* Window) noexcept
 	pWnd->Present(Window, *pRoot);
 }
 
+Node::Node(const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
+	:
+	pMeshes(std::move(pMeshes)),
+		name(name)
+	{
+		DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
+		DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
+	}
+
+void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noexcept_unless
+{
+	const matrix transform_built =
+		DirectX::XMLoadFloat4x4(&transform_base) *
+		DirectX::XMLoadFloat4x4(&transform_applied) *
+		current_transform;
+
+	for (Mesh* const pm : pMeshes)
+	{
+		pm->Render(gfx, transform_built);
+	}
+	for (const unique_ptr<Node>& pChild : pChildren)
+	{
+		pChild->Render(gfx, transform_built);
+	}
+}
+
 void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pNode_selected) const noexcept // recursively render child nodes
 {
 	const int idx_node_current = idx_node; ++idx_node;
@@ -248,19 +275,24 @@ void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pN
 		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
 	using namespace ImGui;
-	if (TreeNodeEx((void*)(intptr_t)idx_node_current,node_flags,name.c_str()))
-	{
+	const auto expanded =
+		TreeNodeEx(
+			(void*)(intptr_t)idx_node_current, node_flags, name.c_str()
+		);
+	
 		if (IsItemClicked())
 		{
 			idx_selected = idx_node_current;
 			pNode_selected = const_cast<Node*>(this);
 		}
-		for (const std::unique_ptr<Node>& pChild : pChildren)
+		if (expanded)
 		{
-			pChild->RenderTree(idx_node, idx_selected, pNode_selected);
+			for (const std::unique_ptr<Node>& pChild : pChildren)
+			{
+				pChild->RenderTree(idx_node, idx_selected, pNode_selected);
+			}
+			TreePop();
 		}
-		TreePop();
-	}
 }
 
 void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
@@ -270,4 +302,27 @@ void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
 		&transform_applied,
 		transform
 	);
+}
+
+ModelException::ModelException(int line, const wchar_t* filename, std::wstring note) noexcept
+:
+ExceptionHandler(line,filename), note(std::move(note))
+{}
+
+const wchar_t* ModelException::whatw() const noexcept
+{
+	std::wstringstream wss;
+	wss << ExceptionHandler::whatw() << std::endl
+		<< L"[Note] " << FetchNote();
+	return wss.str().c_str();
+}
+
+const wchar_t* ModelException::FetchErrorType() const noexcept
+{
+	return L"Model Exception";
+}
+
+const std::wstring& ModelException::FetchNote() const noexcept
+{
+	return note;
 }

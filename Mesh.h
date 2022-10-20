@@ -12,6 +12,16 @@ using std::unique_ptr;
 using std::make_unique;
 using std::vector;
 
+struct ModelException : public ExceptionHandler
+{
+	ModelException(int line, const wchar_t* filename, std::wstring note) noexcept;
+	const wchar_t* whatw() const noexcept override;
+	const wchar_t* FetchErrorType() const noexcept override;
+	const std::wstring& FetchNote() const noexcept;
+private:
+	std::wstring note;
+};
+
 struct Mesh : public DrawableBase<Mesh>
 {
 	Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs);
@@ -26,32 +36,9 @@ struct Node
 	friend struct Model;
 	friend struct ModelWnd;
 
-	Node(const std::string& name,vector<Mesh*> pMeshes, const DirectX::XMMATRIX& transform) noexcept_unless
-		:
-		pMeshes(std::move(pMeshes)),
-			name(name)
-	{
-		DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
-		DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
-	}
-		void Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless
-		{
-
-			const matrix transform_built =
-				DirectX::XMLoadFloat4x4(&transform_base) * 
-				DirectX::XMLoadFloat4x4(&transform_applied) *
-				accumulatedTransform;
-
-			for (Mesh* const pm : pMeshes)
-			{
-				pm->Render(gfx, transform_built);
-			}
-			for (const unique_ptr<Node>& pChild : pChildren)
-			{
-				pChild->Render(gfx, transform_built);
-			}
-		}
-		void Transform_Apply(DirectX::FXMMATRIX transform) noexcept;
+	Node(const std::string& name, vector<Mesh*> pMeshes, const DirectX::XMMATRIX& transform) noexcept_unless;
+	void Render(Graphics& gfx, const matrix current_transform) const noexcept_unless;
+	void Transform_Apply(const matrix transform) noexcept;
 private:
 	void RenderTree(int& idx_node /*id of node*/,
 		std::optional<int>& idx_selected,
