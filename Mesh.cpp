@@ -121,8 +121,6 @@ private:
 public:
 	matrix FetchTransform() const noexcept
 	{
-		if (!pNode_selected)
-		{
 			const std::unordered_map<int, ModelWnd::transform_params>::mapped_type& transform
 				= transform_map.at(*idx_selected);
 
@@ -139,7 +137,6 @@ public:
 					transform.position.y,
 					transform.position.z
 				);
-		}
 	}
 	Node* FetchSelectedNode() const noexcept
 	{
