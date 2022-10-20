@@ -61,7 +61,7 @@ public:
 	void Window(std::vector<std::unique_ptr<Drawable>>& drawables)
 	{
 
-		if (ImGui::Begin("Spawn Object Selector (CURRENT TEST ONLY ALLOWS FOR CUBES TO HAVE LIGHTING)"))
+		if (ImGui::Begin(""))
 		{
 			/*
 			if (ImGui::Button("Spawn Solid Sphere"))

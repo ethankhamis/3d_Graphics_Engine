@@ -87,7 +87,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 	ImGui_ImplWin32_Init(hWnd);
 
 	//create graphics instance
-	pGraphics = std::make_unique<Graphics>(hWnd);
+	pGraphics = std::make_unique<Graphics>(hWnd,width,height);
 
 }
 

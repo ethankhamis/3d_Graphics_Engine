@@ -19,10 +19,10 @@
 GDIpManager gdipm;
 
 Application::Application()
-	:window(1000, 750, L"6~3D"),
+	:window(1920, 1080, L"6~3D"),
 	spawn(window.grfx())
 {
-	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 3.0f / 4.0f, 0.5f, 40.0f));
+	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 }
 
 void Application::ExecFrame()

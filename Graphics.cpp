@@ -12,14 +12,14 @@
 #pragma comment(lib, "D3DCompiler.lib")
 
 
-Graphics::Graphics(HWND hWnd)
+Graphics::Graphics(HWND hWnd, int w, int h)
 {
 	//create swapchain device
 
 	DXGI_SWAP_CHAIN_DESC SwapChainDesc = {};
 	//buffer dimensions
-	SwapChainDesc.BufferDesc.Width = 0;
-	SwapChainDesc.BufferDesc.Height = 0;
+	SwapChainDesc.BufferDesc.Width = w;
+	SwapChainDesc.BufferDesc.Height = h;
 	//Format of Buffers pixels
 	SwapChainDesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	//Refresh Rate
@@ -85,8 +85,8 @@ Graphics::Graphics(HWND hWnd)
 	// create depth stencil texture
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> pDepthStencil;
 	D3D11_TEXTURE2D_DESC descDepth = {};
-	descDepth.Width = 1000u;
-	descDepth.Height = 750u;
+	descDepth.Width = static_cast<UINT>(w);
+	descDepth.Height = static_cast<UINT>(h);
 	descDepth.MipLevels = 1u;
 	descDepth.ArraySize = 1u;
 	descDepth.Format = DXGI_FORMAT_D32_FLOAT;
@@ -110,8 +110,8 @@ Graphics::Graphics(HWND hWnd)
 
 	// configure viewport
 	D3D11_VIEWPORT vp;
-	vp.Width = 1000.0f;
-	vp.Height = 750.0f;
+	vp.Width = static_cast<float>( w );
+	vp.Height = static_cast<float>( h );
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
