@@ -43,7 +43,7 @@ Node::Node(const std::string& name, std::vector<Mesh*> pMeshes, const matrix& tr
 	pMeshes(std::move(pMeshes)),
 	name(name)
 {
-	DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
+	DirectX::XMStoreFloat4x4(&transform_initial, transform); // store initial transform
 	DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
 }
 
@@ -55,8 +55,8 @@ void Node::AddChild(unique_ptr<Node> pChild) noexcept_unless
 void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noexcept_unless
 {
 	const matrix transform_built =
-		DirectX::XMLoadFloat4x4(&transform_base) *
 		DirectX::XMLoadFloat4x4(&transform_applied) *
+		DirectX::XMLoadFloat4x4(&transform_initial) *
 		current_transform;
 
 	for (const Mesh* pm : pMeshes)

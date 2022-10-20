@@ -48,7 +48,7 @@ private:
 private:
 	vector<Mesh*> pMeshes;
 	vector<unique_ptr<Node>> pChildren;
-	float4x4 transform_base;
+	float4x4 transform_initial;
 	float4x4 transform_applied;
 	std::string name;
 };
