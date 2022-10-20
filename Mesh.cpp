@@ -37,16 +37,86 @@ DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
 	return DirectX::XMLoadFloat4x4(&transform);
 }
 
+
+Node::Node(const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
+	:
+	pMeshes(std::move(pMeshes)),
+	name(name)
+{
+	DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
+	DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
+}
+
+void Node::AddChild(unique_ptr<Node> pChild) noexcept_unless
+{
+	assert(pChild);
+	pChildren.push_back(std::move(pChild));
+}
+void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noexcept_unless
+{
+	const matrix transform_built =
+		DirectX::XMLoadFloat4x4(&transform_base) *
+		DirectX::XMLoadFloat4x4(&transform_applied) *
+		current_transform;
+
+	for (const Mesh* pm : pMeshes)
+	{
+		pm->Render(gfx, transform_built);
+	}
+	for (const unique_ptr<Node>& pChild : pChildren)
+	{
+		pChild->Render(gfx, transform_built);
+	}
+}
+
+void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pNode_selected) const noexcept // recursively render child nodes
+{
+	const int idx_node_current = idx_node; ++idx_node;
+
+	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+		| ((idx_node_current == idx_selected.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
+		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
+
+	using namespace ImGui;
+	const auto expanded =
+		TreeNodeEx(
+			(void*)(int)idx_node_current, node_flags, name.c_str()
+		);
+
+	if (IsItemClicked())
+	{
+		idx_selected = idx_node_current;
+		pNode_selected = const_cast<Node*>(this);
+	}
+	if (expanded)
+	{
+		for (const std::unique_ptr<Node>& pChild : pChildren)
+		{
+			pChild->RenderTree(idx_node, idx_selected, pNode_selected);
+		}
+		TreePop();
+	}
+}
+
+void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
+{
+	DirectX::XMStoreFloat4x4
+	(
+		&transform_applied,
+		transform
+	);
+}
+
 struct ModelWnd
 {
 private:
+	std::optional<int> idx_selected;
+	Node* pNode_selected;
 	struct transform_params
 	{
 		object_variables::orientation orientation;
 		object_variables::position position;
 	};
-	std::optional<int> idx_selected;
-	Node* pNode_selected;
 	std::unordered_map<int, transform_params> transform_map;
 public:
 	matrix FetchTransform() const noexcept
@@ -54,9 +124,9 @@ public:
 		if (!pNode_selected)
 		{
 			const std::unordered_map<int, ModelWnd::transform_params>::mapped_type& transform
-				= transform_map.at(* idx_selected);
+				= transform_map.at(*idx_selected);
 
-				return
+			return
 				DirectX::XMMatrixRotationRollPitchYaw
 				(
 					transform.orientation.roll,
@@ -80,7 +150,7 @@ public:
 		if (!window)
 			window = "Model";
 		using namespace ImGui;
-		int nodeidx=0;
+		int nodeidx = 0;
 		if (Begin(window))
 		{
 
@@ -127,14 +197,23 @@ Model::Model(Graphics& gfx, const std::string fileName)
 		imp.ReadFile(
 			fileName.c_str(),
 			aiProcess_Triangulate |
-			aiProcess_JoinIdenticalVertices
+			aiProcess_JoinIdenticalVertices |
+			aiProcess_ConvertToLeftHanded |
+			aiProcess_GenNormals
 		);
-
-	for (size_t idx = 0; idx < pScene->mNumMeshes; idx++)
+	if (pScene == nullptr)
 	{
-		pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx]));
+		// Convert error string to wide
+		std::string  cs(imp.GetErrorString());
+		std::wstring ws;
+		copy(cs.begin(), cs.end(), back_inserter(ws));
+		throw ModelException(__LINE__, WFILE, ws);
 	}
-
+		for (size_t idx = 0; idx < pScene->mNumMeshes; ++idx)
+		{
+			pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx]));
+		}
+	
 	pRoot = ParseNode(*pScene->mRootNode);
 }
 Model::~Model() noexcept
@@ -142,7 +221,7 @@ Model::~Model() noexcept
 
 void Model::Render(Graphics& gfx) const noexcept_unless
 {
-	if (auto node = pWnd->FetchSelectedNode())
+	if (Node* node = pWnd->FetchSelectedNode())
 	{
 		node->Transform_Apply(pWnd->FetchTransform());
 	}
@@ -180,7 +259,6 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 			indices.push_back(face.mIndices[1]);
 			indices.push_back(face.mIndices[2]);
 		}
-
 	}
 
 	vector<unique_ptr<Bind::Bindable>> bindablePtrs;
@@ -189,7 +267,8 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 
 	bindablePtrs.push_back(make_unique<Bind::IndexBuffer>(gfx, indices));
 
-	std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>> pVertexShader = make_unique<Bind::VertexShader>(gfx, L"PhongShaderVS.cso");
+	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
+	auto pVertexShader = make_unique<Bind::VertexShader>(gfx, L"PhongShaderVS.cso");
 	ID3DBlob* pvsbc = pVertexShader->FetchByteCode();
 	bindablePtrs.push_back(std::move(pVertexShader));
 
@@ -238,70 +317,6 @@ unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 void Model::PresentWindow(const char* Window) noexcept
 {
 	pWnd->Present(Window, *pRoot);
-}
-
-Node::Node(const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
-	:
-	pMeshes(std::move(pMeshes)),
-		name(name)
-	{
-		DirectX::XMStoreFloat4x4(&transform_base, transform); // store initial transform
-		DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
-	}
-
-void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noexcept_unless
-{
-	const matrix transform_built =
-		DirectX::XMLoadFloat4x4(&transform_base) *
-		DirectX::XMLoadFloat4x4(&transform_applied) *
-		current_transform;
-
-	for (Mesh* const pm : pMeshes)
-	{
-		pm->Render(gfx, transform_built);
-	}
-	for (const unique_ptr<Node>& pChild : pChildren)
-	{
-		pChild->Render(gfx, transform_built);
-	}
-}
-
-void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pNode_selected) const noexcept // recursively render child nodes
-{
-	const int idx_node_current = idx_node; ++idx_node;
-	
-	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		| ((idx_node_current == idx_selected.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
-		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
-
-	using namespace ImGui;
-	const auto expanded =
-		TreeNodeEx(
-			(void*)(intptr_t)idx_node_current, node_flags, name.c_str()
-		);
-	
-		if (IsItemClicked())
-		{
-			idx_selected = idx_node_current;
-			pNode_selected = const_cast<Node*>(this);
-		}
-		if (expanded)
-		{
-			for (const std::unique_ptr<Node>& pChild : pChildren)
-			{
-				pChild->RenderTree(idx_node, idx_selected, pNode_selected);
-			}
-			TreePop();
-		}
-}
-
-void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
-{
-	DirectX::XMStoreFloat4x4
-	(
-		&transform_applied,
-		transform
-	);
 }
 
 ModelException::ModelException(int line, const wchar_t* filename, std::wstring note) noexcept
