@@ -151,35 +151,43 @@ public:
 		if (Begin(window))
 		{
 
-			Columns(2, nullptr);
+			Columns(3, nullptr);
 			root.RenderTree(nodeidx, idx_selected, pNode_selected);
 
-			NextColumn();
-			if (pNode_selected)
-			{
-				auto& transform
-					= transform_map[*idx_selected];
-
-				Text("Orientation");
-				SliderAngle("Roll", &transform.orientation.roll, -180.0f, 180.0f);
-				SliderAngle("Pitch", &transform.orientation.pitch, -180.0f, 180.0f);
-				SliderAngle("Yaw", &transform.orientation.yaw, -180.0f, 180.0f);
-				Text("Position");
-				SliderFloat("X", &transform.position.x, -20.0f, 20.0f);
-				SliderFloat("Y", &transform.position.y, -20.0f, 20.0f);
-				SliderFloat("Z", &transform.position.z, -20.0f, 20.0f);
-
-				if (Button("Reset"))
+				NextColumn();
+				if (pNode_selected)
 				{
-					transform.position.x = 0;
-					transform.position.y = 0;
-					transform.position.z = 0;
-					transform.orientation.roll = 0;
-					transform.orientation.pitch = 0;
-					transform.orientation.yaw = 0;
-				}
+					auto& transform =
+						transform_map[*idx_selected];
 
-			}
+					Text("Position");
+					SliderFloat("X", &transform.position.x, -20.0f, 20.0f);
+					SliderFloat("Y", &transform.position.y, -20.0f, 20.0f);
+					SliderFloat("Z", &transform.position.z, -20.0f, 20.0f);
+
+					if (Button("Reset Position"))
+					{
+						transform.position.x = 0;
+						transform.position.y = 0;
+						transform.position.z = 0;
+					}
+
+					NextColumn();
+
+					Text("Orientation");
+					SliderAngle("Roll", &transform.orientation.roll, -180.0f, 180.0f);
+					SliderAngle("Pitch", &transform.orientation.pitch, -180.0f, 180.0f);
+					SliderAngle("Yaw", &transform.orientation.yaw, -180.0f, 180.0f);
+
+					if (Button("Reset Orientation"))
+					{
+						transform.orientation.roll = 0;
+						transform.orientation.pitch = 0;
+						transform.orientation.yaw = 0;
+					}
+				}
+				
+			
 		}
 		End();
 	}
