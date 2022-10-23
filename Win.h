@@ -16,6 +16,20 @@ private:
 public:
 	Keyboard kbd;
 	Mouse mouse;
+// mouse icon functions
+public:
+	void Mouse_DisableIcon() noexcept;
+	void Mouse_EnableIcon() noexcept;
+//mouse icon privates
+private:
+	void Mouse_HideIcon() noexcept;
+	void Mouse_ShowIcon() noexcept;
+	bool Mouse_Icon_IsEnabled = false;
+	void Mouse_ShowIcon_GUI() noexcept;
+	void Mouse_HideIcon_GUI() noexcept;
+
+	void Mouse_Icon_BlockInWindow() noexcept;
+	void Mouse_Icon_FreeRoam() noexcept;
 private:
 	unsigned int width;
 	unsigned int height;

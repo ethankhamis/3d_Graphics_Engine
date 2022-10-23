@@ -50,6 +50,60 @@ Graphics& Wnd::grfx()
 	return *pGraphics;
 }
 
+void Wnd::Mouse_DisableIcon() noexcept
+{
+	Mouse_Icon_IsEnabled = false;
+	Mouse_HideIcon();
+	Mouse_HideIcon_GUI();
+	Mouse_Icon_BlockInWindow();
+}
+
+void Wnd::Mouse_EnableIcon() noexcept
+{
+	Mouse_Icon_IsEnabled = true;
+	Mouse_ShowIcon();
+	Mouse_ShowIcon_GUI();
+	Mouse_Icon_FreeRoam();
+}
+
+void Wnd::Mouse_HideIcon() noexcept
+{
+	do{}
+	while (::ShowCursor(0) >= 0);
+}
+
+void Wnd::Mouse_ShowIcon() noexcept
+{
+	do {}
+	while (::ShowCursor(1) >= 0);
+}
+
+void Wnd::Mouse_ShowIcon_GUI() noexcept
+{
+	using namespace ImGui;
+	GetIO().ConfigFlags&= ~ImGuiConfigFlags_NoMouse;
+}
+
+void Wnd::Mouse_HideIcon_GUI() noexcept
+{
+	using namespace ImGui;
+	GetIO().ConfigFlags|= ImGuiConfigFlags_NoMouse;
+}
+
+void Wnd::Mouse_Icon_BlockInWindow() noexcept
+{
+	// find screen dimensions using hWnd+win functions
+	RECT windowscreen;
+	GetClientRect(hWnd, &windowscreen);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&windowscreen), 2);
+	ClipCursor(&windowscreen); // clip mouse to window
+}
+
+void Wnd::Mouse_Icon_FreeRoam() noexcept
+{
+	ClipCursor(nullptr);
+}
+
 Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 {
 	//get window size using region size of user
@@ -124,7 +178,21 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 		//Start of Windows Kbd Messages
 
-
+	case WM_ACTIVATE:
+		OutputDebugStringW(L"activate called\n");
+		if (!Mouse_Icon_IsEnabled)
+		{
+			if (wParam & WA_ACTIVE)
+			{
+				OutputDebugStringW(L"Activate is locking mouse using\nMouse_Icon_BlockInWindow()\n");
+				Mouse_Icon_BlockInWindow();
+				Mouse_HideIcon();
+				break;
+			}
+			OutputDebugStringW(L"activate is NOT locking mouse. using\nMouse_Icon_FreeRoam()\n");
+			Mouse_Icon_FreeRoam();
+			Mouse_ShowIcon();
+		}break;
 
 	case WM_CHAR:
 		kbd.Char_OnPress(static_cast<unsigned char>(wParam));
@@ -152,6 +220,16 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 
 	case WM_MOUSEMOVE:
 	{
+		if (!Mouse_Icon_IsEnabled)
+		{
+			if (!mouse.Inside_Window_Check())
+			{
+				SetCapture(hWnd);
+				mouse.Mouse_Inside();
+				Mouse_HideIcon();
+			}break;
+		}
+
 		SetForegroundWindow(hWnd);
 		if (io.WantCaptureMouse) { break; }
 
