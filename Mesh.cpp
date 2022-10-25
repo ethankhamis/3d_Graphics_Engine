@@ -283,7 +283,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 
 	struct PSMaterialConstant
 	{
-		DirectX::XMFLOAT3 colour = { 0.8f,0.2f,0.2f };
+		float3 colour = { 0.5f,0.0f,0.5f };
 		float specularIntensity = 0.6f;
 		float specularPower = 30.0f;
 		float padding[3];
@@ -333,8 +333,9 @@ const wchar_t* ModelException::whatw() const noexcept
 {
 	std::wstringstream wss;
 	wss << ExceptionHandler::whatw() << std::endl
-		<< L"[Note] " << FetchNote();
-	return wss.str().c_str();
+		<< L"[Note]" << FetchNote();
+	auto ws = wss.str();
+	return ws.c_str();
 }
 
 const wchar_t* ModelException::FetchErrorType() const noexcept

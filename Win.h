@@ -20,14 +20,16 @@ public:
 public:
 	void Mouse_DisableIcon() noexcept;
 	void Mouse_EnableIcon() noexcept;
+	bool Cursor_Status() const noexcept;
+private:
+	std::vector<unsigned char> Raw_Buffer;
 //mouse icon privates
 private:
 	void Mouse_HideIcon() noexcept;
 	void Mouse_ShowIcon() noexcept;
-	bool Mouse_Icon_IsEnabled = false;
+	bool Mouse_Icon_IsEnabled = true;
 	void Mouse_ShowIcon_GUI() noexcept;
 	void Mouse_HideIcon_GUI() noexcept;
-
 	void Mouse_Icon_BlockInWindow() noexcept;
 	void Mouse_Icon_FreeRoam() noexcept;
 private:

@@ -6,6 +6,8 @@ class Mouse
 {
 	friend class Window;
 public:
+	struct Raw_Delta { int x, y; };
+public:
 	Mouse() = default;
 	Mouse(const Mouse&) = delete;
 	Mouse& operator=(const Mouse&) = delete;
@@ -89,11 +91,19 @@ public:
 	void Left_Released(int x, int y) noexcept;
 	void Right_Pressed(int x, int y) noexcept;
 	void Right_Released(int x, int y) noexcept;
+	std::optional<Raw_Delta> Access_Raw_Data() noexcept;
+public:
+	void Raw_Mouse_Enable() noexcept;
+	void Raw_Mouse_Disable() noexcept;
+	bool Raw_Mouse_Status() const noexcept;
 public:
 	void Wheel_Up(int x, int y) noexcept;
 	void Wheel_Down(int x, int y) noexcept;
 	void Wheel_Delta(int x, int y, int delta) noexcept;
+public:
 	void Buffer_ReduceSize() noexcept;
+	void ApplyRawDelta(int delta_x, int delta_y) noexcept;
+	void RawBuffer_ReduceSize() noexcept;
 public:
 	void Mouse_Inside() noexcept;
 	void Mouse_Outside() noexcept;
@@ -106,7 +116,9 @@ private:
 	bool inside_window = false;
 	static constexpr unsigned int bufferSize = 16u;
 	std::queue<Event> buffer;
+	std::queue<Raw_Delta> Raw_Delta_Buffer;
 private:
 	int wheelDelta = 0;
+	bool Raw_Status = false;
 
 };

@@ -66,16 +66,19 @@ void Wnd::Mouse_EnableIcon() noexcept
 	Mouse_Icon_FreeRoam();
 }
 
+bool Wnd::Cursor_Status() const noexcept
+{
+	return Mouse_Icon_IsEnabled;
+}
+
 void Wnd::Mouse_HideIcon() noexcept
 {
-	do{}
 	while (::ShowCursor(0) >= 0);
 }
 
 void Wnd::Mouse_ShowIcon() noexcept
 {
-	do {}
-	while (::ShowCursor(1) >= 0);
+	while (::ShowCursor(1) < 0);
 }
 
 void Wnd::Mouse_ShowIcon_GUI() noexcept
@@ -142,6 +145,18 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 
 	//create graphics instance
 	pGraphics = std::make_unique<Graphics>(hWnd,width,height);
+
+	//register mouse input (raw) device directx11
+
+	RAWINPUTDEVICE raw_input_device;
+	raw_input_device.usUsagePage = 1;
+	raw_input_device.dwFlags = 0;
+	raw_input_device.usUsage = 2;
+	raw_input_device.hwndTarget = nullptr;
+	if (!RegisterRawInputDevices(&raw_input_device, 0x01, sizeof(raw_input_device))) // if not registering
+	{
+		throw EHWND_LAST_EXCEPT();
+	}
 
 }
 
@@ -328,6 +343,51 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 		const int delta = GET_WHEEL_DELTA_WPARAM(wParam);
 		mouse.Wheel_Delta(pt.x, pt.y, delta);
 		break;
+	}
+
+	case WM_INPUT: //raw mouse input
+	{
+		if (!mouse.Raw_Mouse_Status())
+		{
+			break;
+		}
+
+		unsigned int current_capacity;
+		// sizeof input data
+
+		if (
+			GetRawInputData
+			(
+				reinterpret_cast<HRAWINPUT>(lParam),
+				RID_INPUT,
+				nullptr,
+				&current_capacity,
+				sizeof(RAWINPUTHEADER))
+			== -1) 
+		{
+			break;
+		}
+		Raw_Buffer.resize(current_capacity);
+
+		if (
+			GetRawInputData
+			(
+				reinterpret_cast<HRAWINPUT>(lParam),
+				RID_INPUT,
+				Raw_Buffer.data(),
+				&current_capacity,
+				sizeof(RAWINPUTHEADER)
+			) != current_capacity
+			)
+		{
+			break;
+		}
+
+		auto& raw_input = reinterpret_cast<const RAWINPUT&>(*Raw_Buffer.data());
+		if (raw_input.header.dwType == RIM_TYPEMOUSE && (raw_input.data.mouse.lLastX != 0 || raw_input.data.mouse.lLastY != 0))
+		{
+			mouse.ApplyRawDelta(raw_input.data.mouse.lLastX, raw_input.data.mouse.lLastY);
+		}break;
 	}
 	//End of Windows Mouse Messages
 

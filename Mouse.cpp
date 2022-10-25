@@ -102,6 +102,32 @@ void Mouse::Right_Released(int x, int y) noexcept
 	Buffer_ReduceSize();
 }
 
+std::optional<Mouse::Raw_Delta> Mouse::Access_Raw_Data() noexcept
+{
+	if (Raw_Delta_Buffer.empty())
+	{
+		return std::nullopt;
+	}
+	const Raw_Delta delta_raw = Raw_Delta_Buffer.front();
+	Raw_Delta_Buffer.pop();
+	return delta_raw;
+}
+
+void Mouse::Raw_Mouse_Enable() noexcept
+{
+	Raw_Status = true;
+}
+
+void Mouse::Raw_Mouse_Disable() noexcept
+{
+	Raw_Status = false;
+}
+
+bool Mouse::Raw_Mouse_Status() const noexcept
+{
+	return Raw_Status;
+}
+
 void Mouse::Wheel_Up(int x, int y) noexcept
 {
 	buffer.push(Mouse::Event(Mouse::Event::TypeName::WheelUp, *this));
@@ -133,6 +159,19 @@ void Mouse::Wheel_Delta(int x, int y, int delta) noexcept
 void Mouse::Buffer_ReduceSize() noexcept
 {
 	while (buffer.size() > bufferSize){buffer.pop();}
+}
+
+void Mouse::ApplyRawDelta(int delta_x, int delta_y) noexcept
+{
+	Raw_Delta_Buffer.push({ delta_x, delta_y });
+	Buffer_ReduceSize();
+}
+
+void Mouse::RawBuffer_ReduceSize() noexcept
+{
+	while (Raw_Delta_Buffer.size() > bufferSize)
+		Raw_Delta_Buffer.pop();
+	
 }
 
 void Mouse::Mouse_Inside() noexcept

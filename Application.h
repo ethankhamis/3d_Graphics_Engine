@@ -20,10 +20,11 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
-	Model building{ window.grfx(), "Models\\objBuilding.obj"};
+	Model building{ window.grfx(), "Models\\building.obj"};
 private:
 	void ExecFrame();
-	void PresentDemoWindow();
-
+	void PresentRawInputWindow();
+private:
+	int x = 0, y = 0;
 	float speed = 1.f;
 };
