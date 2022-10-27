@@ -35,17 +35,17 @@ struct Node
 {
 private:
 	friend struct Model;
-	friend struct ModelWnd;
 public:
-	Node(const std::string& name, vector<Mesh*> pMeshes, const matrix& transform) noexcept_unless;
+	Node(unsigned int id ,const std::string& name, vector<Mesh*> pMeshes, const matrix& transform) noexcept_unless;
 	void Render(Graphics& gfx, const matrix current_transform) const noexcept_unless;
 	void Transform_Apply(const matrix transform) noexcept;
-private:
-	void RenderTree(int& idx_node /*id of node*/,
-		std::optional<int>& idx_selected,
+	int Fetch_id() const noexcept;
+	void RenderTree(
 		Node*& pNode_selected) const noexcept;
+private:
 	void AddChild(unique_ptr<Node> pChild) noexcept_unless;
 private:
+	unsigned int id;
 	vector<Mesh*> pMeshes;
 	vector<unique_ptr<Node>> pChildren;
 	float4x4 transform_initial;
@@ -59,7 +59,7 @@ struct Model
 	void Render(Graphics& gfx) const noexcept_unless;
 private:
 	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh);
-	unique_ptr<Node> ParseNode(const aiNode& node) noexcept;
+	unique_ptr<Node> ParseNode(unsigned int& next_id,const aiNode& node) noexcept;
 public:
 	void PresentWindow(const char* Window = nullptr) noexcept;
 	~Model() noexcept;

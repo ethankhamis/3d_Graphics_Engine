@@ -1,16 +1,17 @@
 #pragma once
 #include "Graphics.h"
+#include "MathematicalConstants.h"
 
 struct Camera
 {
-	DirectX::XMMATRIX FetchMatrix() const noexcept;
+	Camera() noexcept;
+	matrix FetchMatrix() const noexcept;
 	void ConstructControlWindow() noexcept;
 	void Resetv() noexcept;
+	void Rotate_by(float delta_x, float delta_y) noexcept;
+	void Translate_by(float3 translation) noexcept;
 private:
-	float radius = 20.0f;
-	float theta = 0.0f;
-	float phi = 0.0f;
-	float pitch = 0.0f;
-	float yaw = 0.0f;
-	float roll = 0.0f;
+	float3 position;
+	float pitch, yaw;
+	static constexpr float travel_speed = 12.f, rotation_speed = 0.004f;
 };

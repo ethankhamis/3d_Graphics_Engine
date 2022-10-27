@@ -313,7 +313,7 @@ const wchar_t* Graphics::InfoException::whatw() const noexcept
 	wss << FetchErrorType() << std::endl
 		<< "\n[Error Info]\n" << FetchErrorInfo() 
 		<< std::endl << std::endl << FetchErrorWString();
-	buffer_w = wss.str();
+	buffer_w = wss.str().c_str();
 	return buffer_w.c_str();
 }
 

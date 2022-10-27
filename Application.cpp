@@ -39,10 +39,15 @@ void Application::ExecFrame()
 	spawn.FetchLight()->Render(window.grfx());
 
 
-	while (const auto e = window.kbd.Key_Read())
+	while (const std::optional<Keyboard::Event> key = window.kbd.Key_Read())
 	{
-		if (e->Pressed() && e->Keycode_Get() == VK_INSERT)
+		if (!key->Pressed())
 		{
+			continue;
+		}
+		switch(key->Keycode_Get())
+		{
+		case VK_ESCAPE:
 			if (window.Cursor_Status())
 			{
 				window.Mouse_DisableIcon();
@@ -52,15 +57,48 @@ void Application::ExecFrame()
 			{
 				window.Mouse_EnableIcon();
 				window.mouse.Raw_Mouse_Disable();
-			}
+			}break;
 		}
 	}
 
+	if (!window.Cursor_Status())
+	{
+		if (window.kbd.Key_Pressed('W'))
+		{
+			camera.Translate_by({ 0.0f,0.0f,delta });
+		}
+		if (window.kbd.Key_Pressed('A'))
+		{
+			camera.Translate_by({ -delta,0.0f,0.0f });
+		}
+		if (window.kbd.Key_Pressed('S'))
+		{
+			camera.Translate_by({ 0.0f,0.0f,-delta });
+		}
+		if (window.kbd.Key_Pressed('D'))
+		{
+			camera.Translate_by({ delta,0.0f,0.0f });
+		}
+		if (window.kbd.Key_Pressed('R'))
+		{
+			camera.Translate_by({ 0.0f,delta,0.0f });
+		}
+		if (window.kbd.Key_Pressed('F'))
+		{
+			camera.Translate_by({ 0.0f,-delta,0.0f });
+		}
+	}
+	while (const auto delta_raw = window.mouse.Access_Raw_Data())
+	{
+		if (!window.Cursor_Status())
+		{
+			camera.Rotate_by(static_cast<float>(delta_raw->x), static_cast<float>(delta_raw->y));
+		}
+	}
 
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
 	building.PresentWindow();
-	PresentRawInputWindow();
 	//spawn.Window(drawables);
 
 	//ImGui::End();
@@ -68,21 +106,6 @@ void Application::ExecFrame()
 	window.grfx().EndFrame();
 }
 
-void Application::PresentRawInputWindow()
-{
-	while (const auto delta = window.mouse.Access_Raw_Data())
-	{
-		x += delta->x;
-		y += delta->y;
-	}
-	using namespace ImGui;
-	if (ImGui::Begin("Raw Input"))
-	{
-		ImGui::Text("Tally: (%d,%d)", x, y);
-		ImGui::Text("Cursor: %s", window.Cursor_Status() ? "enabled" : "disabled");
-	}
-	ImGui::End();
-}
 
 
 Application::~Application() {}

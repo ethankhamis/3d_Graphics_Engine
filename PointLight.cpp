@@ -39,7 +39,7 @@ void PointLight::ControlWnd() noexcept
 void PointLight::Reset() noexcept
 {
 	constbuffer_data = {
-		{ 0.0f,0.0f,0.0f },
+		{ 2.f,15.f,-5.0f },
 		{ 0.05f,0.05f,0.05f },
 		{ 1.0f,1.0f,1.0f },
 		1.0f,

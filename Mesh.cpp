@@ -38,8 +38,9 @@ DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
 }
 
 
-Node::Node(const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
+Node::Node(unsigned int id,const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
 	:
+	id(id),
 	pMeshes(std::move(pMeshes)),
 	name(name)
 {
@@ -69,33 +70,37 @@ void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noe
 	}
 }
 
-void Node::RenderTree(int& idx_node, std::optional<int>& idx_selected, Node*& pNode_selected) const noexcept // recursively render child nodes
+void Node::RenderTree(Node*& pNode_selected) const noexcept // recursively render child nodes
 {
-	const int idx_node_current = idx_node; ++idx_node;
+	const int idx_selected = (pNode_selected == nullptr) ? -1 : pNode_selected->Fetch_id();
 
-	const auto node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		| ((idx_node_current == idx_selected.value_or(-1)) ? ImGuiTreeNodeFlags_Selected : 0)
+	const int node_flags = ImGuiTreeNodeFlags_OpenOnArrow
+		| ((Fetch_id() == idx_selected) ? ImGuiTreeNodeFlags_Selected : 0)
 		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
 
 	using namespace ImGui;
 	const auto expanded =
 		TreeNodeEx(
-			(void*)(int)idx_node_current, node_flags, name.c_str()
+			(void*)(int)Fetch_id(), node_flags, name.c_str()
 		);
 
 	if (IsItemClicked())
 	{
-		idx_selected = idx_node_current;
 		pNode_selected = const_cast<Node*>(this);
 	}
 	if (expanded)
 	{
 		for (const std::unique_ptr<Node>& pChild : pChildren)
 		{
-			pChild->RenderTree(idx_node, idx_selected, pNode_selected);
+			pChild->RenderTree( pNode_selected);
 		}
 		TreePop();
 	}
+}
+
+int Node::Fetch_id() const noexcept
+{
+	return id;
 }
 
 void Node::Transform_Apply(DirectX::FXMMATRIX transform) noexcept
@@ -121,8 +126,9 @@ private:
 public:
 	matrix FetchTransform() const noexcept
 	{
+			assert(pNode_selected != nullptr);
 			const std::unordered_map<int, ModelWnd::transform_params>::mapped_type& transform
-				= transform_map.at(*idx_selected);
+				= transform_map.at(pNode_selected->Fetch_id());
 
 			return
 				DirectX::XMMatrixRotationRollPitchYaw
@@ -152,13 +158,13 @@ public:
 		{
 
 			Columns(3, nullptr);
-			root.RenderTree(nodeidx, idx_selected, pNode_selected);
+			root.RenderTree( pNode_selected);
 
 				NextColumn();
 				if (pNode_selected)
 				{
 					auto& transform =
-						transform_map[*idx_selected];
+						transform_map[pNode_selected->Fetch_id()];
 
 					Text("Position");
 					SliderFloat("X", &transform.position.x, -20.0f, 20.0f);
@@ -218,8 +224,8 @@ Model::Model(Graphics& gfx, const std::string fileName)
 		{
 			pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx]));
 		}
-	
-	pRoot = ParseNode(*pScene->mRootNode);
+	unsigned int next_id = 0;
+	pRoot = ParseNode(next_id,*pScene->mRootNode);
 }
 Model::~Model() noexcept
 {}
@@ -293,7 +299,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	return make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 
-unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
+unique_ptr<Node> Model::ParseNode(unsigned int& next_id,const aiNode& node) noexcept
 {
 	namespace DirectX = DirectX;
 	const matrix transform = DirectX::XMMatrixTranspose(
@@ -310,10 +316,10 @@ unique_ptr<Node> Model::ParseNode(const aiNode& node) noexcept
 		curMeshPtrs.push_back(pMeshes.at(meshIdx).get());
 	}
 
-	std::unique_ptr<Node> pNode = make_unique<Node>(node.mName.C_Str(), std::move(curMeshPtrs), transform);
+	std::unique_ptr<Node> pNode = make_unique<Node>(next_id++,node.mName.C_Str(), std::move(curMeshPtrs), transform);
 	for (size_t idx = 0; idx < node.mNumChildren; idx++)
 	{
-		pNode->AddChild(ParseNode(*node.mChildren[idx]));
+		pNode->AddChild(ParseNode(next_id,*node.mChildren[idx]));
 	}
 
 	return pNode;
@@ -333,8 +339,8 @@ const wchar_t* ModelException::whatw() const noexcept
 {
 	std::wstringstream wss;
 	wss << ExceptionHandler::whatw() << std::endl
-		<< L"[Note]" << FetchNote();
-	auto ws = wss.str();
+		<< "\n[Note]\n" << FetchNote();
+	std::wstring ws = wss.str();
 	return ws.c_str();
 }
 
