@@ -280,9 +280,10 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 	float shininess = 35.0f;
 	if (mesh.mMaterialIndex >= 0)
 	{
+		const aiMaterial& mat = *pMaterials[mesh.mMaterialIndex];
 		std::wstring texture_filename_w;
 		using namespace std::string_literals;
-		const aiMaterial& mat = *pMaterials[mesh.mMaterialIndex];
+	
 		const std::wstring base = L"Models\\nanosuit_textured\\"s;
 		aiString texture_filename; mat.GetTexture(aiTextureType_DIFFUSE, NULL, &texture_filename);
 		std::string temp = texture_filename.C_Str();
@@ -291,9 +292,9 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		if (mat.GetTexture(aiTextureType_SPECULAR, NULL, &texture_filename) == aiReturn_SUCCESS /*0*/)
 		{
 			texture_filename_w.clear();
-			std::string temp2 = texture_filename.C_Str();
+			temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(std::make_unique <Bind::Texture>(gfx, Surface::WithFile(base + texture_filename_w), 1));
+			bindablePtrs.push_back(std::make_unique<Bind::Texture>(gfx, Surface::WithFile(base + texture_filename_w), 1));
 			ContainsSpecular = true;
 		}
 		else
