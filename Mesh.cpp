@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include "imgui/imgui.h"
 #include <sstream>
+#include "Surface.h"
 
 Mesh::Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs)
 {
@@ -38,7 +39,7 @@ DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
 }
 
 
-Node::Node(unsigned int id,const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform)
+Node::Node(unsigned int id,const std::string& name, std::vector<Mesh*> pMeshes, const matrix& transform) noexcept_unless
 	:
 	id(id),
 	pMeshes(std::move(pMeshes)),
@@ -222,7 +223,7 @@ Model::Model(Graphics& gfx, const std::string fileName)
 	}
 		for (size_t idx = 0; idx < pScene->mNumMeshes; ++idx)
 		{
-			pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx]));
+			pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx],pScene->mMaterials));
 		}
 	unsigned int next_id = 0;
 	pRoot = ParseNode(next_id,*pScene->mRootNode);
@@ -239,7 +240,7 @@ void Model::Render(Graphics& gfx) const noexcept_unless
 	pRoot->Render(gfx, DirectX::XMMatrixIdentity());
 }
 
-unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
+unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials)
 {
 	using DynamicVertex::VertexLayout;
 
@@ -248,6 +249,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 			VertexLayout{}
 			.Append(VertexLayout::Position3D)
 			.Append(VertexLayout::Normal)
+			.Append(VertexLayout::Texture2D)
 		)
 	);
 
@@ -255,24 +257,51 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 	{
 		VertexBuf.Emplace_Back(
 			*reinterpret_cast<float3*>(&mesh.mVertices[idx]),
-			*reinterpret_cast<float3*>(&mesh.mNormals[idx])
+			*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
+			*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
 		);
 	}
 
-	vector<unsigned short> indices;
+	vector<UINT16> indices;
 	indices.reserve(mesh.mNumFaces * 3);
 	for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
 	{
 		const auto& face = mesh.mFaces[idx];
 		assert(face.mNumIndices == 3);
-		{
+		
 			indices.push_back(face.mIndices[0]);
 			indices.push_back(face.mIndices[1]);
 			indices.push_back(face.mIndices[2]);
-		}
+		
 	}
 
 	vector<unique_ptr<Bind::Bindable>> bindablePtrs;
+	bool ContainsSpecular = false;
+	float shininess = 35.0f;
+	if (mesh.mMaterialIndex >= 0)
+	{
+		std::wstring texture_filename_w;
+		using namespace std::string_literals;
+		const aiMaterial& mat = *pMaterials[mesh.mMaterialIndex];
+		const std::wstring base = L"Models\\nanosuit_textured\\"s;
+		aiString texture_filename; mat.GetTexture(aiTextureType_DIFFUSE, NULL, &texture_filename);
+		std::string temp = texture_filename.C_Str();
+		std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
+		bindablePtrs.push_back(std::make_unique<Bind::Texture>(gfx, Surface::WithFile(base + texture_filename_w)));
+		if (mat.GetTexture(aiTextureType_SPECULAR, NULL, &texture_filename) == aiReturn_SUCCESS /*0*/)
+		{
+			texture_filename_w.clear();
+			std::string temp2 = texture_filename.C_Str();
+			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
+			bindablePtrs.push_back(std::make_unique <Bind::Texture>(gfx, Surface::WithFile(base + texture_filename_w), 1));
+			ContainsSpecular = true;
+		}
+		else
+		{
+			mat.Get(AI_MATKEY_SHININESS, shininess);
+		}
+		bindablePtrs.push_back(std::make_unique<Bind::Sampler>(gfx));
+	}
 
 	bindablePtrs.push_back(make_unique<Bind::VertexBuffer>(gfx, VertexBuf));
 
@@ -280,22 +309,29 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh)
 
 	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
 	auto pVertexShader = make_unique<Bind::VertexShader>(gfx, L"PhongShaderVS.cso");
-	ID3DBlob* pvsbc = pVertexShader->FetchByteCode();
+	ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	bindablePtrs.push_back(std::move(pVertexShader));
 
-	bindablePtrs.push_back(make_unique<Bind::PixelShader>(gfx, L"PhongShaderPS.cso"));
-
-	bindablePtrs.push_back(make_unique<Bind::InputLayout>(gfx, VertexBuf.FetchLayout().FetchD3DLayout(), pvsbc));
-
-	struct PSMaterialConstant
+	bindablePtrs.push_back(std::make_unique<Bind::InputLayout>(gfx, VertexBuf.FetchLayout().FetchD3DLayout(), pVertexShaderByteCode));
+	if (ContainsSpecular)
 	{
-		float3 colour = { 0.5f,0.0f,0.5f };
-		float specularIntensity = 0.6f;
-		float specularPower = 30.0f;
-		float padding[3];
-	} pixelMatConstant;
-	bindablePtrs.push_back(make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(gfx, pixelMatConstant, 1u));
+		bindablePtrs.push_back(std::make_unique<Bind::PixelShader>(gfx,L"PhongShaderPSSpecularMap.cso"));
+	}
+	else
+	{
+		bindablePtrs.push_back(make_unique<Bind::PixelShader>(gfx, L"PhongShaderPS.cso"));
 
+		bindablePtrs.push_back(make_unique<Bind::InputLayout>(gfx, VertexBuf.FetchLayout().FetchD3DLayout(), pVertexShaderByteCode));
+
+		struct PSMaterialConstant
+		{
+			float specularIntensity = 0.8f;
+			float specularPower;
+			float padding[2];
+		} pixelMatConstant;
+		pixelMatConstant.specularPower = shininess;
+		bindablePtrs.push_back(make_unique<Bind::PixelConstantBuffer<PSMaterialConstant>>(gfx, pixelMatConstant, 1u));
+	}
 	return make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 

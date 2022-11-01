@@ -6,8 +6,8 @@ namespace Bind
 {
 
 
-	Texture::Texture(Graphics& gfx, const Surface& surface)
-	{
+	Texture::Texture(Graphics& gfx, const Surface& surface, UINT32 slot)
+	:slot(slot) {
 		DEF_INFOMANAGER(gfx);
 		D3D11_TEXTURE2D_DESC textureDescription = {};
 		textureDescription.Width = surface.FetchWidth();
@@ -43,6 +43,6 @@ namespace Bind
 
 	void Texture::Bind(Graphics& gfx) noexcept
 	{
-		FetchDeviceContext(gfx)->PSSetShaderResources(0u, 1u, pTextureView.GetAddressOf());
+		FetchDeviceContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
 	}
 }

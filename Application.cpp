@@ -19,7 +19,7 @@
 GDIpManager gdipm;
 
 Application::Application()
-	:window(1920, 1080, L"6~3D"),
+	:window(1280, 720, L"6~3D"),
 	spawn(window.grfx())
 {
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
@@ -30,7 +30,7 @@ void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
 
-	window.grfx().ClearBuffer(0.01f, 0.0f, 0.0f);
+	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
 

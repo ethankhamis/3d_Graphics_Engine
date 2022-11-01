@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Texture.h"
 #include "ConstBuffer(s).h"
 #include "IndexBuffer.h"
 #include "InputLayout.h"
@@ -8,3 +8,4 @@
 #include "TransformConstBuffer.h"
 #include "VertexBuffer.h"
 #include "VertexShader.h"
+#include "Sampler.h"
