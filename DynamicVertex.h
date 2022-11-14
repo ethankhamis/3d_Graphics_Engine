@@ -35,49 +35,49 @@ namespace DynamicVertex {
 			using SysType = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
-			static constexpr const char* id = "POS2";
+			static constexpr const wchar_t* id = L"POS2";
 		};
 		template<> struct Map<Position3D>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
-			static constexpr const char* id = "POS3";
+			static constexpr const wchar_t* id = L"POS3";
 		};
 		template<> struct Map<Texture2D>
 		{
 			using SysType = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
-			static constexpr const char* id = "TEX2";
+			static constexpr const wchar_t* id = L"TEX2";
 		};
 		template<> struct Map<Float3Colour>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Colour";
-			static constexpr const char* id = "COL3";
+			static constexpr const wchar_t* id = L"COL3";
 		};
 		template<> struct Map<Float4Colour>
 		{
 			using SysType = float4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Colour";
-			static constexpr const char* id = "COL4";
+			static constexpr const wchar_t* id = L"COL4";
 		};
 		template<> struct Map<Normal>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
-			static constexpr const char* id = "NOR";
+			static constexpr const wchar_t* id = L"NOR";
 		};
 		template<> struct Map<BGRAColour>
 		{
 			using SysType = DynamicVertex::BGRAColour;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Colour";
-			static constexpr const char* id = "COL8";
+			static constexpr const wchar_t* id = L"COL8";
 		};
 
 
@@ -102,7 +102,7 @@ namespace DynamicVertex {
 			{
 				return size_BYTES(memberType);
 			}
-			const char* FetchID() const noexcept
+			const wchar_t* FetchID() const noexcept
 			{
 				switch (memberType)
 				{
@@ -121,8 +121,8 @@ namespace DynamicVertex {
 				case BGRAColour:
 					return Map<BGRAColour>::id;
 				}
-				assert("Unrecognised element type called" && false);
-				return "Unrecognised element";
+				assert(L"Unrecognised element type called" && false);
+				return L"Unrecognised element";
 				
 			}
 			static constexpr unsigned int size_BYTES(MemberType type) noexcept_unless
@@ -234,9 +234,9 @@ namespace DynamicVertex {
 
 			return description;
 		}
-		std::string FetchID() const noexcept_unless
+		std::wstring FetchID() const noexcept_unless
 		{
-			std::string id;
+			std::wstring id;
 			for (const auto& elem : elements)
 			{
 				id += elem.FetchID();

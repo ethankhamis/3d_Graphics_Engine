@@ -304,7 +304,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 	bindablePtrs.push_back(Bind::IndexBuffer::Resolve(gfx, mesh_name, indices));
 
 	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
-	std::shared_ptr<Bind::VertexShader> pVertexShader = Bind::VertexShader::Resolve(gfx, L"PhongShaderVS.cso");
+	auto pVertexShader = Bind::VertexShader::Resolve(gfx, L"PhongShaderVS.cso");
 	ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	bindablePtrs.push_back(std::move(pVertexShader));
 

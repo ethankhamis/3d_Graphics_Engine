@@ -30,7 +30,7 @@ void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
 
-	window.grfx().ClearBuffer(0.0f, 1.0f, 0.0f);
+	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
 

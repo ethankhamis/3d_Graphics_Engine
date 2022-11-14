@@ -54,7 +54,7 @@ namespace Bind
 	std::wstring Texture::ConstructUID(const std::wstring& pathway, UINT32 slot)
 	{
 		using namespace std::string_literals;
-		return convert::make_wstring( typeid(Texture).name() ) + L"#"s + convert::make_wstring(std::to_string(slot).c_str());
+		return convert::make_wstring(typeid(Texture).name()) + L"#"s + pathway + L"#" + convert::make_wstring(std::to_string(slot).c_str());
 	}
 	std::wstring Texture::FetchUID() const noexcept
 	{

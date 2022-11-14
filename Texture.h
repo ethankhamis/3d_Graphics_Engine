@@ -15,9 +15,9 @@ namespace Bind
 		static std::wstring ConstructUID(const std::wstring& pathway, UINT32 slot = NULL);
 		std::wstring FetchUID() const noexcept override;
 	protected:
+		std::wstring pathway;
 		ComPtr<ID3D11ShaderResourceView> pTextureView;
 	private:
-		std::wstring pathway;
 		UINT32 slot;
 	};
 }

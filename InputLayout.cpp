@@ -32,7 +32,7 @@ namespace Bind
 	std::wstring InputLayout::ConstructUID(const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS)
 	{
 		using namespace std::string_literals;
-		return convert::make_wstring( typeid(InputLayout).name() ) + L"#"s + convert::make_wstring(layout.FetchID().c_str());
+		return convert::make_wstring( typeid(InputLayout).name() ) + L"#"s + layout.FetchID().c_str();
 	}
 	std::wstring InputLayout::FetchUID() const noexcept
 	{
