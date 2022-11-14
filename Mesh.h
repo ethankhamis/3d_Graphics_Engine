@@ -1,8 +1,8 @@
 #pragma once
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include "DynamicVertex.h"
 #include "DefaultBindables.h"
-#include "DrawableBase.h"
+#include "Drawable.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -22,9 +22,9 @@ private:
 	std::wstring note;
 };
 
-struct Mesh : public DrawableBase<Mesh>
+struct Mesh : public Drawable
 {
-	Mesh(Graphics& gfx, vector<unique_ptr<Bind::Bindable>> bindPtrs);
+	Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
 	void Render(Graphics& gfx, const matrix accumulatedTransform) const noexcept_unless;
 	matrix FetchTransformMat() const noexcept override;
 private:

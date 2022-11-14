@@ -2,6 +2,7 @@
 #include <DirectXMath.h>
 #include "Graphics.h"
 #include "debugdefs.h"
+#include <memory> // for shared_ptr
 
 namespace Bind
 {
@@ -10,8 +11,6 @@ namespace Bind
 }
 struct Drawable
 {
-	template<class T>
-	friend struct DrawableBase;
 public:
 	Drawable() = default;
 	Drawable(const Drawable& ) = delete;
@@ -19,7 +18,6 @@ public:
 public: // standard member functions
 	virtual DirectX::XMMATRIX FetchTransformMat() const noexcept = 0; //make abstract
 	void Render(Graphics& gfx) const noexcept_unless; // noexcept unless debugging (preprocessor def'd)
-	virtual void Update(float DeltaTime) noexcept{}
 	virtual ~Drawable() = default;
 protected: // member functions involving adding
 	template<class Type>
@@ -34,11 +32,8 @@ protected: // member functions involving adding
 		}
 		return nullptr;
 	}
-	void ApplyIndexBuffer(std::unique_ptr<Bind::IndexBuffer> indexBuffer) noexcept_unless;
-	void ApplyBind(std::unique_ptr<Bind::Bindable> bind) noexcept_unless;
-private:
-	virtual const std::vector<std::unique_ptr<Bind::Bindable>>& FetchStaticBinds() const noexcept = 0;
+	void ApplyBind(std::shared_ptr<Bind::Bindable> bind) noexcept_unless;
 private:
 	const Bind::IndexBuffer* pIndexBuffer = nullptr;
-	std::vector<std::unique_ptr<Bind::Bindable>> allBinds;
+	std::vector<std::shared_ptr<Bind::Bindable>> allBinds;
 };

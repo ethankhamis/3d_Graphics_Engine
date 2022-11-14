@@ -1,3 +1,4 @@
+/*
 #pragma once
 
 #include "ObjTestCase.h"
@@ -15,3 +16,4 @@ struct RandomTest : public TestObject<RandomTest>
 		float scale
 	);
 };
+*/

@@ -1,6 +1,6 @@
 #include "PointLight.h"
 #include "imgui/imgui.h"
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 PointLight::PointLight(Graphics& gfx, float rad)
 :
 	mesh(gfx,rad),

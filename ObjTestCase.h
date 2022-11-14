@@ -1,9 +1,11 @@
+
 #pragma once
 
-#include "DrawableBase.h"
-#include "MathematicalConstants.h"
+
+//#include "Math.cpp"
 
 /*testcase taken from ChilliTomatoNoodle*/
+/*
 template<class Object>
 struct TestObject : public DrawableBase<Object>
 {
@@ -66,3 +68,4 @@ protected:
 	float dphi;
 	float dchi;
 };
+*/

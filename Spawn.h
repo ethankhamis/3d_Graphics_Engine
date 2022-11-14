@@ -6,7 +6,7 @@
 //#include "PhongShadingCube.h"
 //#include "TexturedPlane.h"
 
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include <memory>
 #include <concepts>
 #include <typeinfo>
@@ -205,10 +205,6 @@ private:
 				//return std::make_unique<SemiSkinnedCube>
 					//(gfx, rng, adist, ddist, odist, rdist)
 					;
-
-			case static_cast<int>(Geometry::PhongShadedMonkey):
-				return std::make_unique<RandomTest>
-					(gfx, rng, adist, ddist, odist, rdist, matrix, 1.5f);
 
 			default:
 				assert(false && "bad drawable type in factory");

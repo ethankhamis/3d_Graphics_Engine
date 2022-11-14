@@ -158,6 +158,8 @@
     <ClCompile Include="Bindable.cpp" />
     <ClCompile Include="BindSolidLongLatSphere.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Converter.cpp" />
+    <ClCompile Include="Converter.h" />
     <ClCompile Include="DirectXInfoManagement.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="dxerr.cpp" />
@@ -174,6 +176,7 @@
     <ClCompile Include="IndexBuffer.cpp" />
     <ClCompile Include="InputLayout.cpp" />
     <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Mouse.cpp" />
     <ClCompile Include="PixelShader.cpp" />
@@ -233,6 +236,7 @@
     <ClInclude Include="assimp\include\assimp\vector3.h" />
     <ClInclude Include="assimp\include\assimp\version.h" />
     <ClInclude Include="Bindable.h" />
+    <ClInclude Include="BindableCodex.h" />
     <ClInclude Include="BindSolidLongLatSphere.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Colour.h" />
@@ -242,7 +246,6 @@
     <ClInclude Include="debugdefs.h" />
     <ClInclude Include="DefaultBindables.h" />
     <ClInclude Include="DirectXInfoManagement.h" />
-    <ClInclude Include="DrawableBase.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="GfxDeviceInterface+Mng.h" />
@@ -258,7 +261,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="IndexedTriangleList.h" />
     <ClInclude Include="LongLatSphere.h" />
-    <ClInclude Include="MathematicalConstants.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="ObjTestCase.h" />
     <ClInclude Include="Plane.h" />

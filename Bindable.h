@@ -7,6 +7,11 @@ namespace Bind
 	{
 		virtual void Bind(Graphics& gfx) noexcept = 0; // make abstract
 		virtual ~Bindable() = default;
+		virtual std::wstring FetchUID() const noexcept //function should never be called
+		{
+			assert(false); 
+			return L"";
+		}
 
 	protected: //standard getter functions
 		static ID3D11Device* FetchDevice(Graphics& gfx) noexcept;

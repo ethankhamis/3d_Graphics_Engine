@@ -2,13 +2,13 @@
 
 #include <vector>
 #include <DirectXMath.h>
+#include "DynamicVertex.h"
 
 using std::vector;
-template<class T>
 struct IndexedTriangleList
 {
 	IndexedTriangleList() = default;
-	IndexedTriangleList(vector<T> v, vector<uint16_t> i)
+	IndexedTriangleList(DynamicVertex::VertexBuffer v, vector<uint16_t> i) // vertices + indices
 		:
 		vertices(std::move(v)), indices(std::move(i))
 	{
@@ -18,33 +18,33 @@ struct IndexedTriangleList
 
 	void Transform(DirectX::FXMMATRIX matrix)
 	{
-		for (auto& vertex : vertices)
+		for (int idx = NULL; idx < vertices.size(); idx++)
 		{
-			const DirectX::XMVECTOR position = DirectX::XMLoadFloat3(&vertex.position);
-			DirectX::XMStoreFloat3(&vertex.position, DirectX::XMVector3Transform(position, matrix));
+			auto& position = vertices[idx].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>();
+			DirectX::XMStoreFloat3(&position,DirectX::XMVector3Transform( DirectX::XMLoadFloat3(&position), matrix));
 		}
 	}
 
-	void ApplyNormalsIndependent() noexcept_unless
-	{
-		using namespace DirectX;
-		assert(indices.size() % 3 == 0 && indices.size() > 0);
-		for (size_t i = 0; i < indices.size(); i += 3)
-		{
-			auto& v0 = vertices[indices[i]];
-			auto& v1 = vertices[indices[i + 1]];
-			auto& v2 = vertices[indices[i + 2]];
-			const auto p0 = XMLoadFloat3(&v0.position);
-			const auto p1 = XMLoadFloat3(&v1.position);
-			const auto p2 = XMLoadFloat3(&v2.position);
-
-			const auto normal = XMVector3Normalize(XMVector3Cross((p1 - p0), (p2 - p0)));
-
-			XMStoreFloat3(&v0.normal, normal);
-			XMStoreFloat3(&v1.normal, normal);
-			XMStoreFloat3(&v2.normal, normal);
-		}
-	}
-	vector<T> vertices;
+//	void ApplyNormalsIndependent() noexcept_unless
+	//{
+		//using namespace DirectX;
+		//assert(indices.size() % 3 == 0 && indices.size() > 0);
+		//for (size_t idx = 0; idx < indices.size(); idx += 3)
+		//{
+		//	DynamicVertex::Vertex& v0 = vertices[indices[idx]];
+		//	DynamicVertex::Vertex& v1 = vertices[indices[idx + 1]];
+		//	DynamicVertex::Vertex& v2 = vertices[indices[idx + 2]];
+	//		const vector p0 = XMLoadFloat3(&v0.position);
+		//	const vector p1 = XMLoadFloat3(&v1.position);
+		//	const vector p2 = XMLoadFloat3(&v2.position);
+//
+	//	const vector normal = XMVector3Normalize(XMVector3Cross((p1 - p0), (p2 - p0)));
+		//
+				//	XMStoreFloat3(&v0.normal, normal);
+				//	XMStoreFloat3(&v1.normal, normal);
+				//	XMStoreFloat3(&v2.normal, normal);
+	//}
+//}
+	DynamicVertex::VertexBuffer vertices;
 	vector<uint16_t> indices;
 };

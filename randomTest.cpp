@@ -1,3 +1,4 @@
+/*
 #pragma once
 #include "randomTest.h"
 #include "DefaultBindables.h"
@@ -83,3 +84,4 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 	ApplyBind(std::make_unique<TransformConstBuffer>(gfx, *this));
 
 }
+*/

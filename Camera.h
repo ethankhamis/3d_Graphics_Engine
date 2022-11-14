@@ -1,6 +1,6 @@
 #pragma once
 #include "Graphics.h"
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 
 struct Camera
 {

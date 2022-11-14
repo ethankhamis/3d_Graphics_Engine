@@ -2,6 +2,7 @@
 #include <iterator>
 #include "Win.h"
 #include "Application.h"
+#include "Converter.h"
 
 
 int CALLBACK WinMain(
@@ -20,12 +21,7 @@ int CALLBACK WinMain(
 	}
 	catch (const std::exception& exception)
 	{
-		// Convert e.what() to a wide string
-		std::string  cs(exception.what());
-		std::wstring ws;
-		copy(cs.begin(), cs.end(), back_inserter(ws));
-
-		MessageBoxExW(nullptr, ws.c_str()
+		MessageBoxExW(nullptr, convert::make_wstring(exception.what()).c_str()
 			, L"std Exception", MB_OK | MB_ICONEXCLAMATION,NULL);
 	}
 	catch (...)

@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <array>
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include "IndexedTriangleList.h"
 
 using std::vector;

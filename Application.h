@@ -21,6 +21,7 @@ private:
 private:
 	Spawn spawn;
 	Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
+	Model building2{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
 private:
 	void ExecFrame();
 private:

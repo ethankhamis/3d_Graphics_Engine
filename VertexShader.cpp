@@ -1,9 +1,13 @@
 
 #include "ThrowMacros.h"
 #include "VertexShader.h"
+#include "Converter.h"
+#include "BindableCodex.h"
+#include <typeinfo>
+
 namespace Bind
 {
-	VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath)
+	VertexShader::VertexShader(Graphics& gfx, const std::wstring& filepath) : pathway(filepath)
 	{
 		DEF_INFOMANAGER(gfx);
 
@@ -27,5 +31,18 @@ namespace Bind
 	ID3DBlob* VertexShader::FetchByteCode() const noexcept
 	{
 		return pByteCodeBlob.Get();
+	}
+	std::shared_ptr<VertexShader> VertexShader::Resolve(Graphics& gfx, const std::wstring& pathway)
+	{
+		return Codex::Resolve<VertexShader>(gfx, pathway);
+	}
+	std::wstring VertexShader::ConstructUID(const std::wstring& pathway)
+	{
+		using namespace std::string_literals;
+		return convert::make_wstring(typeid(VertexShader).name()) + L"#"s + pathway;
+	}
+	std::wstring VertexShader::FetchUID() const noexcept
+	{
+		return ConstructUID(pathway);
 	}
 }

@@ -1,24 +1,29 @@
 #pragma once
+#include <optional>
 #include <DirectXMath.h>
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include "IndexedTriangleList.h"
+#include "DynamicVertex.h"
 
 using std::vector;
 struct Sphere
 {
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Advanced(int Division_Latitude, int Division_Longitude);
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create()
+	static IndexedTriangleList Create_Advanced(DynamicVertex::VertexLayout vlayout,int Division_Latitude, int Division_Longitude);
+	static IndexedTriangleList Create( std::optional<DynamicVertex::VertexLayout> vlayout = std::nullopt)
 	{
-		return Create_Advanced<Vertex>(12, 24);
+		if (!vlayout)
+		{
+			vlayout = DynamicVertex::VertexLayout{}.Append(DynamicVertex::VertexLayout::MemberType::Position3D);
+		}
+		return Create_Advanced(std::move(*vlayout), 12, 24);
+		
 	}
 
 
 };
 
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude, int Division_Longitude)
+
+inline IndexedTriangleList Sphere::Create_Advanced(DynamicVertex::VertexLayout vlayout, int Division_Latitude, int Division_Longitude)
 {
 	assert(Division_Latitude >= 3);
 	assert(Division_Longitude >= 3);
@@ -28,7 +33,7 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 	const float lattitudeAngle = static_cast<float>(PI / Division_Latitude);
 	const float longitudeAngle = static_cast<float>(2.0f * PI / Division_Longitude);
 
-	std::vector<Vertex> vertices;
+	DynamicVertex::VertexBuffer vbuffer{ std::move(vlayout) };
 	for (int iLat = 1; iLat < Division_Latitude; iLat++)
 	{
 		const auto latBase = DirectX::XMVector3Transform(
@@ -37,23 +42,29 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 		);
 		for (int iLong = 0; iLong < Division_Longitude; iLong++)
 		{
-			vertices.emplace_back();
+			DirectX::XMFLOAT3 calculated_position;
 			auto v = DirectX::XMVector3Transform(
 				latBase,
 				DirectX::XMMatrixRotationZ(longitudeAngle * iLong)
 			);
-			DirectX::XMStoreFloat3(&vertices.back().position, v);
+			DirectX::XMStoreFloat3(&calculated_position, v);
+			vbuffer.Emplace_Back(calculated_position);
 		}
 	}
 
 	// add the cap vertices
-	const UINT16 iNorthPole = (unsigned short)vertices.size();
-	vertices.emplace_back();
-	DirectX::XMStoreFloat3(&vertices.back().position, base);
-	const UINT16 iSouthPole = (unsigned short)vertices.size();
-	vertices.emplace_back();
-	DirectX::XMStoreFloat3(&vertices.back().position, DirectX::XMVectorNegate(base));
-
+	const UINT16 iNorthPole = (unsigned short)vbuffer.size();
+{
+	DirectX::XMFLOAT3 north_position;
+	DirectX::XMStoreFloat3(&north_position, base);
+	vbuffer.Emplace_Back(north_position);
+}
+	const UINT16 iSouthPole = (unsigned short)vbuffer.size();
+	{
+		DirectX::XMFLOAT3 south_position;
+		DirectX::XMStoreFloat3(&south_position, DirectX::XMVectorNegate(base));
+		vbuffer.Emplace_Back(south_position);
+	}
 	const auto calcIdx = [Division_Latitude, Division_Longitude](unsigned short iLat, unsigned short iLong)
 	{ return iLat * Division_Longitude + iLong; };
 	std::vector<unsigned short> indices;
@@ -99,5 +110,5 @@ inline IndexedTriangleList<Vertex> Sphere::Create_Advanced(int Division_Latitude
 	indices.push_back(calcIdx(Division_Latitude - 2, Division_Longitude - 1));
 	indices.push_back(iSouthPole);
 
-	return { std::move(vertices),std::move(indices) };
+	return { std::move(vbuffer),std::move(indices) };
 }

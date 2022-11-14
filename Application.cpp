@@ -2,7 +2,7 @@
 #include <sstream>
 #include <memory>
 #include "Timer.h"
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include <DirectXMath.h>
 #include <algorithm>
 #include "GfxDeviceInterface+Mng.h"
@@ -30,12 +30,14 @@ void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
 
-	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
+	window.grfx().ClearBuffer(0.0f, 1.0f, 0.0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
 
 
 	building.Render(window.grfx());
+	building2.Render(window.grfx());
+
 	spawn.FetchLight()->Render(window.grfx());
 
 
@@ -98,7 +100,8 @@ void Application::ExecFrame()
 
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
-	building.PresentWindow();
+	building.PresentWindow("Model 1");
+	building2.PresentWindow("Model 2");
 	//spawn.Window(drawables);
 
 	//ImGui::End();

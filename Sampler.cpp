@@ -1,5 +1,7 @@
 #include "Sampler.h"
 #include "ThrowMacros.h"
+#include "BindableCodex.h"
+#include "Converter.h"
 namespace Bind
 {
 	Sampler::Sampler(Graphics& gfx)
@@ -18,5 +20,17 @@ namespace Bind
 	void Sampler::Bind(Graphics& gfx) noexcept
 	{
 		FetchDeviceContext(gfx)->PSSetSamplers(0, 1, pSampler.GetAddressOf());
+	}
+	std::shared_ptr<Sampler> Sampler::Resolve(Graphics& gfx)
+	{
+		return Codex::Resolve<Sampler>(gfx);//Codex::Resolve<Sampler>(gfx);
+	}
+	std::wstring Sampler::ConstructUID()
+	{
+		return convert::make_wstring(typeid(Sampler).name());
+	}
+	std::wstring Sampler::FetchUID() const noexcept
+	{
+		return ConstructUID();
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bindable.h"
+#include "BindableCodex.h"
 #include "ThrowMacros.h"
 
 namespace Bind
@@ -26,6 +27,17 @@ namespace Bind
 	public:
 		using ConstantBuffer<Ctype>::ConstantBuffer;
 		void Bind(Graphics& gfx) noexcept override;
+		static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
+		{
+			return Codex::Resolve<PixelConstantBuffer>(gfx, constants, slot);
+		}
+		static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, UINT32 slot = NULL)
+		{
+			return Codex::Resolve<PixelConstantBuffer>(gfx, slot);
+		}
+		static std::wstring ConstructUID(const Ctype&, UINT32 slot = NULL);
+		static std::wstring ConstructUID(UINT32 slot = NULL);
+		std::wstring FetchUID() const noexcept override;
 	};
 
 	template <typename Ctype>
@@ -39,6 +51,17 @@ namespace Bind
 		using ConstantBuffer<Ctype>::ConstantBuffer;
 	public:
 		void Bind(Graphics& gfx) noexcept override;
+		static std::shared_ptr<VConstantBuffer> Resolve(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
+		{
+			return Codex::Resolve<VConstantBuffer>(gfx, constants, slot);
+		}
+		static std::shared_ptr<VConstantBuffer> Resolve(Graphics& gfx, UINT32 slot = NULL)
+		{
+			return Codex::Resolve<VConstantBuffer>(gfx, slot);
+		}
+		static std::wstring ConstructUID(const Ctype&, UINT32 slot = NULL);
+		static std::wstring ConstructUID(UINT32 slot = NULL);
+		std::wstring FetchUID() const noexcept override;
 	};
 
 	template<typename Ctype>
@@ -112,6 +135,28 @@ namespace Bind
 			PSSetConstantBuffers(slot, 1u, pConstBuffer.GetAddressOf());
 	}
 
+
+
+
+	template<typename Ctype>
+	inline std::wstring PixelConstantBuffer<Ctype>::ConstructUID(const Ctype&, UINT32 slot)
+	{
+		return ConstructUID(slot);
+	}
+
+	template<typename Ctype>
+	inline std::wstring PixelConstantBuffer<Ctype>::ConstructUID(UINT32 slot)
+	{
+		using namespace std::string_literals;
+		return convert::make_wstring(typeid(PixelConstantBuffer).name()) + L"#"s + convert::make_wstring(std::to_string(slot).c_str());
+	}
+
+	template<typename Ctype>
+	inline std::wstring PixelConstantBuffer<Ctype>::FetchUID() const noexcept
+	{
+		return ConstructUID(slot);
+	}
+
 	template<typename Ctype>
 	inline void VConstantBuffer<Ctype>::Bind(Graphics& gfx) noexcept
 	{
@@ -119,4 +164,27 @@ namespace Bind
 			->
 			VSSetConstantBuffers(slot, 1u, pConstBuffer.GetAddressOf());
 	}
+
+
+
+
+	template<typename Ctype>
+	inline std::wstring VConstantBuffer<Ctype>::ConstructUID(const Ctype&, UINT32 slot)
+	{
+		return ConstructUID(slot);
+	}
+
+	template<typename Ctype>
+	inline std::wstring VConstantBuffer<Ctype>::ConstructUID(UINT32 slot)
+	{
+		using namespace std::string_literals;
+		return convert::make_wstring(typeid(VConstantBuffer).name()) + L"#"s + convert::make_wstring(std::to_string(slot).c_str());
+	}
+
+	template<typename Ctype>
+	inline std::wstring VConstantBuffer<Ctype>::FetchUID() const noexcept
+	{
+		return ConstructUID(slot);
+	}
+
 }

@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include <type_traits>
 #include <utility>
 #include <cassert>
@@ -35,42 +35,49 @@ namespace DynamicVertex {
 			using SysType = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
+			static constexpr const char* id = "POS2";
 		};
 		template<> struct Map<Position3D>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
+			static constexpr const char* id = "POS3";
 		};
 		template<> struct Map<Texture2D>
 		{
 			using SysType = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
+			static constexpr const char* id = "TEX2";
 		};
 		template<> struct Map<Float3Colour>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Colour";
+			static constexpr const char* id = "COL3";
 		};
 		template<> struct Map<Float4Colour>
 		{
 			using SysType = float4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Colour";
+			static constexpr const char* id = "COL4";
 		};
 		template<> struct Map<Normal>
 		{
 			using SysType = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
+			static constexpr const char* id = "NOR";
 		};
 		template<> struct Map<BGRAColour>
 		{
 			using SysType = DynamicVertex::BGRAColour;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Colour";
+			static constexpr const char* id = "COL8";
 		};
 
 
@@ -94,6 +101,29 @@ namespace DynamicVertex {
 			unsigned int size() const noexcept_unless
 			{
 				return size_BYTES(memberType);
+			}
+			const char* FetchID() const noexcept
+			{
+				switch (memberType)
+				{
+				case Position2D:
+					return Map<Position2D>::id;
+				case Texture2D:
+					return Map<Texture2D>::id;
+				case Position3D:
+					return Map<Position3D>::id;
+				case Float3Colour:
+					return Map<Float3Colour>::id;
+				case Normal:
+					return Map<Normal>::id;
+				case Float4Colour:
+					return Map<Float4Colour>::id;
+				case BGRAColour:
+					return Map<BGRAColour>::id;
+				}
+				assert("Unrecognised element type called" && false);
+				return "Unrecognised element";
+				
 			}
 			static constexpr unsigned int size_BYTES(MemberType type) noexcept_unless
 			{
@@ -142,7 +172,7 @@ namespace DynamicVertex {
 			}
 		private:
 			template<MemberType memtype>
-			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateD3DDesc(uint32_t offset) noexcept_unless
+			static constexpr D3D11_INPUT_ELEMENT_DESC GenerateD3DDesc(uint32_t offset) noexcept
 			{
 				return{ Map<memtype>::semantic,0,Map<memtype>::dxgiFormat,0,static_cast<uint32_t>(offset), D3D11_INPUT_PER_VERTEX_DATA,0 };
 			}
@@ -186,7 +216,7 @@ namespace DynamicVertex {
 			}
 			else
 			{
-				elements.back().FetchOffsetAfterCurrent();
+				return elements.back().FetchOffsetAfterCurrent();
 			}
 		}
 		unsigned int FetchMemberCount() const noexcept
@@ -203,6 +233,14 @@ namespace DynamicVertex {
 			}
 
 			return description;
+		}
+		std::string FetchID() const noexcept_unless
+		{
+			std::string id;
+			for (const auto& elem : elements)
+			{
+				id += elem.FetchID();
+			}return id;
 		}
 	private:
 		std::vector<Member> elements;

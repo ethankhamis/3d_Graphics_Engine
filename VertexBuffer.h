@@ -2,49 +2,29 @@
 #include "Bindable.h"
 #include "DynamicVertex.h"
 #include "ThrowMacros.h"
+#include <string>
 using Microsoft::WRL::ComPtr;
 namespace Bind
 {
 
 	struct VertexBuffer : public Bindable
 	{
-		template <class Vertex>
-		VertexBuffer(Graphics& gfx, const std::vector<Vertex>& vertices) : stride(sizeof(Vertex))
-		{
-			DEF_INFOMANAGER(gfx);
-
-			D3D11_BUFFER_DESC bufferDesc = {};
-
-			bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-			bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			bufferDesc.CPUAccessFlags = 0u;
-			bufferDesc.MiscFlags = 0u;
-			bufferDesc.ByteWidth = UINT(sizeof(Vertex) * vertices.size());
-			bufferDesc.StructureByteStride = sizeof(Vertex);
-			D3D11_SUBRESOURCE_DATA SubresourceData = {};
-			SubresourceData.pSysMem = vertices.data();
-			GFX_THROW_INFO(FetchDevice(gfx)->CreateBuffer(&bufferDesc, &SubresourceData, &pVertexBuffer));
-		}
-
-		VertexBuffer(Graphics& gfx, const DynamicVertex::VertexBuffer& vertexBuffer) :
-			stride(static_cast<uint32_t>(vertexBuffer.FetchLayout().size()))
-		{
-			DEF_INFOMANAGER(gfx);
-
-			D3D11_BUFFER_DESC bufferDesc = {};
-			bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-			bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-			bufferDesc.CPUAccessFlags = 0u;
-			bufferDesc.MiscFlags = 0u;
-			bufferDesc.ByteWidth = UINT(vertexBuffer.size_bytes());
-			bufferDesc.StructureByteStride = stride;
-			D3D11_SUBRESOURCE_DATA SubresourceData = {};
-			SubresourceData.pSysMem = vertexBuffer.FetchData();
-			GFX_THROW_INFO(FetchDevice(gfx)->CreateBuffer(&bufferDesc, &SubresourceData, &pVertexBuffer));
-		}
+		VertexBuffer(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer);
+		VertexBuffer(Graphics& gfx, const DynamicVertex::VertexBuffer& vertexBuffer);
 		void Bind(Graphics& gfx) noexcept override;
+		static std::shared_ptr<VertexBuffer> Resolve(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer);
+		template<typename...Remainder>
+		static std::wstring ConstructUID(const std::wstring& tag, Remainder&&...remainder);
+		std::wstring FetchUID() const noexcept override;
+		static std::wstring ConstructUID_(const std::wstring& tag);
 	protected:
+		std::wstring tag;
 		UINT stride;
 		ComPtr<ID3D11Buffer> pVertexBuffer;
 	};
+	template<typename ...Remainder>
+	inline std::wstring VertexBuffer::ConstructUID(const std::wstring& tag, Remainder && ...remainder)
+	{
+		return ConstructUID_(tag);
+	}
 }

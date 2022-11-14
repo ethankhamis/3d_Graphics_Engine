@@ -1,11 +1,10 @@
 #pragma once
-#include "DrawableBase.h"
+#include "Drawable.h"
 
-struct SolidLongLatSphere : public DrawableBase<SolidLongLatSphere>
+struct SolidLongLatSphere : public Drawable
 {
 	SolidLongLatSphere(
 		Graphics& gfx, float rad);
-	void Update(float dt) noexcept override;
 	DirectX::XMMATRIX FetchTransformMat() const noexcept override;
 	void SetPosition(DirectX::XMFLOAT3 position);
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "IndexedTriangleList.h"
 #include <DirectXMath.h>
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 
 class Prism
 {

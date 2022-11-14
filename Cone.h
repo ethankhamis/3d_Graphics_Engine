@@ -1,5 +1,5 @@
 #pragma once
-#include "MathematicalConstants.h"
+#include "Math.cpp"
 #include <DirectXMath.h>
 #include "IndexedTriangleList.h"
 

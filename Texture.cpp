@@ -2,13 +2,15 @@
 #include "Surface.h"
 #include "DirectXInfoManagement.h"
 #include "ThrowMacros.h"
+#include "BindableCodex.h"
 namespace Bind
 {
 
 
-	Texture::Texture(Graphics& gfx, const Surface& surface, UINT32 slot)
-	:slot(slot) {
+	Texture::Texture(Graphics& gfx, const std::wstring& pathway, UINT32 slot)
+	:slot(slot), pathway(pathway) {
 		DEF_INFOMANAGER(gfx);
+		const Surface surface = Surface::WithFile(pathway);
 		D3D11_TEXTURE2D_DESC textureDescription = {};
 		textureDescription.Width = surface.FetchWidth();
 		textureDescription.Height = surface.FetchHeight();
@@ -44,5 +46,18 @@ namespace Bind
 	void Texture::Bind(Graphics& gfx) noexcept
 	{
 		FetchDeviceContext(gfx)->PSSetShaderResources(slot, 1u, pTextureView.GetAddressOf());
+	}
+	std::shared_ptr<Texture> Texture::Resolve(Graphics& gfx, const std::wstring& pathway, UINT32 slot)
+	{
+		return Codex::Resolve<Texture>(gfx, pathway, slot);
+	}
+	std::wstring Texture::ConstructUID(const std::wstring& pathway, UINT32 slot)
+	{
+		using namespace std::string_literals;
+		return convert::make_wstring( typeid(Texture).name() ) + L"#"s + convert::make_wstring(std::to_string(slot).c_str());
+	}
+	std::wstring Texture::FetchUID() const noexcept
+	{
+		return ConstructUID(pathway, slot);
 	}
 }

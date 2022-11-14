@@ -202,6 +202,9 @@
     <Filter Include="Others\Header Files\Not Created by Me">
       <UniqueIdentifier>{43866bd2-45f6-4785-9cd3-d63a2c61cf70}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Performance &amp; Helpers\Conversions">
+      <UniqueIdentifier>{c4109bd1-7d59-4599-af8c-97e16a536a44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -309,6 +312,15 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Model</Filter>
     </ClCompile>
+    <ClCompile Include="Math.cpp">
+      <Filter>Performance &amp; Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.h">
+      <Filter>Performance &amp; Helpers\Conversions</Filter>
+    </ClCompile>
+    <ClCompile Include="Converter.cpp">
+      <Filter>Performance &amp; Helpers\Conversions</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
@@ -368,9 +380,6 @@
     <ClInclude Include="DefaultBindables.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
-    <ClInclude Include="MathematicalConstants.h">
-      <Filter>Performance &amp; Helpers</Filter>
-    </ClInclude>
     <ClInclude Include="Bindable.h">
       <Filter>Bindable</Filter>
     </ClInclude>
@@ -379,9 +388,6 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Resource Files</Filter>
-    </ClInclude>
-    <ClInclude Include="DrawableBase.h">
-      <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
       <Filter>Primatives + Binds\Primative\Plane</Filter>
@@ -595,6 +601,9 @@
     </ClInclude>
     <ClInclude Include="assimp\include\assimp\version.h">
       <Filter>Others\Header Files\Not Created by Me</Filter>
+    </ClInclude>
+    <ClInclude Include="BindableCodex.h">
+      <Filter>Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
