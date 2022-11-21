@@ -4,6 +4,7 @@
 #include "Camera.h"
 #include "Spawn.h"
 #include "Mesh.h"
+#include "BindTexturedPlane.h"
 #include "ImGUIManager.h"
 #include <set>
 
@@ -20,8 +21,9 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
+	TexturedPlane plane;
 	Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
-	Model building2{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
+	Model building2{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
 private:
 	void ExecFrame();
 private:

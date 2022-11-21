@@ -26,7 +26,7 @@ SolidLongLatSphere::SolidLongLatSphere(Graphics& gfx, float rad)
 			DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
 			float padding;
 		} colour_const;
-		ApplyBind(PixelConstantBuffer<PSColourConstant>::Resolve(gfx, colour_const));
+		ApplyBind(PixelConstantBuffer<PSColourConstant>::Resolve(gfx, colour_const,1U));
 		ApplyBind(InputLayout::Resolve(gfx, model.vertices.FetchLayout(), pvsbc));
 
 		ApplyBind(PrimTopology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));

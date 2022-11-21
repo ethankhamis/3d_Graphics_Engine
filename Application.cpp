@@ -7,7 +7,6 @@
 #include <algorithm>
 #include "GfxDeviceInterface+Mng.h"
 #include "Surface.h"
-//#include "Spawn.h"
 #include "imgui/imgui.h"
 #include "DynamicVertex.h"
 
@@ -20,8 +19,10 @@ GDIpManager gdipm;
 
 Application::Application()
 	:window(1280, 720, L"6~3D"),
-	spawn(window.grfx())
+	spawn(window.grfx()),
+	plane(window.grfx(), 15.f,L"Models\\brickwall\\brickwall.jpg")
 {
+	plane.ApplyPos({ 1.f,-5.f,10.f });
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 	//window.Mouse_DisableIcon();
 }
@@ -30,16 +31,14 @@ void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
 
-	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
+	window.grfx().ClearBuffer(1.0f, 0.0f, 0.0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
 
-
 	building.Render(window.grfx());
 	building2.Render(window.grfx());
-
 	spawn.FetchLight()->Render(window.grfx());
-
+	plane.Render(window.grfx());
 
 	while (const std::optional<Keyboard::Event> key = window.kbd.Key_Read())
 	{
@@ -100,9 +99,10 @@ void Application::ExecFrame()
 
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
+
 	building.PresentWindow("Model 1");
 	building2.PresentWindow("Model 2");
-	//spawn.Window(drawables);
+
 
 	//ImGui::End();
 	

@@ -321,6 +321,9 @@
     <ClCompile Include="Converter.cpp">
       <Filter>Performance &amp; Helpers\Conversions</Filter>
     </ClCompile>
+    <ClCompile Include="BindTexturedPlane.cpp">
+      <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
@@ -604,6 +607,9 @@
     </ClInclude>
     <ClInclude Include="BindableCodex.h">
       <Filter>Bindable</Filter>
+    </ClInclude>
+    <ClInclude Include="BindTexturedPlane.h">
+      <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
