@@ -650,6 +650,9 @@
     <FxCompile Include="PhongShaderPSSpecularMap.hlsl">
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
+    <FxCompile Include="PhongShaderNormalPS.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="assimp\include\assimp\color4.inl">

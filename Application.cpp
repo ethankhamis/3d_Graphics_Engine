@@ -102,6 +102,7 @@ void Application::ExecFrame()
 
 	building.PresentWindow("Model 1");
 	building2.PresentWindow("Model 2");
+	plane.Open_Window(window.grfx());
 
 
 	//ImGui::End();

@@ -23,7 +23,7 @@ protected: // member functions involving adding
 	template<class Type>
 	Type* QueryBindableObj() noexcept
 	{
-		for (std::unique_ptr<Bind::Bindable>& pbind : allBinds)
+		for (std::shared_ptr<Bind::Bindable>& pbind : allBinds)
 		{
 			if (auto pType = dynamic_cast<Type*>(pbind.get()))
 			{
