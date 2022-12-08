@@ -23,10 +23,10 @@ void PointLight::ControlWnd() noexcept
 		ImGui::ColorEdit3("Diffuse Colour", &constbuffer_data.diffuseColour.x);
 		ImGui::ColorEdit3("Ambience", &constbuffer_data.ambient.x);
 
-		ImGui::Text("Falloff Parameters");
-		ImGui::SliderFloat("Constant", &constbuffer_data.attConst, 0.05f, 10.0f, "%.2f", 4);
-		ImGui::SliderFloat("Linear", &constbuffer_data.attLin, 0.0001f, 4.0f, "%.4f", 8);
-		ImGui::SliderFloat("Quadratic", &constbuffer_data.attQuad, 0.0000001f, 10.0f, "%.7f", 10);
+		//ImGui::Text("Falloff Parameters");
+		//ImGui::SliderFloat("Constant", &constbuffer_data.attConst, 0.05f, 10.0f, "%.2f", 4);
+		//ImGui::SliderFloat("Linear", &constbuffer_data.attLin, 0.0001f, 4.0f, "%.4f", 8);
+		//ImGui::SliderFloat("Quadratic", &constbuffer_data.attQuad, 0.0000001f, 10.0f, "%.7f", 10);
 
 		if (ImGui::Button("Reset"))
 		{

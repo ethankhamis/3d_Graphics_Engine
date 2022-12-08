@@ -1,10 +1,11 @@
 #pragma once
 #include "Drawable.h"
 #include "Math.cpp"
+#include <optional>
 
 struct TexturedPlane : public Drawable
 {
-	TexturedPlane(Graphics& gfx, float size, std::wstring texture);
+	TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal);
 	void ApplyPos(float3 pos) noexcept;
 	void ApplyRot(float roll, float pitch, float yaw) noexcept;
 	matrix FetchTransformMat() const noexcept override;
@@ -17,8 +18,9 @@ private:
 		  yaw = 0.f;
 	struct PixelShaderMaterialProperties
 	{
-		float specular_power = 20.f,
-			  specular_intensity = .1f;
+		float
+			specular_intensity = .1f,
+			specular_power = 20.f;
 		int normal_map_state = 1;
 		float padding[1];
 	}pixelshaderproperties;

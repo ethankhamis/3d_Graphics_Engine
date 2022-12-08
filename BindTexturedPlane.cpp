@@ -3,8 +3,9 @@
 #include "Converter.h"
 #include "imgui/imgui.h"
 #include "DefaultBindables.h"
+#include <optional>
 
-TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture)
+TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal)
 {
 	IndexedTriangleList plane = Plane::Create_Textured();
 	plane.Transform(DirectX::XMMatrixScaling(size, size, 1.f));
@@ -12,6 +13,7 @@ TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture)
 	ApplyBind(Bind::VertexBuffer::Resolve(gfx, geometry_tag, plane.vertices));
 	ApplyBind(Bind::IndexBuffer::Resolve(gfx, geometry_tag, plane.indices));
 	ApplyBind(Bind::Texture::Resolve(gfx, texture));
+	ApplyBind(Bind::Texture::Resolve(gfx, normal.value(), 1u));
 	std::shared_ptr<Bind::VertexShader> pVertexShader = Bind::VertexShader::Resolve(gfx, L"PhongShaderVS.cso");
 	auto pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	ApplyBind(std::move(pVertexShader));
