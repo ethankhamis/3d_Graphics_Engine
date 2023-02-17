@@ -4,13 +4,13 @@
 #include <sstream>
 #include "Surface.h"
 
-Mesh::Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::Bindable>> pBinds)
+Mesh::Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::isBinded>> pBinds)
 {
 	
-	ApplyBind(Bind::PrimTopology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	ApplyBind(Bind::PrimTopology::Store(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
 
-	for (std::shared_ptr<Bind::Bindable>& pBindable : pBinds)
+	for (std::shared_ptr<Bind::isBinded>& pBindable : pBinds)
 	{
 		
 		ApplyBind(std::move(pBindable));
@@ -23,7 +23,7 @@ Mesh::Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::Bindable>> pBinds)
 void Mesh::Render(Graphics& gfx, DirectX::FXMMATRIX accumulatedTransform) const noexcept_unless
 {
 	DirectX::XMStoreFloat4x4(&transform, accumulatedTransform);
-	Drawable::Render(gfx);
+	isRendered::Render(gfx);
 }
 
 DirectX::XMMATRIX Mesh::FetchTransformMat() const noexcept
@@ -268,7 +268,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		
 	}
 
-	vector<std::shared_ptr<Bind::Bindable>> bindablePtrs;
+	vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
 	using namespace std::string_literals;
 	const std::wstring base = L"Models\\nanosuit_textured\\"s;
 
@@ -281,41 +281,41 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		aiString texture_filename; mat.GetTexture(aiTextureType_DIFFUSE, NULL, &texture_filename);
 		std::string temp = texture_filename.C_Str();
 		std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-		bindablePtrs.push_back(Bind::Texture::Resolve(gfx, base + texture_filename_w));  //1111111111111111111111111111111111111
+		bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w));  //1111111111111111111111111111111111111
 		if (mat.GetTexture(aiTextureType_SPECULAR, NULL, &texture_filename) == aiReturn_SUCCESS /*0*/)
 		{
 			texture_filename_w.clear();
 			temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Resolve(gfx, base + texture_filename_w, 1)); //22222222222222222222222222222222222
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 1)); //22222222222222222222222222222222222
 			ContainsSpecular = true;
 		}
 		else
 		{
 			mat.Get(AI_MATKEY_SHININESS, shininess);
 		}
-		bindablePtrs.push_back(Bind::Sampler::Resolve(gfx));
+		bindablePtrs.push_back(Bind::Sampler::Store(gfx));
 	}
 
 	std::wstring mesh_name = base + L"%" + convert::make_wstring(mesh.mName.C_Str());
 
-	bindablePtrs.push_back(Bind::VertexBuffer::Resolve(gfx,mesh_name,VertexBuf));
+	bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx,mesh_name,VertexBuf));
 
-	bindablePtrs.push_back(Bind::IndexBuffer::Resolve(gfx, mesh_name, indices));
+	bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
 
 	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
-	auto pVertexShader = Bind::VertexShader::Resolve(gfx, L"PhongShaderVS.cso");
+	auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVS.cso");
 	ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	bindablePtrs.push_back(std::move(pVertexShader));
 
-	bindablePtrs.push_back(Bind::InputLayout::Resolve(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
+	bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
 	if (ContainsSpecular)
 	{
-		bindablePtrs.push_back(Bind::PixelShader::Resolve(gfx,L"PhongShaderPSSpecularMap.cso"));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx,L"PhongShaderPSSpecularMap.cso"));
 	}
 	else
 	{
-		bindablePtrs.push_back(Bind::PixelShader::Resolve(gfx, L"PhongShaderPS.cso"));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderPS.cso"));
 
 		struct PSMaterialConstant
 		{
@@ -326,7 +326,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
 		pixelMatConstant.specularPower = shininess;
-		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pixelMatConstant, 1u));
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant>::Store(gfx, pixelMatConstant, 1u));
 	}
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }

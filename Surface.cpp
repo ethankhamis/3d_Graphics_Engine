@@ -124,48 +124,56 @@ Surface Surface::WithFile(const std::wstring& filename)
 
     {
         gdp::Bitmap bitmap(filename.c_str());
+        // create bitmap type using filename
         if (bitmap.GetLastStatus() != gdp::Status::Ok)
-        {
+        {//if an error occurs
             std::wstringstream wss;
             wss << L"Loading image {" << filename << L"}: has failed to load.";
             throw Exception(__LINE__, WFILE, wss.str());
         }
-
+        // initialise parameters for surface
         w = bitmap.GetWidth();;
         h = bitmap.GetHeight();
         pBuffer = std::make_unique<Colour[]>(w * h);
 
+        // O(n"2) Time Complexity
+        // Nested Loop
         for (UINT y = 0; y < h; y++)
         {
             for (UINT x = 0; x < w; x++)
             {
+                //create colour object
                 gdp::Color c;
+                //find colour at specific x/u y/v levels of bitmap
                 bitmap.GetPixel(x, y, &c);
+                //set buffer to pixel value
                 pBuffer[y * w + x] = c.GetValue();
             }
         }
     }
+    // return correctly constructed Surface type
     return Surface(w,h,std::move(pBuffer));
 }
 
 void Surface::SaveFile(const std::wstring& filename) const
 {
-
+    // lambda function which returns void
     auto GetEncoderClsid = [&filename](const WCHAR* format, CLSID* pClsid) -> void
     {
-        unsigned int n = NULL;          // number of image encoders
-        unsigned int size = NULL;       // size of the image encoder array in bytes
+        unsigned int n = NULL;          // n = number of image encoders
+        unsigned int size = NULL;       // size = size of the image encoder array in bytes
 
         gdp::ImageCodecInfo* pImageCodecInfo = nullptr;
 
         gdp::GetImageEncodersSize(&n, &size);
+        //if the encoder size is not provided
         if (size == NULL)
         {
             std::wstringstream wss;
             wss << L"Saving surface to [" << filename << L"]: failed to get encoder; size == 0.";
             throw Exception(__LINE__, WFILE, wss.str());
         }
-
+        //allocate dynamic memory to store image codec information
         pImageCodecInfo = (gdp::ImageCodecInfo*)(malloc(size));
         if (pImageCodecInfo == nullptr)
         {
@@ -173,31 +181,35 @@ void Surface::SaveFile(const std::wstring& filename) const
             wss << L"Saving surface to [" << filename << L"]: failed to get encoder; failed to allocate memory.";
             throw Exception(__LINE__, WFILE, wss.str());
         }
-
+        //GdiPlus function
         GetImageEncoders(n, size, pImageCodecInfo);
-
+       // definite loop to image encoders
         for (UINT j = NULL; j < n; ++j)
         {
+            //compare both wide strings to ensure that they have the same encoder
             if (wcscmp(pImageCodecInfo[j].MimeType, format) == NULL)
             {
+                //point to the codec information
                 *pClsid = pImageCodecInfo[j].Clsid;
                 free(pImageCodecInfo);
                 return;
             }
         }
-
+        //equivalent to for else in python
         free(pImageCodecInfo);
+        //free the dynamic memory storing the image codec
         std::wstringstream wss;
         wss << L"Saving surface to [" << filename <<
             L"]: failed to get encoder; failed to find matching encoder.";
         throw Exception(__LINE__, WFILE, wss.str());
     };
-
+    //create a bitmap entity 
     CLSID bmpID;
     GetEncoderClsid(L"image/bmp", &bmpID);
 
 
     gdp::Bitmap bitmap(width, height, width * sizeof(Colour), PixelFormat32bppARGB, (BYTE*)pBuffer.get());
+    //if the error status is negative
     if (bitmap.Save(filename.c_str(), &bmpID, nullptr) != gdp::Status::Ok)
     {
         std::wstringstream wss;
@@ -210,17 +222,21 @@ void Surface::Copy(const Surface& src) noexcept_unless
 {
     assert(width == src.width);
     assert(height == src.height);
+    int s = width * height *
+        sizeof(Colour);
+    // copy the value of bytes from the original source
+    //to the current buffer of s (size of the buffer)
     memcpy
     (
         pBuffer.get(),
         src.pBuffer.get(),
-        width * height *
-        sizeof(Colour)
+        s
     );
 }
 
 void Surface::gfxAsserts(unsigned int x, unsigned int y) const
 {
+    //asserts to make sure the x/u, y/v
     assert(x >= 0);
     assert(y >= 0);
     assert(x < width);

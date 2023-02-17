@@ -1,5 +1,5 @@
 #pragma once
-#include "Drawable.h"
+#include "isRendered.h"
 #include "ThrowMacros.h"
 #include <typeinfo>
 #include "IndexBuffer.h"
@@ -7,15 +7,15 @@
 
 using namespace Bind;
 
-void Drawable::Render(Graphics& gfx) const noexcept_unless
+void isRendered::Render(Graphics& gfx) const noexcept_unless
 {
 	for (auto& bind : allBinds){ bind->Bind(gfx); }
-	
+	//render geometry using count from the index buffer 
 	gfx.RenderIndexed(pIndexBuffer->FetchCount());
 }
 
 
-void Drawable::ApplyBind(std::shared_ptr<Bind::Bindable> bind) noexcept_unless
+void isRendered::ApplyBind(std::shared_ptr<Bind::isBinded> bind) noexcept_unless
 {
 	if (typeid(*bind) == typeid(IndexBuffer))
 	{

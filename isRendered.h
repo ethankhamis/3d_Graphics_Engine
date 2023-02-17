@@ -6,24 +6,24 @@
 
 namespace Bind
 {
-	struct Bindable;
+	struct isBinded;
 	struct IndexBuffer;
 }
-struct Drawable
+struct isRendered
 {
 public:
-	Drawable() = default;
-	Drawable(const Drawable& ) = delete;
+	isRendered() = default;
+	isRendered(const isRendered& ) = delete;
 
 public: // standard member functions
 	virtual DirectX::XMMATRIX FetchTransformMat() const noexcept = 0; //make abstract
 	void Render(Graphics& gfx) const noexcept_unless; // noexcept unless debugging (preprocessor def'd)
-	virtual ~Drawable() = default;
+	virtual ~isRendered() = default;
 protected: // member functions involving adding
 	template<class Type>
 	Type* QueryBindableObj() noexcept
 	{
-		for (std::shared_ptr<Bind::Bindable>& pbind : allBinds)
+		for (std::shared_ptr<Bind::isBinded>& pbind : allBinds)
 		{
 			if (auto pType = dynamic_cast<Type*>(pbind.get()))
 			{
@@ -32,8 +32,8 @@ protected: // member functions involving adding
 		}
 		return nullptr;
 	}
-	void ApplyBind(std::shared_ptr<Bind::Bindable> bind) noexcept_unless;
+	void ApplyBind(std::shared_ptr<Bind::isBinded> bind) noexcept_unless;
 private:
 	const Bind::IndexBuffer* pIndexBuffer = nullptr;
-	std::vector<std::shared_ptr<Bind::Bindable>> allBinds;
+	std::vector<std::shared_ptr<Bind::isBinded>> allBinds;
 };

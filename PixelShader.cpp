@@ -1,6 +1,6 @@
 #include "PixelShader.h"
 #include "ThrowMacros.h"
-#include "BindableCodex.h"
+#include "isBinded_Storage.h"
 namespace Bind
 {
 	namespace WRL = Microsoft::WRL;
@@ -12,6 +12,7 @@ namespace Bind
 		GFX_THROW_INFO(D3DReadFileToBlob(filepath.c_str(), &pBlob));
 		GFX_THROW_INFO
 		(
+			//create pixel chader and free size for it
 			FetchDevice(gfx)
 			->
 			CreatePixelShader(pBlob->GetBufferPointer(),
@@ -21,13 +22,14 @@ namespace Bind
 
 	void PixelShader::Bind(Graphics& gfx) noexcept
 	{
+		//bind the pixel shader to use
 		FetchDeviceContext(gfx)
 			->
 			PSSetShader(pPixelShader.Get(), nullptr, 0u);
 	}
-	std::shared_ptr<PixelShader> PixelShader::Resolve(Graphics& gfx, const std::wstring& pathway)
+	std::shared_ptr<PixelShader> PixelShader::Store(Graphics& gfx, const std::wstring& pathway)
 	{
-		return Codex::Resolve<PixelShader>(gfx, pathway);
+		return Repository::Store<PixelShader>(gfx, pathway);
 	}
 	std::wstring PixelShader::ConstructUID(const std::wstring& path)
 	{

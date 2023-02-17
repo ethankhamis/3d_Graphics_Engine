@@ -14,22 +14,22 @@ SolidLongLatSphere::SolidLongLatSphere(Graphics& gfx, float rad)
 
 		const std::wstring Geometry_name = L"$sphere. " + convert::make_wstring(std::to_string(rad).c_str());
 
-		ApplyBind(VertexBuffer::Resolve(gfx, Geometry_name, model.vertices));
-		ApplyBind(IndexBuffer::Resolve(gfx, Geometry_name , model.indices));
+		ApplyBind(VertexBuffer::Store(gfx, Geometry_name, model.vertices));
+		ApplyBind(IndexBuffer::Store(gfx, Geometry_name , model.indices));
 
-		std::shared_ptr<Bind::VertexShader> pVertexShader = VertexShader::Resolve(gfx, L"SolidVS.cso");
+		std::shared_ptr<Bind::VertexShader> pVertexShader = VertexShader::Store(gfx, L"SolidVS.cso");
 		ID3DBlob* pvsbc = pVertexShader->FetchByteCode();
 		ApplyBind(std::move(pVertexShader));
-		ApplyBind(PixelShader::Resolve(gfx, L"SolidPS.cso"));
+		ApplyBind(PixelShader::Store(gfx, L"SolidPS.cso"));
 		struct PSColourConstant
 		{
 			DirectX::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
 			float padding;
 		} colour_const;
-		ApplyBind(PixelConstantBuffer<PSColourConstant>::Resolve(gfx, colour_const,1U));
-		ApplyBind(InputLayout::Resolve(gfx, model.vertices.FetchLayout(), pvsbc));
+		ApplyBind(PixelConstantBuffer<PSColourConstant>::Store(gfx, colour_const,1U));
+		ApplyBind(InputLayout::Store(gfx, model.vertices.FetchLayout(), pvsbc));
 
-		ApplyBind(PrimTopology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		ApplyBind(PrimTopology::Store(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 		ApplyBind(std::make_shared<TransformConstBuffer>(gfx, *this));
 }
 

@@ -77,7 +77,7 @@ public:
 	struct HResultException : public ExceptionHandler
 	{
 		HResultException(unsigned int curLine, const wchar_t* fName, HRESULT hResult) noexcept;
-		const wchar_t* whatw() const noexcept override; //override std::ExceptionHandler's 'what()' func
+		const wchar_t* whatw() const noexcept override; //override std::ExceptionHandler's 'whatw()' func
 		std::wstring FetchErrorDescription() const noexcept;
 		/*virtual*/ const wchar_t* FetchErrorType() const noexcept override;
 		HRESULT FetchErrorCode() const noexcept;

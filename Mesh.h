@@ -2,7 +2,7 @@
 #include "Math.cpp"
 #include "DynamicVertex.h"
 #include "DefaultBindables.h"
-#include "Drawable.h"
+#include "isRendered.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -22,9 +22,9 @@ private:
 	std::wstring note;
 };
 
-struct Mesh : public Drawable
+struct Mesh : public isRendered
 {
-	Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::Bindable>> bindPtrs);
+	Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::isBinded>> bindPtrs);
 	void Render(Graphics& gfx, const matrix accumulatedTransform) const noexcept_unless;
 	matrix FetchTransformMat() const noexcept override;
 private:

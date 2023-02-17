@@ -20,25 +20,27 @@ DxGfxInfoMng::DxGfxInfoMng()
 	const auto hModDxgiDebug = LoadLibraryExW(L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
 	if (hModDxgiDebug == nullptr)
 	{
-		throw EHWND_LAST_EXCEPT();
+		throw WINDOW_LAST_EXCEPT();
 	}
 	
-	// get address of DXGIGetDebugInterface in dll
+	// fetch address of DXGIGetDebugInterface in dll
 	const auto DxgiGetDebugInterface = reinterpret_cast<DXGIGetDebugInterface>(
 		reinterpret_cast<void*>(GetProcAddress(hModDxgiDebug, "DXGIGetDebugInterface"))
 		);
 	if (DxgiGetDebugInterface == nullptr)
 	{
-		throw EHWND_LAST_EXCEPT();
+		throw WINDOW_LAST_EXCEPT();
 	}
 	
 	HRESULT hr;
+	// store info using the debug interface
 	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pIDxGfxInfoQueue));
 	
 }
 
 void DxGfxInfoMng::Apply() noexcept
 {
+	// store the number of messages using GUID type DXGI_DEBUG_ALL
 	nextMsg = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
@@ -48,6 +50,7 @@ std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 
 
 	const auto end = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
+	// loop first messagee to last message
 	for (auto i = nextMsg; i < end; i++)
 	{
 		HRESULT hr;
@@ -58,12 +61,12 @@ std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 		// allocate memory for message
 		std::unique_ptr bytes = std::make_unique<byte[]>(messageLength);
 		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
-		// get the message and push description into std::vector
+		// get the message
 		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
-
+		//describe description into std::vector
 		messages.emplace_back(pMessage->pDescription);
 	}
-
+	//return vector of messages
 	return messages;
 
 }

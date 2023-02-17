@@ -1,10 +1,11 @@
 #include "TransformConstBuffer.h"
 
+
 namespace Bind
 {
 
 
-	TransformConstBuffer::TransformConstBuffer(Graphics& gfx, const Drawable& parent, UINT slot) noexcept
+	TransformConstBuffer::TransformConstBuffer(Graphics& gfx, const isRendered& parent, UINT slot) noexcept
 		:
 		parent(parent)
 	{
@@ -13,9 +14,27 @@ namespace Bind
 
 	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
 	{
-		const DirectX::XMMATRIX modelView = parent.FetchTransformMat() * gfx.FetchCameraMat();
+		//update and bind the constant buffer
+		UpdateBind(gfx, FetchTransforms(gfx));
+	}
 
-		const allTransforms transforms =
+	void TransformConstBuffer::UpdateBind(Graphics& gfx, const allTransforms& transforms) noexcept
+	{
+		//update constant buffer with most recent information
+		pVConstBuffer->Update(gfx, transforms);
+		//bind updated buffer
+		pVConstBuffer->Bind(gfx);
+	}
+
+	TransformConstBuffer::allTransforms TransformConstBuffer::FetchTransforms(Graphics& gfx) noexcept
+	{
+		//intiialise model view to the transformation matrix multiplied by the camera matrix
+		const DirectX::XMMATRIX modelView = parent.FetchTransformMat() * gfx.FetchCameraMat();
+		// return the transposed matrices
+		// with their row and column flipped to be represented in the correct form for directx
+		//directx uses row major matrices which differ from column major's
+		//model view multiplied by projection IS the model view projection
+		return
 		{
 			DirectX::XMMatrixTranspose(modelView),
 			DirectX::XMMatrixTranspose
@@ -24,9 +43,6 @@ namespace Bind
 				gfx.FetchProjection()
 			)
 		};
-
-		pVConstBuffer->Update(gfx, transforms);
-		pVConstBuffer->Bind(gfx);
 	}
 
 	std::unique_ptr<VConstantBuffer<TransformConstBuffer::allTransforms>> TransformConstBuffer::pVConstBuffer;

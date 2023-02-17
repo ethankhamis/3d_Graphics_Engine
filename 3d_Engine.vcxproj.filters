@@ -255,10 +255,10 @@
     <ClCompile Include="TransformConstBuffer.cpp">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClCompile>
-    <ClCompile Include="Bindable.cpp">
+    <ClCompile Include="isBinded.cpp">
       <Filter>Bindable</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable.cpp">
+    <ClCompile Include="isRendered.cpp">
       <Filter>Drawable</Filter>
     </ClCompile>
     <ClCompile Include="BindSolidLongLatSphere.cpp">
@@ -383,10 +383,10 @@
     <ClInclude Include="DefaultBindables.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
-    <ClInclude Include="Bindable.h">
+    <ClInclude Include="isBinded.h">
       <Filter>Bindable</Filter>
     </ClInclude>
-    <ClInclude Include="Drawable.h">
+    <ClInclude Include="isRendered.h">
       <Filter>Drawable</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
@@ -605,11 +605,14 @@
     <ClInclude Include="assimp\include\assimp\version.h">
       <Filter>Others\Header Files\Not Created by Me</Filter>
     </ClInclude>
-    <ClInclude Include="BindableCodex.h">
+    <ClInclude Include="isBinded_Storage.h">
       <Filter>Bindable</Filter>
     </ClInclude>
     <ClInclude Include="BindTexturedPlane.h">
       <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
+    </ClInclude>
+    <ClInclude Include="DualTransformConstBuffer.h">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

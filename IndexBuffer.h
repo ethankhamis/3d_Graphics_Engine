@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Bindable.h"
+#include "isBinded.h"
 
 namespace Bind
 {
 	namespace WRL = Microsoft::WRL;
-	struct IndexBuffer : public Bindable
+	struct IndexBuffer : public isBinded
 	{
 		IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices);
 		IndexBuffer(Graphics& gfx, std::wstring tag, const std::vector<UINT16>& indices);
@@ -14,7 +14,7 @@ namespace Bind
 	public:
 		unsigned int FetchCount() const noexcept;
 	public:
-		static std::shared_ptr<IndexBuffer> Resolve(Graphics& gfx, const std::wstring& tag, const std::vector<UINT16> indices);
+		static std::shared_ptr<IndexBuffer> Store(Graphics& gfx, const std::wstring& tag, const std::vector<UINT16> indices);
 		template<typename ...Remainder>
 		static std::wstring ConstructUID(const std::wstring& tag, Remainder&& ...remainder)
 		{

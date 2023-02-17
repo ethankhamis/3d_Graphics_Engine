@@ -9,8 +9,6 @@
 #include "debugdefs.h"
 
 namespace DynamicVertex {
-
-
 	typedef colours::BGRAColour BGRAColour;
 
 	struct VertexLayout
@@ -27,8 +25,6 @@ namespace DynamicVertex {
 
 			Count,
 		};
-
-
 		template<MemberType> struct Map;
 		template<> struct Map<Position2D>
 		{
@@ -79,8 +75,6 @@ namespace DynamicVertex {
 			static constexpr const char* semantic = "Colour";
 			static constexpr const wchar_t* id = L"COL8";
 		};
-
-
 
 		struct Member
 		{
@@ -187,7 +181,7 @@ namespace DynamicVertex {
 		};
 	public:
 		template<MemberType elem_t>
-		const Member& Resolve() const noexcept_unless
+		const Member& Store() const noexcept_unless
 		{
 			for (const VertexLayout::Member& e : elements)
 			{
@@ -281,6 +275,7 @@ namespace DynamicVertex {
 		template<typename First, typename ...Others>
 		void SetAttributeByIndex(unsigned int idx, First&& first, Others&&... others) noexcept_unless
 		{
+			//template recursion
 			SetAttributeByIndex(idx, std::forward<First>(first));
 			SetAttributeByIndex(idx + 1, std::forward<Others>(others)...);
 		}
@@ -370,7 +365,7 @@ namespace DynamicVertex {
 	template<VertexLayout::MemberType elem_t>
 	inline auto& Vertex::Attribute() noexcept_unless
 	{
-		auto pAttribute = pVertexData + layout.Resolve<elem_t>().FetchOffset();
+		auto pAttribute = pVertexData + layout.Store<elem_t>().FetchOffset();
 		return *reinterpret_cast<typename VertexLayout::Map<elem_t>::SysType*>(pAttribute);
 	}
 
@@ -379,7 +374,7 @@ namespace DynamicVertex {
 	{
 		const auto& member = layout.ResolveByIndex(idx);
 		auto pAttribute = pVertexData + member.FetchOffset();
-
+		// find type and apply it depending on its case
 		switch (member.FetchType())
 		{
 		case VertexLayout::Position2D:

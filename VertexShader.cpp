@@ -2,7 +2,7 @@
 #include "ThrowMacros.h"
 #include "VertexShader.h"
 #include "Converter.h"
-#include "BindableCodex.h"
+#include "isBinded_Storage.h"
 #include <typeinfo>
 
 namespace Bind
@@ -23,6 +23,7 @@ namespace Bind
 
 	void VertexShader::Bind(Graphics& gfx) noexcept
 	{
+		//bind the vertex shader 
 		FetchDeviceContext(gfx)
 			->
 			VSSetShader(pVertexShader.Get(), nullptr, 0u);
@@ -32,9 +33,9 @@ namespace Bind
 	{
 		return pByteCodeBlob.Get();
 	}
-	std::shared_ptr<VertexShader> VertexShader::Resolve(Graphics& gfx, const std::wstring& pathway)
+	std::shared_ptr<VertexShader> VertexShader::Store(Graphics& gfx, const std::wstring& pathway)
 	{
-		return Codex::Resolve<VertexShader>(gfx, pathway);
+		return Repository::Store<VertexShader>(gfx, pathway);
 	}
 	std::wstring VertexShader::ConstructUID(const std::wstring& pathway)
 	{

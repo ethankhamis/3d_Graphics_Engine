@@ -5,11 +5,11 @@
 struct Camera
 {
 	Camera() noexcept;
-	matrix FetchMatrix() const noexcept;
-	void ConstructControlWindow() noexcept;
-	void Resetv() noexcept;
-	void Rotate_by(float delta_x, float delta_y) noexcept;
-	void Translate_by(float3 translation) noexcept;
+	matrix FetchMatrix() const noexcept; // return matrix 
+	void ConstructControlWindow() noexcept; // create control window
+	void Resetv() noexcept; // reset camera
+	void Rotate_by(float delta_x, float delta_y) noexcept; // rotate camera matrix
+	void Translate_by(float3 translation) noexcept; // alter matrix position
 private:
 	float3 position;
 	float pitch, yaw;

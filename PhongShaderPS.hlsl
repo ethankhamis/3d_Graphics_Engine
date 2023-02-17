@@ -2,11 +2,11 @@ cbuffer LightCBuf
 {
     float3 lightPos;
     float3 ambient;
-    float3 diffuseColor;
+    float3 diffuseColour;
     float diffuseIntensity;
     float attConst;
-    float attLin;
-    float attQuad;
+    float linear_attenuation;
+    float Quadratic_attenuation;
 };
 
 cbuffer ObjectCBuf
@@ -24,18 +24,19 @@ SamplerState splr;
 float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
 {
     // fragment to light vector data
-    const float3 vToL = lightPos - worldPos;
-    const float distToL = length(vToL);
-    const float3 dirToL = vToL / distToL;
+    const float3 Vector_To_Light = lightPos - worldPos;
+    const float Distance_ofVector_To_Light = length(Vector_To_Light);
+    const float3 Direction_Vector_To_Light = Vector_To_Light / Distance_ofVector_To_Light;
     // attenuation
-    const float att = 1.0f / (attConst + attLin * distToL + attQuad * (distToL * distToL));
+    const float attenuation = 1.0f / (attConst + linear_attenuation * Distance_ofVector_To_Light + Quadratic_attenuation * (Distance_ofVector_To_Light * Distance_ofVector_To_Light));
     // diffuse intensity
-    const float3 diffuse = diffuseColor * diffuseIntensity * att * max(0.0f, dot(dirToL, n));
+    const float3 diffuse = diffuseColour * diffuseIntensity * attenuation * max(0.0f, dot(Direction_Vector_To_Light, n));
     // reflected light vector
-    const float3 w = n * dot(vToL, n);
-    const float3 r = w * 2.0f - vToL;
+    const float3 w = n * dot(Vector_To_Light, n);
+    const float3 r = w * 2.0f - Vector_To_Light;
     // calculate specular intensity based on angle between viewing vector and reflection vector, narrow with power function
-    const float3 specular = att * (diffuseColor * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
-    // final color
+    const float3 specular = attenuation * (diffuseColour * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
+    // final Colour
+    // does not account for specular highlight
     return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specular), 1.0f);
 }

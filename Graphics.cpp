@@ -138,6 +138,7 @@ void Graphics::EndFrame()
 #ifndef NDEBUG
 	infomanager.Apply();
 #endif
+	//perform flipping presentation
 	if (FAILED(hr = pSwapChain->Present(1u, 0u)))
 	{
 		if (hr == DXGI_ERROR_DEVICE_REMOVED){

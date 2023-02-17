@@ -1,9 +1,9 @@
 #pragma once
-#include "Drawable.h"
+#include "isRendered.h"
 #include "Math.cpp"
 #include <optional>
 
-struct TexturedPlane : public Drawable
+struct TexturedPlane : public isRendered
 {
 	TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal);
 	void ApplyPos(float3 pos) noexcept;

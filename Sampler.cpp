@@ -1,6 +1,6 @@
 #include "Sampler.h"
 #include "ThrowMacros.h"
-#include "BindableCodex.h"
+#include "isBinded_Storage.h"
 #include "Converter.h"
 namespace Bind
 {
@@ -21,9 +21,9 @@ namespace Bind
 	{
 		FetchDeviceContext(gfx)->PSSetSamplers(0, 1, pSampler.GetAddressOf());
 	}
-	std::shared_ptr<Sampler> Sampler::Resolve(Graphics& gfx)
+	std::shared_ptr<Sampler> Sampler::Store(Graphics& gfx)
 	{
-		return Codex::Resolve<Sampler>(gfx);//Codex::Resolve<Sampler>(gfx);
+		return Repository::Store<Sampler>(gfx);//Repository::Store<Sampler>(gfx);
 	}
 	std::wstring Sampler::ConstructUID()
 	{

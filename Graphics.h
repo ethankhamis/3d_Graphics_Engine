@@ -14,12 +14,12 @@
 
 namespace Bind
 {
-	struct Bindable;
+	struct isBinded;
 }
 
 struct Graphics
 {
-	friend Bind::Bindable;
+	friend Bind::isBinded;
 public:
 	Graphics( HWND hWnd, int w, int h);
 	Graphics(const Graphics&) = delete;

@@ -4,7 +4,7 @@
 
 class Mouse
 {
-	friend class Window;
+	friend class Wnd;
 public:
 	struct Raw_Delta { int x, y; };
 public:
@@ -83,7 +83,7 @@ public:
 		return buffer.empty();
 	}
 	void Clear() noexcept;
-public:
+private:
 	void Mouse_Pos_Change(int x_, int y_) noexcept;
 	void Middle_Mouse_Pressed(int x, int y) noexcept;
 	void Middle_Mouse_Released(int x, int y) noexcept;
@@ -91,12 +91,13 @@ public:
 	void Left_Released(int x, int y) noexcept;
 	void Right_Pressed(int x, int y) noexcept;
 	void Right_Released(int x, int y) noexcept;
+public:
 	std::optional<Raw_Delta> Access_Raw_Data() noexcept;
 public:
 	void Raw_Mouse_Enable() noexcept;
 	void Raw_Mouse_Disable() noexcept;
 	bool Raw_Mouse_Status() const noexcept;
-public:
+private:
 	void Wheel_Up(int x, int y) noexcept;
 	void Wheel_Down(int x, int y) noexcept;
 	void Wheel_Delta(int x, int y, int delta) noexcept;

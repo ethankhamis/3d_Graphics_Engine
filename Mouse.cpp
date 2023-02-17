@@ -64,9 +64,7 @@ void Mouse::Middle_Mouse_Pressed(int x, int y) noexcept
 	middle_mouse_Pressed = true;
 	buffer.push(Mouse::Event(Mouse::Event::TypeName::MMouse, *this));
 	Buffer_ReduceSize();
-	
 }
-
 void Mouse::Middle_Mouse_Released(int x, int y) noexcept
 {
 	middle_mouse_Pressed = true;

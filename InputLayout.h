@@ -1,17 +1,17 @@
 #pragma once
-#include "Bindable.h"
+#include "isBinded.h"
 #include "DynamicVertex.h"
 
 namespace Bind
 {
 	namespace WRL = Microsoft::WRL;
-	struct InputLayout : public Bindable
+	struct InputLayout : public isBinded
 	{
 		InputLayout(Graphics& gfx, DynamicVertex::VertexLayout layout,
 			ID3DBlob* pVertexShaderByteCode);
 		void Bind(Graphics& gfx) noexcept override;
 
-		static std::shared_ptr<InputLayout> Resolve(Graphics& gfx, const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS);
+		static std::shared_ptr<InputLayout> Store(Graphics& gfx, const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS);
 		static std::wstring ConstructUID(const  DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS = nullptr);
 		std::wstring FetchUID() const noexcept override;
 	protected:

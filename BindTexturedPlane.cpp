@@ -10,18 +10,18 @@ TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, st
 	IndexedTriangleList plane = Plane::Create_Textured();
 	plane.Transform(DirectX::XMMatrixScaling(size, size, 1.f));
 	const std::wstring geometry_tag = L"$plane. " + convert::make_wstring( std::to_string(size).c_str() );
-	ApplyBind(Bind::VertexBuffer::Resolve(gfx, geometry_tag, plane.vertices));
-	ApplyBind(Bind::IndexBuffer::Resolve(gfx, geometry_tag, plane.indices));
-	ApplyBind(Bind::Texture::Resolve(gfx, texture));
-	ApplyBind(Bind::Texture::Resolve(gfx, normal.value(), 1u));
-	std::shared_ptr<Bind::VertexShader> pVertexShader = Bind::VertexShader::Resolve(gfx, L"PhongShaderVS.cso");
+	ApplyBind(Bind::VertexBuffer::Store(gfx, geometry_tag, plane.vertices));
+	ApplyBind(Bind::IndexBuffer::Store(gfx, geometry_tag, plane.indices));
+	ApplyBind(Bind::Texture::Store(gfx, texture));
+	ApplyBind(Bind::Texture::Store(gfx, normal.value(), 1u));
+	std::shared_ptr<Bind::VertexShader> pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVS.cso");
 	auto pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	ApplyBind(std::move(pVertexShader));
-	ApplyBind(Bind::PixelShader::Resolve(gfx, L"PhongShaderNormalPS.cso"));
+	ApplyBind(Bind::PixelShader::Store(gfx, L"PhongShaderNormalPS.cso"));
 
-	ApplyBind(Bind::PixelConstantBuffer<PixelShaderMaterialProperties>::Resolve(gfx, pixelshaderproperties, 1u));
-	ApplyBind(Bind::InputLayout::Resolve(gfx, plane.vertices.FetchLayout(), pVertexShaderByteCode));
-	ApplyBind(Bind::PrimTopology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+	ApplyBind(Bind::PixelConstantBuffer<PixelShaderMaterialProperties>::Store(gfx, pixelshaderproperties, 1u));
+	ApplyBind(Bind::InputLayout::Store(gfx, plane.vertices.FetchLayout(), pVertexShaderByteCode));
+	ApplyBind(Bind::PrimTopology::Store(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	ApplyBind(std::make_shared<Bind::TransformConstBuffer>(gfx, *this));
 }
 

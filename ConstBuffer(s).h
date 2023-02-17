@@ -1,13 +1,13 @@
 #pragma once
 
-#include "Bindable.h"
-#include "BindableCodex.h"
+#include "isBinded.h"
+#include "isBinded_Storage.h"
 #include "ThrowMacros.h"
 
 namespace Bind
 {
 	template<typename Ctype>
-	struct ConstantBuffer : public Bindable
+	struct ConstantBuffer : public isBinded
 	{
 		ConstantBuffer(Graphics& gfx, const Ctype& constants, UINT slot = 0u);
 		ConstantBuffer(Graphics& gfx, UINT slot = 0u);
@@ -23,17 +23,17 @@ namespace Bind
 	private:
 		using ConstantBuffer<Ctype>::pConstBuffer;
 		using ConstantBuffer<Ctype>::slot;
-		using Bindable::FetchDeviceContext;
+		using isBinded::FetchDeviceContext;
 	public:
 		using ConstantBuffer<Ctype>::ConstantBuffer;
 		void Bind(Graphics& gfx) noexcept override;
-		static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
+		static std::shared_ptr<PixelConstantBuffer> Store(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
 		{
-			return Codex::Resolve<PixelConstantBuffer>(gfx, constants, slot);
+			return Repository::Store<PixelConstantBuffer>(gfx, constants, slot);
 		}
-		static std::shared_ptr<PixelConstantBuffer> Resolve(Graphics& gfx, UINT32 slot = NULL)
+		static std::shared_ptr<PixelConstantBuffer> Store(Graphics& gfx, UINT32 slot = NULL)
 		{
-			return Codex::Resolve<PixelConstantBuffer>(gfx, slot);
+			return Repository::Store<PixelConstantBuffer>(gfx, slot);
 		}
 		static std::wstring ConstructUID(const Ctype&, UINT32 slot = NULL);
 		static std::wstring ConstructUID(UINT32 slot = NULL);
@@ -46,18 +46,18 @@ namespace Bind
 	private:
 		using ConstantBuffer<Ctype>::pConstBuffer;
 		using ConstantBuffer<Ctype>::slot;
-		using Bindable::FetchDeviceContext;
+		using isBinded::FetchDeviceContext;
 	public:
 		using ConstantBuffer<Ctype>::ConstantBuffer;
 	public:
 		void Bind(Graphics& gfx) noexcept override;
-		static std::shared_ptr<VConstantBuffer> Resolve(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
+		static std::shared_ptr<VConstantBuffer> Store(Graphics& gfx, const Ctype constants, UINT32 slot = NULL)
 		{
-			return Codex::Resolve<VConstantBuffer>(gfx, constants, slot);
+			return Repository::Store<VConstantBuffer>(gfx, constants, slot);
 		}
-		static std::shared_ptr<VConstantBuffer> Resolve(Graphics& gfx, UINT32 slot = NULL)
+		static std::shared_ptr<VConstantBuffer> Store(Graphics& gfx, UINT32 slot = NULL)
 		{
-			return Codex::Resolve<VConstantBuffer>(gfx, slot);
+			return Repository::Store<VConstantBuffer>(gfx, slot);
 		}
 		static std::wstring ConstructUID(const Ctype&, UINT32 slot = NULL);
 		static std::wstring ConstructUID(UINT32 slot = NULL);
@@ -114,16 +114,19 @@ namespace Bind
 	template<typename Ctype>
 	inline void ConstantBuffer<Ctype>::Update(Graphics& gfx, const Ctype& constants)
 	{
+		//performs what is essentially a constant cast equivalent from D3D
 		DEF_INFOMANAGER(gfx);
-
+		// initialise mapped subresource
 		D3D11_MAPPED_SUBRESOURCE MappedSubRes;
 		GFX_THROW_INFO(FetchDeviceContext(gfx)->Map(
 			pConstBuffer.Get(), 0u,
 			D3D11_MAP_WRITE_DISCARD, 0u,
 			&MappedSubRes));
-
+		//remap constant buffer
 		size_t size = sizeof(constants);
+		//copy the memory from the constants to the subresource
 		memcpy(MappedSubRes.pData, &constants, sizeof(constants));
+		//unmap constant buffer
 		FetchDeviceContext(gfx)->Unmap(pConstBuffer.Get(), 0u);
 	}
 

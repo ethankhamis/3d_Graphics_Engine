@@ -14,6 +14,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
+#include <string>
 
 GDIpManager gdipm;
 
@@ -30,10 +31,9 @@ Application::Application()
 void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
-
-	window.grfx().ClearBuffer(0.0f, 0.0f, 0.0f);
+	window.grfx().ClearBuffer(0.0f, 0.0f, 0.f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
-	spawn.FetchLight()->Bind(window.grfx(), camera.FetchMatrix());
+	spawn.FetchLight()->Update(window.grfx(), camera.FetchMatrix());
 
 	building.Render(window.grfx());
 	building2.Render(window.grfx());

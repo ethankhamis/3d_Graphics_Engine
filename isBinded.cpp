@@ -1,19 +1,19 @@
-#include "Bindable.h"
+#include "isBinded.h"
 #include <exception>
 
 namespace Bind
 {
-	ID3D11Device* Bindable::FetchDevice(Graphics& gfx) noexcept
+	ID3D11Device* isBinded::FetchDevice(Graphics& gfx) noexcept
 	{
 		return gfx.pDevice.Get();
 	}
 
-	ID3D11DeviceContext* Bindable::FetchDeviceContext(Graphics& gfx) noexcept
+	ID3D11DeviceContext* isBinded::FetchDeviceContext(Graphics& gfx) noexcept
 	{
 		return gfx.pDeviceContext.Get();
 	}
 
-	DxGfxInfoMng& Bindable::FetchInfoManager(Graphics& gfx)
+	DxGfxInfoMng& isBinded::FetchInfoManager(Graphics& gfx)
 	{
 #ifndef NDEBUG
 		return gfx.infomanager;

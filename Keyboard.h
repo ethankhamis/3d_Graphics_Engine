@@ -38,7 +38,6 @@ struct Keyboard
 
 	};
 
-
 	// char events
 	std::optional<char> Char_Read() noexcept;
 	bool Char_Empty() const noexcept;

@@ -27,7 +27,7 @@ public:
 	~Surface();
 public:
 	void Wipe(Colour fillValue) noexcept;
-	void ApplyPixel(unsigned int x, unsigned int y, Colour c) noexcept_unless;
+	void ApplyPixel(unsigned int u, unsigned int v, Colour c) noexcept_unless;
 	Colour FetchPixel(unsigned int x, unsigned int y) const noexcept_unless;
 	unsigned int FetchWidth() const noexcept;
 	unsigned int FetchHeight() const noexcept;

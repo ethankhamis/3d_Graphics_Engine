@@ -45,7 +45,7 @@ HINSTANCE Wnd::WndClass::FetchInstance() noexcept
 Graphics& Wnd::grfx()
 {
 	if (!pGraphics) { 
-		throw EHWND_NOGFX_EXCEPT(); }
+		throw WINDOW_NOGFX_EXCEPT(); }
 
 	return *pGraphics;
 }
@@ -123,7 +123,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		WS_MAXIMIZEBOX,
 		FALSE)) == NULL)
 	{
-		throw EHWND_LAST_EXCEPT();
+		throw WINDOW_LAST_EXCEPT();
 	};
 	 
 	//initialise window CreateWindowExW
@@ -135,7 +135,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		nullptr, nullptr, WndClass::FetchInstance(), this
 	);
 	if (hWnd == nullptr) { 
-		throw EHWND_LAST_EXCEPT(); }
+		throw WINDOW_LAST_EXCEPT(); }
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -155,7 +155,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 	raw_input_device.hwndTarget = nullptr;
 	if (!RegisterRawInputDevices(&raw_input_device, 0x01, sizeof(raw_input_device))) // if not registering
 	{
-		throw EHWND_LAST_EXCEPT();
+		throw WINDOW_LAST_EXCEPT();
 	}
 
 }
@@ -170,7 +170,7 @@ void Wnd::ApplyTitle(const std::wstring& t)
 {
 	if(SetWindowTextW(hWnd, t.c_str()) == NULL)
 	{
-		throw EHWND_LAST_EXCEPT();
+		throw WINDOW_LAST_EXCEPT();
 	}
 }
 
@@ -227,12 +227,8 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 			kbd.Key_onPress(static_cast<unsigned char>(wParam));
 		}
 		break;
-
-
 		//End of Windows Kbd Messages
-
 		//Start of Windows Mouse Messages
-
 	case WM_MOUSEMOVE:
 	{
 		if (!Mouse_Icon_IsEnabled)
@@ -244,10 +240,8 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 				Mouse_HideIcon();
 			}break;
 		}
-
 		SetForegroundWindow(hWnd);
 		if (io.WantCaptureMouse) { break; }
-
 		const POINTS pt = MAKEPOINTS(lParam);
 		if(pt.y<height && pt.y >=0 && pt.x>=0 && pt.x < width)
 		{

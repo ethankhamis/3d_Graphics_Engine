@@ -1,6 +1,6 @@
 #include "IndexBuffer.h"
 #include "ThrowMacros.h"
-#include "BindableCodex.h"
+#include "isBinded_Storage.h"
 namespace Bind
 {
 	IndexBuffer::IndexBuffer(Graphics& gfx, const std::vector<unsigned short>& indices): IndexBuffer(gfx, L"?", indices){}
@@ -27,6 +27,7 @@ namespace Bind
 
 	void IndexBuffer::Bind(Graphics& gfx) noexcept
 	{
+		//bind index buffer to the input assembler stage
 		FetchDeviceContext(gfx)
 			->
 			IASetIndexBuffer(pIndexBuffer.Get(),
@@ -37,10 +38,10 @@ namespace Bind
 	{
 		return count;
 	}
-	std::shared_ptr<IndexBuffer> IndexBuffer::Resolve(Graphics& gfx, const std::wstring& tag, const std::vector<UINT16> indices)
+	std::shared_ptr<IndexBuffer> IndexBuffer::Store(Graphics& gfx, const std::wstring& tag, const std::vector<UINT16> indices)
 	{
 		assert(tag != L"?");
-		return Codex::Resolve<IndexBuffer>(gfx, tag, indices);
+		return Repository::Store<IndexBuffer>(gfx, tag, indices);
 	}
 	std::wstring IndexBuffer::FetchUID() const noexcept
 	{

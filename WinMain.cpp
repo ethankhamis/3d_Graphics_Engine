@@ -4,7 +4,7 @@
 #include "Application.h"
 #include "Converter.h"
 
-
+//WinMain -> Entry Point
 int CALLBACK WinMain(
 	HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
@@ -13,8 +13,10 @@ int CALLBACK WinMain(
 {
 	try
 	{
+		//stores the message handler and game loop
 		return Application{}.Start();
 	}
+	//catch custom exceptions, std::exceptions and unidentified exceptiosn
 	catch (const ExceptionHandler& exception)
 	{	
 		MessageBoxW(nullptr, exception.whatw(), exception.FetchErrorType(), MB_OK | MB_ICONEXCLAMATION);

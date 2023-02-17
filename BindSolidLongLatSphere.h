@@ -1,7 +1,7 @@
 #pragma once
-#include "Drawable.h"
+#include "isRendered.h"
 
-struct SolidLongLatSphere : public Drawable
+struct SolidLongLatSphere : public isRendered
 {
 	SolidLongLatSphere(
 		Graphics& gfx, float rad);

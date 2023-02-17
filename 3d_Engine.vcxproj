@@ -155,14 +155,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
-    <ClCompile Include="Bindable.cpp" />
+    <ClCompile Include="isBinded.cpp" />
     <ClCompile Include="BindSolidLongLatSphere.cpp" />
     <ClCompile Include="BindTexturedPlane.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Converter.cpp" />
     <ClCompile Include="Converter.h" />
     <ClCompile Include="DirectXInfoManagement.cpp" />
-    <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="isRendered.cpp" />
     <ClCompile Include="dxerr.cpp" />
     <ClCompile Include="ExceptionHandler.cpp" />
     <ClCompile Include="GfxDeviceInterface+Mng.cpp" />
@@ -236,8 +236,8 @@
     <ClInclude Include="assimp\include\assimp\vector2.h" />
     <ClInclude Include="assimp\include\assimp\vector3.h" />
     <ClInclude Include="assimp\include\assimp\version.h" />
-    <ClInclude Include="Bindable.h" />
-    <ClInclude Include="BindableCodex.h" />
+    <ClInclude Include="isBinded.h" />
+    <ClInclude Include="isBinded_Storage.h" />
     <ClInclude Include="BindSolidLongLatSphere.h" />
     <ClInclude Include="BindTexturedPlane.h" />
     <ClInclude Include="Camera.h" />
@@ -252,6 +252,7 @@
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="GfxDeviceInterface+Mng.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="DualTransformConstBuffer.h" />
     <ClInclude Include="ImGUIManager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -274,7 +275,7 @@
     <ClInclude Include="Surface.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="ThrowMacros.h" />
-    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="isRendered.h" />
     <ClInclude Include="IndexBuffer.h" />
     <ClInclude Include="InputLayout.h" />
     <ClInclude Include="Keyboard.h" />

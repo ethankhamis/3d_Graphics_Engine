@@ -55,11 +55,16 @@ void PointLight::Render(Graphics& gfx) const noexcept_unless
 	mesh.Render(gfx);
 }
 
-void PointLight::Bind(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept
+void PointLight::Update(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept
 {
+	//create a copy of the current data of the pointlight
 	PointLight::PointLightCBuf constbuffer_data_Copy = constbuffer_data;
+	// retrieve the current position
 	const vec32_t pos = DirectX::XMLoadFloat3(&constbuffer_data.pos);
+	//store the current position with respect to the camera perspective
 	DirectX::XMStoreFloat3(&constbuffer_data_Copy.pos, DirectX::XMVector3Transform(pos, view));
+	//update the  constant buffer to the updated data
 	cbuf.Update(gfx, constbuffer_data_Copy);
+	//bind new data to the constant buffer
 	cbuf.Bind(gfx);
 }

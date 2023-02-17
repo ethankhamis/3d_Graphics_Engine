@@ -1,5 +1,5 @@
 #pragma once
-#include "Drawable.h"
+#include "isRendered.h"
 //#include "BindSolidLongLatSphere.h"
 //#include "BindSolidCube.h"
 //#include "BindSolidPlane.h"
@@ -58,7 +58,7 @@ struct Spawn
 	};
 
 public:
-	void Window(std::vector<std::unique_ptr<Drawable>>& drawables)
+	void Window(std::vector<std::unique_ptr<isRendered>>& drawables)
 	{
 
 		if (ImGui::Begin(""))
@@ -124,13 +124,13 @@ public:
 
 	}
 public:
-	std::unique_ptr<Drawable> Random()
+	std::unique_ptr<isRendered> Random()
 	{
 		return Spawner(typedist(rng));
 	}
 
 	template<Geometry_T Geometry_t>
-	std::unique_ptr<Drawable> Chosen(Geometry_t g)
+	std::unique_ptr<isRendered> Chosen(Geometry_t g)
 	{ 
 		return Spawner( static_cast<int>(g) );
 	}
@@ -143,7 +143,7 @@ public:
 
 private:
 	template<Switchable _switch>
-		std::unique_ptr<Drawable> Spawner(_switch s)
+		std::unique_ptr<isRendered> Spawner(_switch s)
 		{
 			const DirectX::XMFLOAT3 matrix = { 1 , NULL , NULL };
 			switch (static_cast<int>(s))

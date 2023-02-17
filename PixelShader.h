@@ -1,15 +1,15 @@
 #pragma once
-#include "Bindable.h"
+#include "isBinded.h"
 namespace Bind
 {
 	using Microsoft::WRL::ComPtr;
 
-	struct PixelShader : public Bindable
+	struct PixelShader : public isBinded
 	{
 		PixelShader(Graphics& gfx, const std::wstring& filepath);
 		void Bind(Graphics& gfx) noexcept override;
 
-		static std::shared_ptr<PixelShader> Resolve(Graphics& gfx, const std::wstring& pathway);
+		static std::shared_ptr<PixelShader> Store(Graphics& gfx, const std::wstring& pathway);
 		static std::wstring ConstructUID(const std::wstring& path);
 		std::wstring FetchUID() const noexcept override;
 	protected:

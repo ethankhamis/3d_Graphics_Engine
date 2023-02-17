@@ -1,6 +1,6 @@
 #include "InputLayout.h"
 #include "ThrowMacros.h"
-#include "BindableCodex.h"
+#include "isBinded_Storage.h"
 #include "DynamicVertex.h"
 #pragma once
 namespace Bind
@@ -11,6 +11,7 @@ namespace Bind
 
 		const std::vector<D3D11_INPUT_ELEMENT_DESC> d3dlayout = layout.FetchD3DLayout();
 
+		//create input layout and allocate its appropriate memory
 		GFX_THROW_INFO(FetchDevice(gfx)->CreateInputLayout
 		(
 			d3dlayout.data(), static_cast<UINT>(d3dlayout.size()),
@@ -23,11 +24,12 @@ namespace Bind
 
 	void InputLayout::Bind(Graphics& gfx) noexcept
 	{
+		//bind input layout to the input assembler stage
 		FetchDeviceContext(gfx)->IASetInputLayout(pInputLayout.Get());
 	}
-	std::shared_ptr<InputLayout> InputLayout::Resolve(Graphics& gfx, const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS)
+	std::shared_ptr<InputLayout> InputLayout::Store(Graphics& gfx, const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS)
 	{
-		return Codex::Resolve<InputLayout>(gfx, layout, pByteCode_VS);
+		return Repository::Store<InputLayout>(gfx, layout, pByteCode_VS);
 	}
 	std::wstring InputLayout::ConstructUID(const DynamicVertex::VertexLayout& layout, ID3DBlob* pByteCode_VS)
 	{
