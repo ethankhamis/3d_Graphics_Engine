@@ -9,7 +9,7 @@ namespace Bind
 		:
 		parent(parent)
 	{
-		if (!pVConstBuffer) { pVConstBuffer = std::make_unique<VConstantBuffer<allTransforms>>(gfx, slot); } //create buffer if not already created
+		if (!pVertexConstBuffer) { pVertexConstBuffer = std::make_unique<VConstantBuffer<allTransforms>>(gfx, slot); } //create buffer if not already created
 	}
 
 	void TransformConstBuffer::Bind(Graphics& gfx) noexcept
@@ -21,9 +21,9 @@ namespace Bind
 	void TransformConstBuffer::UpdateBind(Graphics& gfx, const allTransforms& transforms) noexcept
 	{
 		//update constant buffer with most recent information
-		pVConstBuffer->Update(gfx, transforms);
+		pVertexConstBuffer->Update(gfx, transforms);
 		//bind updated buffer
-		pVConstBuffer->Bind(gfx);
+		pVertexConstBuffer->Bind(gfx);
 	}
 
 	TransformConstBuffer::allTransforms TransformConstBuffer::FetchTransforms(Graphics& gfx) noexcept
@@ -45,5 +45,5 @@ namespace Bind
 		};
 	}
 
-	std::unique_ptr<VConstantBuffer<TransformConstBuffer::allTransforms>> TransformConstBuffer::pVConstBuffer;
+	std::unique_ptr<VConstantBuffer<TransformConstBuffer::allTransforms>> TransformConstBuffer::pVertexConstBuffer;
 }

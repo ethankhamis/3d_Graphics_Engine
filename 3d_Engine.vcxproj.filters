@@ -324,6 +324,9 @@
     <ClCompile Include="BindTexturedPlane.cpp">
       <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
     </ClCompile>
+    <ClCompile Include="TransformPixelConstBuffer.cpp">
+      <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
@@ -611,7 +614,7 @@
     <ClInclude Include="BindTexturedPlane.h">
       <Filter>Primatives + Binds\Binds\Texture_Oriented\Plane</Filter>
     </ClInclude>
-    <ClInclude Include="DualTransformConstBuffer.h">
+    <ClInclude Include="PrimaryTransformConstBuffer.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
   </ItemGroup>

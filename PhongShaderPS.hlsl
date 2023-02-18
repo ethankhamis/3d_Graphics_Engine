@@ -9,7 +9,7 @@ cbuffer LightCBuf
     float Quadratic_attenuation;
 };
 
-cbuffer ObjectCBuf
+cbuffer ObjectConstBuffer
 {
     float specularIntensity;
     float specularPower;

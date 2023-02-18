@@ -1,3 +1,4 @@
+//slot 0
 cbuffer LightCBuf
 {
     float3 lightPos;
@@ -8,7 +9,7 @@ cbuffer LightCBuf
     float attLin;
     float attQuad;
 };
-
+//slot 1
 cbuffer ObjectCBuf
 {
     float specularIntensity;
@@ -16,11 +17,19 @@ cbuffer ObjectCBuf
     bool normalMapEnabled;
     float padding[1];
 };
+//slot 2
+cbuffer TransformCBuf
+{
+    matrix modelView;
+    matrix modelViewProjection;
+};
 
 Texture2D tex;
 Texture2D nmap;
 
 SamplerState splr;
+
+
 
 
 float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
@@ -32,6 +41,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord)
         n.x = normalSample.x * 2.0f - 1.0f;
         n.y = -normalSample.y * 2.0f + 1.0f;
         n.z = -normalSample.z;
+        n = mul(n, (float3x3)modelView);
     }
 // fragment to light vector data
 const float3 vToL = lightPos - worldPos;

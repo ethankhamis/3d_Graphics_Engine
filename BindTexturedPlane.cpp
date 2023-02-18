@@ -3,10 +3,12 @@
 #include "Converter.h"
 #include "imgui/imgui.h"
 #include "DefaultBindables.h"
+#include "PrimaryTransformConstBuffer.h"
 #include <optional>
 
 TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal)
 {
+	using namespace Bind;
 	IndexedTriangleList plane = Plane::Create_Textured();
 	plane.Transform(DirectX::XMMatrixScaling(size, size, 1.f));
 	const std::wstring geometry_tag = L"$plane. " + convert::make_wstring( std::to_string(size).c_str() );
@@ -22,7 +24,7 @@ TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, st
 	ApplyBind(Bind::PixelConstantBuffer<PixelShaderMaterialProperties>::Store(gfx, pixelshaderproperties, 1u));
 	ApplyBind(Bind::InputLayout::Store(gfx, plane.vertices.FetchLayout(), pVertexShaderByteCode));
 	ApplyBind(Bind::PrimTopology::Store(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-	ApplyBind(std::make_shared<Bind::TransformConstBuffer>(gfx, *this));
+	ApplyBind(std::make_shared<Bind::PrimaryTransformConstBuffer>(gfx, *this, NULLUNSIGNED, 2u));
 }
 
 void TexturedPlane::ApplyPos(float3 pos) noexcept

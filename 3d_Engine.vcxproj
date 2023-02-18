@@ -189,6 +189,7 @@
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="TransformConstBuffer.cpp" />
+    <ClCompile Include="TransformPixelConstBuffer.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
     <ClCompile Include="Win.cpp" />
@@ -252,7 +253,7 @@
     <ClInclude Include="ExceptionHandler.h" />
     <ClInclude Include="GfxDeviceInterface+Mng.h" />
     <ClInclude Include="Graphics.h" />
-    <ClInclude Include="DualTransformConstBuffer.h" />
+    <ClInclude Include="PrimaryTransformConstBuffer.h" />
     <ClInclude Include="ImGUIManager.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
