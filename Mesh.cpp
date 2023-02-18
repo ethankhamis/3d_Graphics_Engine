@@ -240,9 +240,9 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 	DynamicVertex::VertexBuffer VertexBuf(
 		std::move(
 			VertexLayout{}
-			.Append(VertexLayout::Position3D)
-			.Append(VertexLayout::Normal)
-			.Append(VertexLayout::Texture2D)
+			.Emplace_Back(VertexLayout::Position3D)
+			.Emplace_Back(VertexLayout::Normal)
+			.Emplace_Back(VertexLayout::Texture2D)
 		)
 	);
 

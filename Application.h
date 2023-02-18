@@ -7,6 +7,7 @@
 #include "BindTexturedPlane.h"
 #include "ImGUIManager.h"
 #include <set>
+#include "BindTexturedCube.h"
 
 struct Application
 {
@@ -24,6 +25,7 @@ private:
 	TexturedPlane plane;
 	Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
 	Model building2{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
+	TexturedCube cube;
 private:
 	void ExecFrame();
 private:

@@ -1,5 +1,6 @@
 #pragma once
 #include "IndexedTriangleList.h"
+#include "DynamicVertex.h"
 #include "DirectXMath.h"
 #include <vector>
 
@@ -7,131 +8,43 @@ using std::vector;
 
 struct Cube
 {
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create(float _side = .5f);
-	
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Skinned(float _side = 0.5f);
 
-	//template<class Vertex>
-	//static IndexedTriangleList<Vertex> Create_SemiSkinned();
+	static IndexedTriangleList Create_Independentf(DynamicVertex::VertexLayout vlayout);
 
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Independentf(float _side = 0.5f);
-
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_SemiSkinned_Independentf(float _side = .5f);
-
-	template<class Vertex>
-	static IndexedTriangleList<Vertex> Create_Skinned_Independentf(float _side = .5f);
+	static IndexedTriangleList Create_Skinned_Independentf();
 };
 
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create(float _side)
+
+inline IndexedTriangleList Cube::Create_Independentf(DynamicVertex::VertexLayout vlayout)
 {
-	float side = _side;
-	vector<Vertex> vertices(8);
-	vertices[0].position = { -side, -side, -side };
-	vertices[1].position = { side, -side, -side };
-	vertices[2].position = { -side, side, -side };
-	vertices[3].position = { side, side, -side };
-	vertices[4].position = { -side, -side, side };
-	vertices[5].position = { side, -side, side };
-	vertices[6].position = { -side, side, side };
-	vertices[7].position = { side, side, side };
+	float side = 0.5f;
 
-	return
-	{
-		std::move(vertices),
-		{0,2,1, 2,3,1,
-		1,3,5, 3,7,5,
-		2,6,3, 3,6,7,
-		4,5,7, 4,7,6,
-		0,4,2, 2,4,6,
-		0,1,4, 1,5,4
-	}
-	};
-}
+	DynamicVertex::VertexBuffer vertices(std::move(vlayout), 24u);
 
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_Skinned(float _side)
-{
-
-	float side = _side;
-
-	std::vector<Vertex> vertices(14);
-
-	vertices[0].position = { -side,-side,-side };
-	vertices[0].tex = { 2.0f / 3.0f,0.0f / 4.0f };
-	vertices[1].position = { side,-side,-side };
-	vertices[1].tex = { 1.0f / 3.0f,0.0f / 4.0f };
-	vertices[2].position = { -side,side,-side };
-	vertices[2].tex = { 2.0f / 3.0f,1.0f / 4.0f };
-	vertices[3].position = { side,side,-side };
-	vertices[3].tex = { 1.0f / 3.0f,1.0f / 4.0f };
-	vertices[4].position = { -side,-side,side };
-	vertices[4].tex = { 2.0f / 3.0f,3.0f / 4.0f };
-	vertices[5].position = { side,-side,side };
-	vertices[5].tex = { 1.0f / 3.0f,3.0f / 4.0f };
-	vertices[6].position = { -side,side,side };
-	vertices[6].tex = { 2.0f / 3.0f,2.0f / 4.0f };
-	vertices[7].position = { side,side,side };
-	vertices[7].tex = { 1.0f / 3.0f,2.0f / 4.0f };
-	vertices[8].position = { -side,-side,-side };
-	vertices[8].tex = { 2.0f / 3.0f,4.0f / 4.0f };
-	vertices[9].position = { side,-side,-side };
-	vertices[9].tex = { 1.0f / 3.0f,4.0f / 4.0f };
-	vertices[10].position = { -side,-side,-side };
-	vertices[10].tex = { 3.0f / 3.0f,1.0f / 4.0f };
-	vertices[11].position = { -side,-side,side };
-	vertices[11].tex = { 3.0f / 3.0f,2.0f / 4.0f };
-	vertices[12].position = { side,-side,-side };
-	vertices[12].tex = { 0.0f / 3.0f,1.0f / 4.0f };
-	vertices[13].position = { side,-side,side };
-	vertices[13].tex = { 0.0f / 3.0f,2.0f / 4.0f };
-
-	return{
-		std::move(vertices),{
-			0,2,1,   2,3,1,
-			4,8,5,   5,8,9,
-			2,6,3,   3,6,7,
-			4,5,7,   4,7,6,
-			2,10,11, 2,11,6,
-			12,3,7,  12,7,13
-		}
-	};
-}
-
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_Independentf(float _side)
-{
-	float side = _side;
-
-	std::vector<Vertex> vertices(24);
-	vertices[0].position = { -side,-side,-side };// 0 near side
-	vertices[1].position = { side,-side,-side };// 1
-	vertices[2].position = { -side,side,-side };// 2
-	vertices[3].position = { side,side,-side };// 3
-	vertices[4].position = { -side,-side,side };// 4 far side
-	vertices[5].position = { side,-side,side };// 5
-	vertices[6].position = { -side,side,side };// 6
-	vertices[7].position = { side,side,side };// 7
-	vertices[8].position = { -side,-side,-side };// 8 left side
-	vertices[9].position = { -side,side,-side };// 9
-	vertices[10].position = { -side,-side,side };// 10
-	vertices[11].position = { -side,side,side };// 11
-	vertices[12].position = { side,-side,-side };// 12 right side
-	vertices[13].position = { side,side,-side };// 13
-	vertices[14].position = { side,-side,side };// 14
-	vertices[15].position = { side,side,side };// 15
-	vertices[16].position = { -side,-side,-side };// 16 bottom side
-	vertices[17].position = { side,-side,-side };// 17
-	vertices[18].position = { -side,-side,side };// 18
-	vertices[19].position = { side,-side,side };// 19
-	vertices[20].position = { -side,side,-side };// 20 top side
-	vertices[21].position = { side,side,-side };// 21
-	vertices[22].position = { -side,side,side };// 22
-	vertices[23].position = { side,side,side };// 23
+	vertices[0].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = {-side,-side,-side};//near face
+	vertices[1].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,-side };
+	vertices[2].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,-side };
+	vertices[3].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,-side };
+	vertices[4].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,-side,side };//furthest face
+	vertices[5].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,side };
+	vertices[6].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,side };
+	vertices[7].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,side };
+	vertices[8].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,-side,-side };//left face
+	vertices[9].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,-side };
+	vertices[10].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,-side,side };
+	vertices[11].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,side };
+	vertices[12].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,-side };//right face
+	vertices[13].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,-side };
+	vertices[14].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,side };
+	vertices[15].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,side };
+	vertices[16].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,-side,-side };//bottom face
+	vertices[17].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,-side };
+	vertices[18].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,-side,side };
+	vertices[19].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,-side,side };
+	vertices[20].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,-side };//top face
+	vertices[21].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,-side };
+	vertices[22].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { -side,side,side };
+	vertices[23].Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>() = { side,side,side };
 
 	return{
 		std::move(vertices),{
@@ -145,68 +58,40 @@ inline IndexedTriangleList<Vertex> Cube::Create_Independentf(float _side)
 	};
 }
 
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_SemiSkinned_Independentf(float _side)
+
+
+inline IndexedTriangleList Cube::Create_Skinned_Independentf()
 {
-	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
+	IndexedTriangleList IndexedTriangleList_ = Create_Independentf(std::move(DynamicVertex::VertexLayout{}
+		.Emplace_Back(DynamicVertex::VertexLayout::MemberType::Position3D)
+		.Emplace_Back(DynamicVertex::VertexLayout::MemberType::Normal)
+		.Emplace_Back(DynamicVertex::VertexLayout::MemberType::Texture2D)
+	));
 
-	IndexedTriangleList_.vertices[0].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[1].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[2].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[3].tex = { 1.f,1.f };
-	IndexedTriangleList_.vertices[4].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[5].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[6].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[7].tex = { 1.f,1.f };
-	IndexedTriangleList_.vertices[8].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[9].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[10].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[11].tex = { 1.f,1.f };
-	IndexedTriangleList_.vertices[12].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[13].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[14].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[15].tex = { 1.f,1.f };
-	IndexedTriangleList_.vertices[16].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[17].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[18].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[19].tex = { 1.f,1.f };
-	IndexedTriangleList_.vertices[20].tex = { 0.f,0.f };
-	IndexedTriangleList_.vertices[21].tex = { 1.f,0.f };
-	IndexedTriangleList_.vertices[22].tex = { 0.f,1.f };
-	IndexedTriangleList_.vertices[23].tex = { 1.f,1.f };
-
-	return IndexedTriangleList_;
-}
-
-template<class Vertex>
-inline IndexedTriangleList<Vertex> Cube::Create_Skinned_Independentf(float _side)
-{
-	auto IndexedTriangleList_ = Create_Independentf<Vertex>();
-
-	IndexedTriangleList_.vertices[0].tex = { 2.0f / 3.0f,0.0f / 4.0f };
-	IndexedTriangleList_.vertices[1].tex = { 1.0f / 3.0f,0.0f / 4.0f };
-	IndexedTriangleList_.vertices[2].tex = { 2.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[3].tex = { 1.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[4].tex = { 2.0f / 3.0f,3.0f / 4.0f };
-	IndexedTriangleList_.vertices[5].tex = { 1.0f / 3.0f,3.0f / 4.0f };
-	IndexedTriangleList_.vertices[6].tex = { 2.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[7].tex = { 1.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[8].tex = { 2.0f / 3.0f,4.0f / 4.0f };
-	IndexedTriangleList_.vertices[9].tex = { 1.0f / 3.0f,4.0f / 4.0f };
-	IndexedTriangleList_.vertices[10].tex = { 3.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[11].tex = { 3.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[12].tex = { 0.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[13].tex = { 0.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[14].tex = { 2.0f / 3.0f,0.0f / 4.0f };
-	IndexedTriangleList_.vertices[15].tex = { 1.0f / 3.0f,0.0f / 4.0f };
-	IndexedTriangleList_.vertices[16].tex = { 2.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[17].tex = { 1.0f / 3.0f,1.0f / 4.0f };
-	IndexedTriangleList_.vertices[18].tex = { 2.0f / 3.0f,3.0f / 4.0f };
-	IndexedTriangleList_.vertices[19].tex = { 1.0f / 3.0f,3.0f / 4.0f };
-	IndexedTriangleList_.vertices[20].tex = { 2.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[21].tex = { 1.0f / 3.0f,2.0f / 4.0f };
-	IndexedTriangleList_.vertices[22].tex = { 2.0f / 3.0f,4.0f / 4.0f };
-	IndexedTriangleList_.vertices[23].tex = { 1.0f / 3.0f,4.0f / 4.0f };
+	IndexedTriangleList_.vertices[0].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {0.0f,0.0f};
+	IndexedTriangleList_.vertices[1].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {1.0f,0.0f};
+	IndexedTriangleList_.vertices[2].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {0.0f,1.0f};
+	IndexedTriangleList_.vertices[3].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {1.0f,1.0f};
+	IndexedTriangleList_.vertices[4].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {0.0f,0.0f};
+	IndexedTriangleList_.vertices[5].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {1.0f,0.0f};
+	IndexedTriangleList_.vertices[6].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {0.0f,1.0f};
+	IndexedTriangleList_.vertices[7].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {1.0f,1.0f};
+	IndexedTriangleList_.vertices[8].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {0.0f,0.0f};
+	IndexedTriangleList_.vertices[9].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() =  {1.0f,0.0f};
+	IndexedTriangleList_.vertices[10].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,1.0f};
+	IndexedTriangleList_.vertices[11].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,1.0f};
+	IndexedTriangleList_.vertices[12].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,0.0f};
+	IndexedTriangleList_.vertices[13].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,0.0f};
+	IndexedTriangleList_.vertices[14].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,1.0f};
+	IndexedTriangleList_.vertices[15].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,1.0f};
+	IndexedTriangleList_.vertices[16].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,0.0f};
+	IndexedTriangleList_.vertices[17].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,0.0f};
+	IndexedTriangleList_.vertices[18].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,1.0f};
+	IndexedTriangleList_.vertices[19].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,1.0f};
+	IndexedTriangleList_.vertices[20].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,0.0f};
+	IndexedTriangleList_.vertices[21].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,0.0f};
+	IndexedTriangleList_.vertices[22].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {0.0f,1.0f};
+	IndexedTriangleList_.vertices[23].Attribute<DynamicVertex::VertexLayout::MemberType::Texture2D>() = {1.0f,1.0f};
 
 	return IndexedTriangleList_;
 }

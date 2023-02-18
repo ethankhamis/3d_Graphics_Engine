@@ -197,7 +197,7 @@ namespace DynamicVertex {
 		{
 			return elements[idx];
 		}
-		VertexLayout& Append(MemberType memtype) noexcept_unless
+		VertexLayout& Emplace_Back(MemberType memtype) noexcept_unless
 		{
 			elements.emplace_back(memtype, size());
 			return *this;
@@ -302,8 +302,20 @@ namespace DynamicVertex {
 	struct VertexBuffer
 	{
 	public:
-		VertexBuffer(VertexLayout layout) noexcept_unless
-			: layout(std::move(layout)) { }
+		VertexBuffer(VertexLayout layout, UINT size = NULLUNSIGNED) noexcept_unless
+			: layout(std::move(layout)) {
+			AdjustBufferLength(size);
+		}
+
+		void AdjustBufferLength(UINT size_)
+		{
+			const UINT current_size = VertexBuffer::size();
+			if (current_size < size_) {
+				int new_size = buffer.size() + layout.size() * ( size_ - current_size);
+				buffer.resize(new_size); 
+			}
+
+		}
 		const VertexLayout& FetchLayout() const noexcept
 		{
 			return layout;

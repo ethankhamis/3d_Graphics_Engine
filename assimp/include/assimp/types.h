@@ -352,8 +352,8 @@ struct aiString {
         return (length != other.length || 0 != memcmp(data, other.data, length));
     }
 
-    /** Append a string to the string */
-    void Append(const char *app) {
+    /** Emplace_Back a string to the string */
+    void Emplace_Back(const char *app) {
         const ai_uint32 len = (ai_uint32)::strlen(app);
         if (!len) {
             return;

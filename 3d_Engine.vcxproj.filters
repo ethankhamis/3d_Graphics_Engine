@@ -184,15 +184,6 @@
     <Filter Include="Primatives + Binds\Binds\Texture_Oriented\Cube">
       <UniqueIdentifier>{3e2c31cd-65b4-4c7f-ad8e-1f53edcd8d9e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Primatives + Binds\Binds\Texture_Oriented\Cube\FullySkinned">
-      <UniqueIdentifier>{7d4a224a-c9e1-466e-9d7c-f8d92209b231}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives + Binds\Binds\Texture_Oriented\Cube\FullySkinned\PhongShaded">
-      <UniqueIdentifier>{c54b88df-ab50-4d1f-a52f-a52dbd4883e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Primatives + Binds\Binds\Texture_Oriented\Cube\SemiSkinned">
-      <UniqueIdentifier>{08c39ece-b6c2-46d5-868c-8ebfc2d9baa0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Dynamics">
       <UniqueIdentifier>{a11f1638-867a-4a41-9132-201a0f4f5967}</UniqueIdentifier>
     </Filter>
@@ -327,6 +318,9 @@
     <ClCompile Include="TransformPixelConstBuffer.cpp">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClCompile>
+    <ClCompile Include="BindTexturedCube.cpp">
+      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Win.h">
@@ -383,7 +377,7 @@
     <ClInclude Include="InputLayout.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
-    <ClInclude Include="DefaultBindables.h">
+    <ClInclude Include="DefaultBinds.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
     </ClInclude>
     <ClInclude Include="isBinded.h">
@@ -616,6 +610,9 @@
     </ClInclude>
     <ClInclude Include="PrimaryTransformConstBuffer.h">
       <Filter>Buffers &amp; Shaders + Related Others\Others</Filter>
+    </ClInclude>
+    <ClInclude Include="BindTexturedCube.h">
+      <Filter>Primatives + Binds\Binds\Texture_Oriented\Cube</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

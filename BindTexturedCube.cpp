@@ -1,19 +1,18 @@
-#include "BindTexturedPlane.h"
-#include "Plane.h"
-#include "Converter.h"
+#pragma once
+#include "BindTexturedCube.h"
+#include "Cube.h"
+#include "PrimaryTransformConstBuffer.h"
 #include "imgui/imgui.h"
 #include "DefaultBinds.h"
-#include "PrimaryTransformConstBuffer.h"
-#include <optional>
 
-TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal)
+TexturedCube::TexturedCube(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal)
 {
 	using namespace Bind;
-	IndexedTriangleList plane = Plane::Create_Textured();
-	plane.Transform(DirectX::XMMatrixScaling(size, size, 1.f));
-	const std::wstring geometry_tag = L"$plane. " + convert::make_wstring( std::to_string(size).c_str() );
-	ApplyBind(Bind::VertexBuffer::Store(gfx, geometry_tag, plane.vertices));
-	ApplyBind(Bind::IndexBuffer::Store(gfx, geometry_tag, plane.indices));
+	IndexedTriangleList cube = Cube::Create_Skinned_Independentf();
+	cube.Transform(DirectX::XMMatrixScaling(size, size, size));
+	const std::wstring geometry_tag = L"cube. " + convert::make_wstring(std::to_string(size).c_str());
+	ApplyBind(Bind::VertexBuffer::Store(gfx, geometry_tag, cube.vertices));
+	ApplyBind(Bind::IndexBuffer::Store(gfx, geometry_tag, cube.indices));
 	ApplyBind(Bind::Texture::Store(gfx, texture));
 	ApplyBind(Bind::Texture::Store(gfx, normal.value(), 1u));
 	std::shared_ptr<Bind::VertexShader> pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVS.cso");
@@ -22,42 +21,43 @@ TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, st
 	ApplyBind(Bind::PixelShader::Store(gfx, L"PhongShaderNormalPS.cso"));
 
 	ApplyBind(Bind::PixelConstantBuffer<PixelShaderMaterialProperties>::Store(gfx, pixelshaderproperties, 1u));
-	ApplyBind(Bind::InputLayout::Store(gfx, plane.vertices.FetchLayout(), pVertexShaderByteCode));
+	ApplyBind(Bind::InputLayout::Store(gfx, cube.vertices.FetchLayout(), pVertexShaderByteCode));
 	ApplyBind(Bind::PrimTopology::Store(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 	ApplyBind(std::make_shared<Bind::PrimaryTransformConstBuffer>(gfx, *this, NULLUNSIGNED, 2u));
 }
 
-void TexturedPlane::ApplyPos(float3 pos) noexcept
+void TexturedCube::ApplyPos(float3 pos) noexcept
 {
-	position = pos;
+	this->pos = {pos.x, pos.y, pos.z};
 }
 
-void TexturedPlane::ApplyRot(float roll, float pitch, float yaw) noexcept
+void TexturedCube::ApplyRot(float roll, float pitch, float yaw) noexcept
 {
-	this->roll = roll;
-	this->pitch = pitch;
-	this->yaw = yaw;
+	this->orientation = { roll, pitch, yaw };
 }
 
-matrix TexturedPlane::FetchTransformMat() const noexcept
+matrix TexturedCube::FetchTransformMat() const noexcept
 {
-	using namespace DirectX;
-	return XMMatrixRotationRollPitchYaw(roll, pitch, yaw)  *  XMMatrixTranslation(position.x, position.y, position.z);
+	return matrix{
+		DirectX::XMMatrixRotationRollPitchYaw(orientation.roll, orientation.pitch, orientation.yaw)
+		*
+		DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z)
+	};
 }
 
-void TexturedPlane::Open_Window(Graphics& gfx) noexcept
+void TexturedCube::Open_Window(Graphics& gfx) noexcept
 {
-	if (ImGui::Begin("Plane"))
+	if (ImGui::Begin("Cube"))
 	{
 		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &position.x, -90.0f, 90.0f, "%.1f");
-		ImGui::SliderFloat("Y", &position.y, -90.0f, 90.0f, "%.1f");
-		ImGui::SliderFloat("Z", &position.z, -90.0f, 90.0f, "%.1f");
+		ImGui::SliderFloat("X", &pos.x, -90.0f, 90.0f, "%.1f");
+		ImGui::SliderFloat("Y", &pos.y, -90.0f, 90.0f, "%.1f");
+		ImGui::SliderFloat("Z", &pos.z, -90.0f, 90.0f, "%.1f");
 
 		ImGui::Text("Orientation");
-		ImGui::SliderAngle("Roll", &roll, -180.f, 180.f);
-		ImGui::SliderAngle("Pitch", &pitch, -180.f, 180.f);
-		ImGui::SliderAngle("Yaw", &yaw, -180.f, 180.f);
+		ImGui::SliderAngle("Roll", &orientation.roll, -180.f, 180.f);
+		ImGui::SliderAngle("Pitch", &orientation.pitch, -180.f, 180.f);
+		ImGui::SliderAngle("Yaw", &orientation.yaw, -180.f, 180.f);
 
 		ImGui::Text("Shading Properties");
 		bool intensity_ischanged =

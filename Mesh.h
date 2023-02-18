@@ -1,7 +1,7 @@
 #pragma once
 #include "Math.cpp"
 #include "DynamicVertex.h"
-#include "DefaultBindables.h"
+#include "DefaultBinds.h"
 #include "isRendered.h"
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>

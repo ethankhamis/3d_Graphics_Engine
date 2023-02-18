@@ -13,7 +13,7 @@ struct Sphere
 	{
 		if (!vlayout)
 		{
-			vlayout = DynamicVertex::VertexLayout{}.Append(DynamicVertex::VertexLayout::MemberType::Position3D);
+			vlayout = DynamicVertex::VertexLayout{}.Emplace_Back(DynamicVertex::VertexLayout::MemberType::Position3D);
 		}
 		return Create_Advanced(std::move(*vlayout), 12, 24);
 		

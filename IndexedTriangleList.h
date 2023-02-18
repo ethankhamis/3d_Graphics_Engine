@@ -4,11 +4,10 @@
 #include <DirectXMath.h>
 #include "DynamicVertex.h"
 
-using std::vector;
 struct IndexedTriangleList
 {
 	IndexedTriangleList() = default;
-	IndexedTriangleList(DynamicVertex::VertexBuffer v, vector<uint16_t> i) // vertices + indices
+	IndexedTriangleList(DynamicVertex::VertexBuffer v, std::vector<uint16_t> i) // vertices + indices
 		:
 		vertices(std::move(v)), indices(std::move(i))
 	{
@@ -25,26 +24,26 @@ struct IndexedTriangleList
 		}
 	}
 
-//	void ApplyNormalsIndependent() noexcept_unless
-	//{
-		//using namespace DirectX;
-		//assert(indices.size() % 3 == 0 && indices.size() > 0);
-		//for (size_t idx = 0; idx < indices.size(); idx += 3)
-		//{
-		//	DynamicVertex::Vertex& v0 = vertices[indices[idx]];
-		//	DynamicVertex::Vertex& v1 = vertices[indices[idx + 1]];
-		//	DynamicVertex::Vertex& v2 = vertices[indices[idx + 2]];
-	//		const vector p0 = XMLoadFloat3(&v0.position);
-		//	const vector p1 = XMLoadFloat3(&v1.position);
-		//	const vector p2 = XMLoadFloat3(&v2.position);
-//
-	//	const vector normal = XMVector3Normalize(XMVector3Cross((p1 - p0), (p2 - p0)));
-		//
-				//	XMStoreFloat3(&v0.normal, normal);
-				//	XMStoreFloat3(&v1.normal, normal);
-				//	XMStoreFloat3(&v2.normal, normal);
-	//}
-//}
+	void ApplyNormalsIndependent() noexcept_unless
+	{
+		using namespace DirectX;
+		assert(indices.size() % 3 == 0 && indices.size() > 0);
+		for (size_t idx = 0; idx < indices.size(); idx += 3)
+		{
+			DynamicVertex::Vertex v0 = vertices[indices[idx]];
+			DynamicVertex::Vertex v1 = vertices[indices[idx + 1]];
+			DynamicVertex::Vertex v2 = vertices[indices[idx + 2]];
+			const vector p0 = XMLoadFloat3(&v0.Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>());
+		const vector p1 = XMLoadFloat3(&v1.Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>());
+			const vector p2 = XMLoadFloat3(&v2.Attribute<DynamicVertex::VertexLayout::MemberType::Position3D>());
+
+		const vector normal = XMVector3Normalize(XMVector3Cross((p1 - p0), (p2 - p0)));
+		
+					XMStoreFloat3(&v0.Attribute<DynamicVertex::VertexLayout::MemberType::Normal>(), normal);
+					XMStoreFloat3(&v1.Attribute<DynamicVertex::VertexLayout::MemberType::Normal>(), normal);
+					XMStoreFloat3(&v2.Attribute<DynamicVertex::VertexLayout::MemberType::Normal>(), normal);
+	}
+}
 	DynamicVertex::VertexBuffer vertices;
-	vector<uint16_t> indices;
+	std::vector<uint16_t> indices;
 };

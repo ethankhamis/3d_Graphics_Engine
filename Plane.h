@@ -15,9 +15,9 @@ struct Plane
 	static IndexedTriangleList Create_Textured()
 	{
 		DynamicVertex::VertexLayout vlayout;
-		vlayout.Append(DynamicVertex::VertexLayout::Position3D);
-		vlayout.Append(DynamicVertex::VertexLayout::Normal);
-		vlayout.Append(DynamicVertex::VertexLayout::Texture2D);
+		vlayout.Emplace_Back(DynamicVertex::VertexLayout::Position3D);
+		vlayout.Emplace_Back(DynamicVertex::VertexLayout::Normal);
+		vlayout.Emplace_Back(DynamicVertex::VertexLayout::Texture2D);
 		return Create_Advanced_Textured(std::move(vlayout), 1, 1);
 	}
 };
@@ -37,8 +37,8 @@ inline IndexedTriangleList Plane::Create_Advanced_Textured(DynamicVertex::Vertex
 						std::move(vlayout)
 										};
 	// set dimensions for width and height
-	constexpr float width = 2.0f;
-	constexpr float height = 2.0f;
+	constexpr float width = 1.0f;
+	constexpr float height = 1.0f;
 
 	{
 		//calculate the sides and division total for 2d axis'

@@ -1,5 +1,5 @@
 #include "BindSolidLongLatSphere.h"
-#include "DefaultBindables.h"
+#include "DefaultBinds.h"
 #include "ThrowMacros.h"
 #include "LongLatSphere.h"
 #include "VertexBuffer.h"

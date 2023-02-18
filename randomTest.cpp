@@ -1,7 +1,7 @@
 /*
 #pragma once
 #include "randomTest.h"
-#include "DefaultBindables.h"
+#include "DefaultBinds.h"
 #include "ThrowMacros.h"
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -21,8 +21,8 @@ RandomTest::RandomTest(Graphics& gfx, std::mt19937& rng, std::uniform_real_distr
 		DynamicVertex::VertexBuffer vertexBuffer(
 			std::move(
 			VertexLayout{}
-			.Append(VertexLayout::Position3D)
-			.Append(VertexLayout::Normal)
+			.Emplace_Back(VertexLayout::Position3D)
+			.Emplace_Back(VertexLayout::Normal)
 		));
 		Assimp::Importer imp;
 		const auto pModel = imp.ReadFile("models\\monkey.obj",

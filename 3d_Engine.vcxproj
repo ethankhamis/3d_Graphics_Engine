@@ -155,6 +155,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="BindTexturedCube.cpp" />
     <ClCompile Include="isBinded.cpp" />
     <ClCompile Include="BindSolidLongLatSphere.cpp" />
     <ClCompile Include="BindTexturedPlane.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="assimp\include\assimp\vector2.h" />
     <ClInclude Include="assimp\include\assimp\vector3.h" />
     <ClInclude Include="assimp\include\assimp\version.h" />
+    <ClInclude Include="BindTexturedCube.h" />
     <ClInclude Include="isBinded.h" />
     <ClInclude Include="isBinded_Storage.h" />
     <ClInclude Include="BindSolidLongLatSphere.h" />
@@ -247,7 +249,7 @@
     <ClInclude Include="ConstBuffer(s).h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="debugdefs.h" />
-    <ClInclude Include="DefaultBindables.h" />
+    <ClInclude Include="DefaultBinds.h" />
     <ClInclude Include="DirectXInfoManagement.h" />
     <ClInclude Include="dxerr.h" />
     <ClInclude Include="ExceptionHandler.h" />
