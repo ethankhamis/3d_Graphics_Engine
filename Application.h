@@ -22,10 +22,8 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
-	TexturedPlane plane;
-	Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
-	Model building2{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj" };
-	TexturedCube cube;
+	//Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
+	Model wall{window.grfx(), "Models\\brickwall\\brickwall.obj"};
 private:
 	void ExecFrame();
 private:

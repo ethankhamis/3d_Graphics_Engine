@@ -20,12 +20,10 @@ GDIpManager gdipm;
 
 Application::Application()
 	:window(1280, 720, L"6~3D"),
-	spawn(window.grfx()),
-	plane(window.grfx(), 20.f, L"Models\\brickwall\\brickwall.jpg", L"Models\\brickwall\\brickwall_normal.jpg"),
-	cube(window.grfx(), 20.f, L"Models\\brickwall\\brickwall.jpg", L"Models\\brickwall\\brickwall_normal.jpg")
+	spawn(window.grfx())
+	//plane(window.grfx(), 20.f, L"Models\\brickwall\\brickwall.jpg", L"Models\\brickwall\\brickwall_normal.jpg"),
 {
-	plane.ApplyPos({ 1.f,-5.f,10.f });
-	cube.ApplyPos({3.f, 14.f, -2.f});
+	//plane.ApplyPos({ 1.f,-5.f,10.f });
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 	//window.Mouse_DisableIcon();
 }
@@ -33,15 +31,13 @@ Application::Application()
 void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
-	window.grfx().ClearBuffer(0.0f, 0.0f, 0.f);
+	window.grfx().ClearBuffer(1.0f, 0.0f, 0.f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Update(window.grfx(), camera.FetchMatrix());
 
-	building.Render(window.grfx());
-	building2.Render(window.grfx());
+	//building.Render(window.grfx());
 	spawn.FetchLight()->Render(window.grfx());
-	plane.Render(window.grfx());
-	cube.Render(window.grfx());
+	wall.Render(window.grfx());
 
 	while (const std::optional<Keyboard::Event> key = window.kbd.Key_Read())
 	{
@@ -103,10 +99,10 @@ void Application::ExecFrame()
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
 
-	building.PresentWindow("Model 1");
-	building2.PresentWindow("Model 2");
-	plane.Open_Window(window.grfx());
-	cube.Open_Window(window.grfx());
+	wall.PresentWindow("Wall");
+	//building.PresentWindow("Model 1");
+	//plane.Open_Window(window.grfx());
+	//cube.Open_Window(window.grfx());
 
 	//ImGui::End();
 	

@@ -15,6 +15,8 @@ namespace DynamicVertex {
 	{
 		enum MemberType
 		{
+			Tangent,
+			Bitangent,
 			Position2D,
 			Position3D,
 			Float3Colour,
@@ -26,51 +28,65 @@ namespace DynamicVertex {
 			Count,
 		};
 		template<MemberType> struct Map;
+		template<> struct Map<Tangent>
+		{
+			using data_type = float3;
+			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+			static constexpr const char* semantic = "Tangent";
+			static constexpr const wchar_t* id = L"Nt";
+		};
+		template<> struct Map<Bitangent>
+		{
+			using data_type = float3;
+			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
+			static constexpr const char* semantic = "Bitangent";
+			static constexpr const wchar_t* id = L"Nb";
+		};
 		template<> struct Map<Position2D>
 		{
-			using SysType = float2;
+			using data_type = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const wchar_t* id = L"POS2";
 		};
 		template<> struct Map<Position3D>
 		{
-			using SysType = float3;
+			using data_type = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Position";
 			static constexpr const wchar_t* id = L"POS3";
 		};
 		template<> struct Map<Texture2D>
 		{
-			using SysType = float2;
+			using data_type = float2;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32_FLOAT;
 			static constexpr const char* semantic = "Texcoord";
 			static constexpr const wchar_t* id = L"TEX2";
 		};
 		template<> struct Map<Float3Colour>
 		{
-			using SysType = float3;
+			using data_type = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Colour";
 			static constexpr const wchar_t* id = L"COL3";
 		};
 		template<> struct Map<Float4Colour>
 		{
-			using SysType = float4;
+			using data_type = float4;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32A32_FLOAT;
 			static constexpr const char* semantic = "Colour";
 			static constexpr const wchar_t* id = L"COL4";
 		};
 		template<> struct Map<Normal>
 		{
-			using SysType = float3;
+			using data_type = float3;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R32G32B32_FLOAT;
 			static constexpr const char* semantic = "Normal";
 			static constexpr const wchar_t* id = L"NOR";
 		};
 		template<> struct Map<BGRAColour>
 		{
-			using SysType = DynamicVertex::BGRAColour;
+			using data_type = DynamicVertex::BGRAColour;
 			static constexpr DXGI_FORMAT dxgiFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 			static constexpr const char* semantic = "Colour";
 			static constexpr const wchar_t* id = L"COL8";
@@ -100,6 +116,10 @@ namespace DynamicVertex {
 			{
 				switch (memberType)
 				{
+				case Tangent:
+					return Map<Tangent>::id;
+				case Bitangent:
+					return Map<Bitangent>::id;
 				case Position2D:
 					return Map<Position2D>::id;
 				case Texture2D:
@@ -123,20 +143,24 @@ namespace DynamicVertex {
 			{
 				switch (type)
 				{
+				case Tangent:
+					return sizeof(Map<Tangent>::data_type);
+				case Bitangent:
+					return sizeof(Map<Bitangent>::data_type);
 				case Position2D:
-					return sizeof(Map<Position2D>::SysType);
+					return sizeof(Map<Position2D>::data_type);
 				case Texture2D:
-					return sizeof(Map<Texture2D>::SysType);
+					return sizeof(Map<Texture2D>::data_type);
 				case Position3D:
-					return sizeof(Map<Position3D>::SysType);
+					return sizeof(Map<Position3D>::data_type);
 				case Float3Colour:
-					return sizeof(Map<Float3Colour>::SysType);
+					return sizeof(Map<Float3Colour>::data_type);
 				case Normal:
-					return sizeof(Map<Normal>::SysType);
+					return sizeof(Map<Normal>::data_type);
 				case Float4Colour:
-					return sizeof(Map<Float4Colour>::SysType);
+					return sizeof(Map<Float4Colour>::data_type);
 				case BGRAColour:
-					return sizeof(Map<BGRAColour>::SysType);
+					return sizeof(Map<BGRAColour>::data_type);
 				}
 				assert("element type not identified" && false);
 				return 0u;
@@ -146,6 +170,10 @@ namespace DynamicVertex {
 			{
 				switch (memberType)
 				{
+				case Tangent:
+					return GenerateD3DDesc<Tangent>(FetchOffset());
+				case Bitangent:
+					return GenerateD3DDesc<Bitangent>(FetchOffset());
 				case Position2D:
 					return GenerateD3DDesc<Position2D>(FetchOffset());
 				case Position3D:
@@ -262,7 +290,7 @@ namespace DynamicVertex {
 		template<VertexLayout::MemberType DestinationLayout_t, typename Source_t>
 		void ApplyNewAttribute(char* pAttribute, Source_t&& val) noexcept_unless
 		{
-			using Destination = typename VertexLayout::Map<DestinationLayout_t>::SysType;
+			using Destination = typename VertexLayout::Map<DestinationLayout_t>::data_type;
 			if constexpr (std::is_assignable<Destination, Source_t>::value)
 			{
 				*reinterpret_cast<Destination*>(pAttribute) = val;
@@ -378,7 +406,7 @@ namespace DynamicVertex {
 	inline auto& Vertex::Attribute() noexcept_unless
 	{
 		auto pAttribute = pVertexData + layout.Store<elem_t>().FetchOffset();
-		return *reinterpret_cast<typename VertexLayout::Map<elem_t>::SysType*>(pAttribute);
+		return *reinterpret_cast<typename VertexLayout::Map<elem_t>::data_type*>(pAttribute);
 	}
 
 	template<typename T>
@@ -389,6 +417,12 @@ namespace DynamicVertex {
 		// find type and apply it depending on its case
 		switch (member.FetchType())
 		{
+		case VertexLayout::Tangent:
+			ApplyNewAttribute<VertexLayout::Tangent>(pAttribute, std::forward<T>(val));
+			break;
+		case VertexLayout::Bitangent:
+			ApplyNewAttribute<VertexLayout::Bitangent>(pAttribute, std::forward<T>(val));
+			break;
 		case VertexLayout::Position2D:
 			ApplyNewAttribute<VertexLayout::Position2D>(pAttribute, std::forward<T>(val));
 			break;

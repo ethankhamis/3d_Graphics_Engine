@@ -18,30 +18,34 @@ cbuffer ObjectCBuf
     float padding[1];
 };
 //slot 2
-cbuffer TransformCBuf
-{
-    matrix modelView;
-    matrix modelViewProjection;
-};
+//cbuffer TransformCBuf
+//{
+ //   matrix modelView;
+ //   matrix modelViewProjection;
+//};
 
 Texture2D tex;
-Texture2D nmap;
+Texture2D nmap : register(t2);
 
 SamplerState splr;
 
 
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
+float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tangent, float3 bitangent : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     // sample normal from map if normal mapping enabled == true
     if (normalMapEnabled)
     {
+        //create transform rotation from tangent space to world space
+        const float3x3 tangent_to_world_space =
+            float3x3(normalize(tangent), normalize(bitangent), normalize(n));
+        //translate normal map into world space
         const float3 normalSample = nmap.Sample(splr, tc).xyz;
         n.x = normalSample.x * 2.0f - 1.0f;
         n.y = -normalSample.y * 2.0f + 1.0f;
         n.z = -normalSample.z;
-        n = mul(n, (float3x3)modelView);
+        n = mul(n,tangent_to_world_space) ;
     }
 // fragment to light vector data
 const float3 vToL = lightPos - worldPos;

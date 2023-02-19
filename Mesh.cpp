@@ -3,7 +3,6 @@
 #include "imgui/imgui.h"
 #include <sstream>
 #include "Surface.h"
-
 Mesh::Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::isBinded>> pBinds)
 {
 	
@@ -204,7 +203,8 @@ Model::Model(Graphics& gfx, const std::string fileName)
 			aiProcess_Triangulate |
 			aiProcess_JoinIdenticalVertices |
 			aiProcess_ConvertToLeftHanded |
-			aiProcess_GenNormals
+			aiProcess_GenNormals |
+			aiProcess_CalcTangentSpace
 		);
 	if (pScene == nullptr)
 	{
@@ -242,6 +242,8 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 			VertexLayout{}
 			.Emplace_Back(VertexLayout::Position3D)
 			.Emplace_Back(VertexLayout::Normal)
+			.Emplace_Back(VertexLayout::Tangent)
+			.Emplace_Back(VertexLayout::Bitangent)
 			.Emplace_Back(VertexLayout::Texture2D)
 		)
 	);
@@ -251,6 +253,8 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		VertexBuf.Emplace_Back(
 			*reinterpret_cast<float3*>(&mesh.mVertices[idx]),
 			*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
+			*reinterpret_cast<float3*>(&mesh.mTangents[idx]),
+			*reinterpret_cast<float3*>(&mesh.mBitangents[idx]),
 			*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
 		);
 	}
@@ -270,7 +274,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 
 	vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
 	using namespace std::string_literals;
-	const std::wstring base = L"Models\\nanosuit_textured\\"s;
+	const std::wstring base = L"Models\\brickwall\\"s;
 
 	bool ContainsSpecular = false;
 	float shininess = 35.0f;
@@ -294,6 +298,12 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		{
 			mat.Get(AI_MATKEY_SHININESS, shininess);
 		}
+		mat.GetTexture(aiTextureType_NORMALS, NULL, &texture_filename);
+		texture_filename_w.clear();
+		temp = texture_filename.C_Str();
+		std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
+		bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 2));
+
 		bindablePtrs.push_back(Bind::Sampler::Store(gfx));
 	}
 
@@ -304,24 +314,32 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 	bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
 
 	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
-	auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVS.cso");
+	auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderNormalVS.cso");
 	ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
 	bindablePtrs.push_back(std::move(pVertexShader));
 
 	bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
 	if (ContainsSpecular)
 	{
-		bindablePtrs.push_back(Bind::PixelShader::Store(gfx,L"PhongShaderPSSpecularMap.cso"));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx,L"PhongShaderPSSpecularNormalMap.cso"));
+		struct PixelShaderMaterialConstant
+		{
+			int normal_map_state = 1;
+			float padding[3];
+		}pixelmatconst;
+		//extremely bad as all meshes will share the same material const
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PixelShaderMaterialConstant>::Store(gfx, pixelmatconst, 1u));
 	}
 	else
 	{
-		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderPS.cso"));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderNormalPS.cso"));
 
 		struct PSMaterialConstant
 		{
 			float specularIntensity = 0.8f;
 			float specularPower;
-			float padding[2];
+			int normal_map_state = 1;
+			float padding[1];
 		} pixelMatConstant;
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties

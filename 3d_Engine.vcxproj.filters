@@ -650,10 +650,13 @@
     <FxCompile Include="PhongShaderVS.hlsl">
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
-    <FxCompile Include="PhongShaderPSSpecularMap.hlsl">
+    <FxCompile Include="PhongShaderPSSpecularNormalMap.hlsl">
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
     <FxCompile Include="PhongShaderNormalPS.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderNormalVS.hlsl">
       <Filter>Shading\Phong Shading</Filter>
     </FxCompile>
   </ItemGroup>
