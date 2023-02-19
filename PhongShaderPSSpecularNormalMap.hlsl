@@ -24,17 +24,13 @@ float4 main(float3 view_position : Position, float3 n : Normal,float3 tangent : 
 {
     if (normal_map_state)
     {
-        float3x3 tangent_to_world_space =
+        float3x3 tangent_to_view_space =
             float3x3(
             normalize(tangent), normalize(bitangent), normalize(n)
                 );
         const float3 normal_sample = normal_map.Sample(splr, tc).xyz;
-        n.x = normal_sample.x * 2.0f - 1.f;
-        n.y = -normal_sample.y * 2.0f + 1.f;
-        n.z = normal_sample.z;
-        n.z = normal_sample.z;
-        // translate normal to view space from tangent space
-        n = mul(n, tangent_to_world_space);
+        n = normal_sample * 2.f - 1.f;
+        n = mul(n, tangent_to_view_space);
     }
     // fragment to light vector data
     const float3 Vector_To_Light = lightPos - view_position;

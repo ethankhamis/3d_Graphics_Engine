@@ -37,8 +37,8 @@ inline IndexedTriangleList Plane::Create_Advanced_Textured(DynamicVertex::Vertex
 						std::move(vlayout)
 										};
 	// set dimensions for width and height
-	constexpr float width = 1.0f;
-	constexpr float height = 1.0f;
+	constexpr float width = 2.0f;
+	constexpr float height = 2.0f;
 
 	{
 		//calculate the sides and division total for 2d axis'

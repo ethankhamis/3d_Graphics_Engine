@@ -221,6 +221,10 @@ Model::Model(Graphics& gfx, const std::string fileName)
 	unsigned int next_id = 0;
 	pRoot = ParseNode(next_id,*pScene->mRootNode);
 }
+void Model::SetTransformation(matrix transform)
+{
+	pRoot->Transform_Apply(transform);
+}
 Model::~Model() noexcept
 {}
 
@@ -237,106 +241,166 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 {
 	using DynamicVertex::VertexLayout;
 
-	DynamicVertex::VertexBuffer VertexBuf(
-		std::move(
-			VertexLayout{}
-			.Emplace_Back(VertexLayout::Position3D)
-			.Emplace_Back(VertexLayout::Normal)
-			.Emplace_Back(VertexLayout::Tangent)
-			.Emplace_Back(VertexLayout::Bitangent)
-			.Emplace_Back(VertexLayout::Texture2D)
-		)
-	);
-
-	for (unsigned int idx = 0; idx < mesh.mNumVertices; idx++)
-	{
-		VertexBuf.Emplace_Back(
-			*reinterpret_cast<float3*>(&mesh.mVertices[idx]),
-			*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
-			*reinterpret_cast<float3*>(&mesh.mTangents[idx]),
-			*reinterpret_cast<float3*>(&mesh.mBitangents[idx]),
-			*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
-		);
-	}
-
-	vector<UINT16> indices;
-	indices.reserve(mesh.mNumFaces * 3);
-	for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
-	{
-		const auto& face = mesh.mFaces[idx];
-		assert(face.mNumIndices == 3);
-		
-			indices.push_back(face.mIndices[0]);
-			indices.push_back(face.mIndices[1]);
-			indices.push_back(face.mIndices[2]);
-		
-	}
-
-	vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
 	using namespace std::string_literals;
-	const std::wstring base = L"Models\\brickwall\\"s;
+	std::vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
+	const std::wstring base = L"Models\\miles\\"s;
 
-	bool ContainsSpecular = false;
-	float shininess = 35.0f;
-	if (mesh.mMaterialIndex >= 0)
+
+	bool contains_specular = false;
+	bool contains_normal = false;
+	bool contains_diffuse = false;
+	float shininess = 35.f;
+	if (mesh.mMaterialIndex >= NULL)
 	{
-		const aiMaterial& mat = *pMaterials[mesh.mMaterialIndex];
+		auto& material = *pMaterials[mesh.mMaterialIndex];
+		aiString texture_filename;
 		std::wstring texture_filename_w;
-		aiString texture_filename; mat.GetTexture(aiTextureType_DIFFUSE, NULL, &texture_filename);
-		std::string temp = texture_filename.C_Str();
-		std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-		bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w));  //1111111111111111111111111111111111111
-		if (mat.GetTexture(aiTextureType_SPECULAR, NULL, &texture_filename) == aiReturn_SUCCESS /*0*/)
+		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
-			texture_filename_w.clear();
-			temp = texture_filename.C_Str();
+			std::string temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 1)); //22222222222222222222222222222222222
-			ContainsSpecular = true;
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w));
+			texture_filename_w.clear();
+			contains_diffuse = true;
+		}
+
+		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texture_filename) == aiReturn_SUCCESS)
+		{
+			std::string temp = texture_filename.C_Str();
+			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 1));
+			texture_filename_w.clear();
+			contains_specular = true;
 		}
 		else
 		{
-			mat.Get(AI_MATKEY_SHININESS, shininess);
+			material.Get(AI_MATKEY_SHININESS, shininess);
 		}
-		mat.GetTexture(aiTextureType_NORMALS, NULL, &texture_filename);
-		texture_filename_w.clear();
-		temp = texture_filename.C_Str();
-		std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-		bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 2));
 
-		bindablePtrs.push_back(Bind::Sampler::Store(gfx));
+		if (material.GetTexture(aiTextureType_NORMALS, 0, &texture_filename) == aiReturn_SUCCESS)
+		{
+			std::string temp = texture_filename.C_Str();
+			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 2));
+			texture_filename_w.clear();
+			contains_normal = true;
+		}
+
+		if (contains_diffuse || contains_specular || contains_normal)
+		{
+			bindablePtrs.push_back(Bind::Sampler::Store(gfx));
+		}
 	}
-
 	std::wstring mesh_name = base + L"%" + convert::make_wstring(mesh.mName.C_Str());
+	const float scale = 6.f;
 
-	bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx,mesh_name,VertexBuf));
-
-	bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
-
-	/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/ 
-	auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderNormalVS.cso");
-	ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
-	bindablePtrs.push_back(std::move(pVertexShader));
-
-	bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
-	if (ContainsSpecular)
+	if (contains_diffuse && contains_normal && contains_specular)
 	{
-		bindablePtrs.push_back(Bind::PixelShader::Store(gfx,L"PhongShaderPSSpecularNormalMap.cso"));
-		struct PixelShaderMaterialConstant
+		DynamicVertex::VertexBuffer VertexBuf(
+			std::move(
+				VertexLayout{}
+				.Emplace_Back(VertexLayout::Position3D)
+				.Emplace_Back(VertexLayout::Normal)
+				.Emplace_Back(VertexLayout::Tangent)
+				.Emplace_Back(VertexLayout::Bitangent)
+				.Emplace_Back(VertexLayout::Texture2D)
+			)
+		);
+
+		for (unsigned int idx = 0; idx < mesh.mNumVertices; idx++)
+		{
+			VertexBuf.Emplace_Back(
+				float3(mesh.mVertices[idx].x * scale, mesh.mVertices[idx].y * scale, mesh.mVertices[idx].z * scale),
+				*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
+				*reinterpret_cast<float3*>(&mesh.mTangents[idx]),
+				*reinterpret_cast<float3*>(&mesh.mBitangents[idx]),
+				*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
+			);
+		}
+
+		vector<UINT16> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
+		{
+			const auto& face = mesh.mFaces[idx];
+			assert(face.mNumIndices == 3);
+
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+
+		}
+		bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx, mesh_name, VertexBuf));
+
+		bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
+
+		/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/
+		auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderNormalVS.cso");
+		ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
+		bindablePtrs.push_back(std::move(pVertexShader));
+
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderPSSpecularNormalMap.cso"));
+		bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
+
+		struct PixelShaderMaterialConstant_dns
 		{
 			int normal_map_state = 1;
 			float padding[3];
 		}pixelmatconst;
 		//extremely bad as all meshes will share the same material const
-		bindablePtrs.push_back(Bind::PixelConstantBuffer<PixelShaderMaterialConstant>::Store(gfx, pixelmatconst, 1u));
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PixelShaderMaterialConstant_dns>::Store(gfx, pixelmatconst, 1u));
 	}
-	else
-	{
-		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderNormalPS.cso"));
 
-		struct PSMaterialConstant
+	else if (contains_diffuse && contains_normal)
+	{
+		DynamicVertex::VertexBuffer VertexBuf(
+			std::move(
+				VertexLayout{}
+				.Emplace_Back(VertexLayout::Position3D)
+				.Emplace_Back(VertexLayout::Normal)
+				.Emplace_Back(VertexLayout::Tangent)
+				.Emplace_Back(VertexLayout::Bitangent)
+				.Emplace_Back(VertexLayout::Texture2D)
+			)
+		);
+
+		for (unsigned int idx = 0; idx < mesh.mNumVertices; idx++)
 		{
-			float specularIntensity = 0.8f;
+			VertexBuf.Emplace_Back(
+				float3(mesh.mVertices[idx].x * scale, mesh.mVertices[idx].y * scale, mesh.mVertices[idx].z * scale),
+				*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
+				*reinterpret_cast<float3*>(&mesh.mTangents[idx]),
+				*reinterpret_cast<float3*>(&mesh.mBitangents[idx]),
+				*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
+			);
+		}
+
+		vector<UINT16> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
+		{
+			const auto& face = mesh.mFaces[idx];
+			assert(face.mNumIndices == 3);
+
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+
+		}
+		bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx, mesh_name, VertexBuf));
+
+		bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
+
+		/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/
+		auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderNormalVS.cso");
+		ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
+		bindablePtrs.push_back(std::move(pVertexShader));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderNormalPS.cso"));
+		bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
+
+		struct PSMaterialConstant_Dn
+		{
+			float specularIntensity = 0.18f;
 			float specularPower;
 			int normal_map_state = 1;
 			float padding[1];
@@ -344,8 +408,126 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
 		pixelMatConstant.specularPower = shininess;
-		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant>::Store(gfx, pixelMatConstant, 1u));
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_Dn>::Store(gfx, pixelMatConstant, 1u));
 	}
+	else if (contains_diffuse)
+	{
+		DynamicVertex::VertexBuffer VertexBuf(
+			std::move(
+				VertexLayout{}
+				.Emplace_Back(VertexLayout::Position3D)
+				.Emplace_Back(VertexLayout::Normal)
+				.Emplace_Back(VertexLayout::Texture2D)
+			)
+		);
+
+		for (unsigned int idx = 0; idx < mesh.mNumVertices; idx++)
+		{
+			VertexBuf.Emplace_Back(
+				float3(mesh.mVertices[idx].x * scale, mesh.mVertices[idx].y * scale, mesh.mVertices[idx].z * scale),
+				*reinterpret_cast<float3*>(&mesh.mNormals[idx]),
+				*reinterpret_cast<float2*>(&mesh.mTextureCoords[NULL][idx])
+			);
+		}
+
+		vector<UINT16> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
+		{
+			const auto& face = mesh.mFaces[idx];
+			assert(face.mNumIndices == 3);
+
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+
+		}
+
+		bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx, mesh_name, VertexBuf));
+
+		bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
+
+		/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/
+		auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVS.cso");
+		ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
+		bindablePtrs.push_back(std::move(pVertexShader));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderPS.cso"));
+		bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
+
+		struct PSMaterialConstant_D
+		{
+			float specularIntensity = 0.18f;
+			float specularPower;
+			float padding[2];
+		} pixelMatConstant;
+		// MUST BE ADDRESSED
+		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
+		pixelMatConstant.specularPower = shininess;
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_D>::Store(gfx, pixelMatConstant, 1u));
+	}
+
+	else if (!contains_diffuse && !contains_normal && !contains_specular)
+	{
+
+
+		DynamicVertex::VertexBuffer VertexBuf(
+			std::move(
+				VertexLayout{}
+				.Emplace_Back(VertexLayout::Position3D)
+				.Emplace_Back(VertexLayout::Normal)
+			)
+		);
+
+		for (unsigned int idx = 0; idx < mesh.mNumVertices; idx++)
+		{
+			VertexBuf.Emplace_Back(
+				float3(mesh.mVertices[idx].x * scale, mesh.mVertices[idx].y * scale, mesh.mVertices[idx].z * scale),
+				*reinterpret_cast<float3*>(&mesh.mNormals[idx])
+			);
+		}
+
+		vector<UINT16> indices;
+		indices.reserve(mesh.mNumFaces * 3);
+		for (unsigned int idx = 0; idx < mesh.mNumFaces; idx++)
+		{
+			const auto& face = mesh.mFaces[idx];
+			assert(face.mNumIndices == 3);
+
+			indices.push_back(face.mIndices[0]);
+			indices.push_back(face.mIndices[1]);
+			indices.push_back(face.mIndices[2]);
+
+		}
+
+		bindablePtrs.push_back(Bind::VertexBuffer::Store(gfx, mesh_name, VertexBuf));
+
+		bindablePtrs.push_back(Bind::IndexBuffer::Store(gfx, mesh_name, indices));
+
+		/*std::unique_ptr<Bind::VertexShader, std::default_delete<Bind::VertexShader>>*/
+		auto pVertexShader = Bind::VertexShader::Store(gfx, L"PhongShaderVSUntextured.cso");
+		ID3DBlob* pVertexShaderByteCode = pVertexShader->FetchByteCode();
+		bindablePtrs.push_back(std::move(pVertexShader));
+		bindablePtrs.push_back(Bind::PixelShader::Store(gfx, L"PhongShaderPSUntextured.cso"));
+		bindablePtrs.push_back(Bind::InputLayout::Store(gfx, VertexBuf.FetchLayout(), pVertexShaderByteCode));
+
+		struct PSMaterialConstant_untextured
+		{
+			float4 colour = { 0.5,0.5,0.85,1.f };
+			float specularIntensity = 0.18f;
+			float specularPower;
+			float padding[2];
+		} pixelMatConstant;
+		// MUST BE ADDRESSED
+		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
+		pixelMatConstant.specularPower = shininess;
+		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_untextured>::Store(gfx, pixelMatConstant, 1u));
+	}
+
+	else
+{
+	throw std::runtime_error("unusable textures");
+}
+
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 
@@ -389,7 +571,7 @@ const wchar_t* ModelException::whatw() const noexcept
 {
 	std::wstringstream wss;
 	wss << ExceptionHandler::whatw() << std::endl
-		<< "\n[Note]\n" << FetchNote();
+		<< L"\n[Note]\n" << FetchNote();
 	std::wstring ws = wss.str();
 	return ws.c_str();
 }

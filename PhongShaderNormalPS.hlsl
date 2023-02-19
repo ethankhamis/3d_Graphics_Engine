@@ -38,14 +38,14 @@ float4 main(float3 view_position : Position, float3 n : Normal,float3 tangent : 
     if (normalMapEnabled)
     {
         //create transform rotation from tangent space to view space
-        const float3x3 tangent_to_world_space =
+        const float3x3 tangent_to_view_space =
             float3x3(normalize(tangent), normalize(bitangent), normalize(n));
         //translate normal map into world space
         const float3 normalSample = nmap.Sample(splr, tc).xyz;
-        n.x = normalSample.x * 2.0f - 1.0f;
-        n.y = -normalSample.y * 2.0f + 1.0f;
-        n.z = -normalSample.z;
-        n = mul(n,tangent_to_world_space) ;
+        n = normalSample * 2.f - 1.f;
+        n.y = -n.y;
+       //n.z = n.z;
+        n = mul(n,tangent_to_view_space) ;
     }
 // fragment to light vector data
 const float3 vToL = lightPos - view_position;

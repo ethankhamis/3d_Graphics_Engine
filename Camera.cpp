@@ -53,7 +53,7 @@ void Camera::ConstructControlWindow() noexcept
 
 void Camera::Resetv() noexcept
 {
-	position = {0.2f, 3.7f, -21.2f };
+	position = {0.0f, 0.0f, -10.2f };
 	
 	pitch = .0f;
 	yaw = .0f;

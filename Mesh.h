@@ -57,6 +57,7 @@ struct Model
 {
 	Model(Graphics& gfx, const std::string fileName);
 	void Render(Graphics& gfx) const noexcept_unless;
+	void SetTransformation(const matrix transform);
 private:
 	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials);
 	unique_ptr<Node> ParseNode(unsigned int& next_id,const aiNode& node) noexcept;

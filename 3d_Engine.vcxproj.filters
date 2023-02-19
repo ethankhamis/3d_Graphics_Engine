@@ -196,6 +196,9 @@
     <Filter Include="Performance &amp; Helpers\Conversions">
       <UniqueIdentifier>{c4109bd1-7d59-4599-af8c-97e16a536a44}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shading\Phong Shading\Untextured">
+      <UniqueIdentifier>{1ad6037d-315d-4500-8c21-69a7a3481dcb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -658,6 +661,15 @@
     </FxCompile>
     <FxCompile Include="PhongShaderNormalVS.hlsl">
       <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="PSNormalMapPhongObjectSpace.hlsl">
+      <Filter>Shading\Phong Shading</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderPSUntextured.hlsl">
+      <Filter>Shading\Phong Shading\Untextured</Filter>
+    </FxCompile>
+    <FxCompile Include="PhongShaderVSUntextured.hlsl">
+      <Filter>Shading\Phong Shading\Untextured</Filter>
     </FxCompile>
   </ItemGroup>
   <ItemGroup>

@@ -22,8 +22,9 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
+	Model goblin{ window.grfx(),"Models\\miles\\spmiles.obj" };
 	//Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
-	Model wall{window.grfx(), "Models\\brickwall\\brickwall.obj"};
+	//Model wall{window.grfx(), "Models\\brickwall\\brickwall.obj"};
 private:
 	void ExecFrame();
 private:

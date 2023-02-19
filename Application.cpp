@@ -23,6 +23,7 @@ Application::Application()
 	spawn(window.grfx())
 	//plane(window.grfx(), 20.f, L"Models\\brickwall\\brickwall.jpg", L"Models\\brickwall\\brickwall_normal.jpg"),
 {
+	//wall.SetTransformation(DirectX::XMMatrixTranslation(-1.5f,0.f,0.f));
 	//plane.ApplyPos({ 1.f,-5.f,10.f });
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
 	//window.Mouse_DisableIcon();
@@ -37,7 +38,8 @@ void Application::ExecFrame()
 
 	//building.Render(window.grfx());
 	spawn.FetchLight()->Render(window.grfx());
-	wall.Render(window.grfx());
+	//wall.Render(window.grfx());
+	goblin.Render(window.grfx());
 
 	while (const std::optional<Keyboard::Event> key = window.kbd.Key_Read())
 	{
@@ -99,7 +101,8 @@ void Application::ExecFrame()
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
 
-	wall.PresentWindow("Wall");
+	goblin.PresentWindow();
+	//wall.PresentWindow("Wall");
 	//building.PresentWindow("Model 1");
 	//plane.Open_Window(window.grfx());
 	//cube.Open_Window(window.grfx());
