@@ -32,12 +32,12 @@ SamplerState splr;
 
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tangent, float3 bitangent : Bitangent, float2 tc : Texcoord) : SV_Target
+float4 main(float3 view_position : Position, float3 n : Normal,float3 tangent : Tangent, float3 bitangent : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     // sample normal from map if normal mapping enabled == true
     if (normalMapEnabled)
     {
-        //create transform rotation from tangent space to world space
+        //create transform rotation from tangent space to view space
         const float3x3 tangent_to_world_space =
             float3x3(normalize(tangent), normalize(bitangent), normalize(n));
         //translate normal map into world space
@@ -48,7 +48,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tange
         n = mul(n,tangent_to_world_space) ;
     }
 // fragment to light vector data
-const float3 vToL = lightPos - worldPos;
+const float3 vToL = lightPos - view_position;
 const float distToL = length(vToL);
 const float3 dirToL = vToL / distToL;
 // attenuation
@@ -60,7 +60,7 @@ const float3 w = n * dot(vToL, n);
 const float3 r = w * 2.0f - vToL;
 // calculate specular intensity based on angle between viewing vector and reflection vector,
 // narrow with power function
-const float3 specular = att * (diffuseColour * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
+const float3 specular = att * (diffuseColour * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(view_position))), specularPower);
 // final Colour
 return float4(saturate((diffuse + ambient) * tex.Sample(splr, tc).rgb + specular), 1.0f);
 }

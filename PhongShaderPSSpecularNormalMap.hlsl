@@ -20,7 +20,7 @@ Texture2D normal_map;
 SamplerState splr;
 
 
-float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tangent,float3 bitangent : Bitangent, float2 tc : Texcoord) : SV_Target
+float4 main(float3 view_position : Position, float3 n : Normal,float3 tangent : Tangent,float3 bitangent : Bitangent, float2 tc : Texcoord) : SV_Target
 {
     if (normal_map_state)
     {
@@ -32,11 +32,12 @@ float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tange
         n.x = normal_sample.x * 2.0f - 1.f;
         n.y = -normal_sample.y * 2.0f + 1.f;
         n.z = normal_sample.z;
+        n.z = normal_sample.z;
         // translate normal to view space from tangent space
         n = mul(n, tangent_to_world_space);
     }
     // fragment to light vector data
-    const float3 Vector_To_Light = lightPos - worldPos;
+    const float3 Vector_To_Light = lightPos - view_position;
     const float Distance_Vector_To__Light = length(Vector_To_Light);
     const float3 Direction_Vector_To_Light = Vector_To_Light / Distance_Vector_To__Light;
     // attenuation calculation
@@ -58,7 +59,7 @@ float4 main(float3 worldPos : Position, float3 n : Normal,float3 tangent : Tange
     //narrow it down using with power function
     const float specularPower = pow(2.0f, specularSample.a * 13.0f);
     //create a float string specular intensity, direction and its calculated power
-    const float3 specular = attenuation * (diffuseColour * diffuseIntensity) * pow(max(0.0f, dot(normalize(-r), normalize(worldPos))), specularPower);
+    const float3 specular = attenuation * (diffuseColour * diffuseIntensity) * pow(max(0.0f, dot(normalize(-r), normalize(view_position))), specularPower);
     // final Colour in NRGB space by clamping using saturate
     // multiply diffuser lighting and ambient lighting by the texture colour alongside the  specular intensity and its colour
     // w = 1.f
