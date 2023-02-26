@@ -14,8 +14,6 @@ namespace Gdiplus
 #include <memory>
 #include <sstream>
 
-namespace gdp = Gdiplus; 
-
 #pragma comment(lib, "gdiplus.lib")
 
 Surface::Exception::Exception(unsigned int line, const wchar_t* file, std::wstring note) noexcept
@@ -123,9 +121,9 @@ Surface Surface::WithFile(const std::wstring& filename)
     std::unique_ptr<Colour[]> pBuffer;
 
     {
-        gdp::Bitmap bitmap(filename.c_str());
+        Gdiplus::Bitmap bitmap(filename.c_str());
         // create bitmap type using filename
-        if (bitmap.GetLastStatus() != gdp::Status::Ok)
+        if (bitmap.GetLastStatus() != Gdiplus::Status::Ok)
         {//if an error occurs
             std::wstringstream wss;
             wss << L"Loading image {" << filename << L"}: has failed to load.";
@@ -143,7 +141,7 @@ Surface Surface::WithFile(const std::wstring& filename)
             for (UINT x = 0; x < w; x++)
             {
                 //create colour object
-                gdp::Color c;
+                Gdiplus::Color c;
                 //find colour at specific x/u y/v levels of bitmap
                 bitmap.GetPixel(x, y, &c);
                 //set buffer to pixel value
@@ -163,9 +161,9 @@ void Surface::SaveFile(const std::wstring& filename) const
         unsigned int n = NULL;          // n = number of image encoders
         unsigned int size = NULL;       // size = size of the image encoder array in bytes
 
-        gdp::ImageCodecInfo* pImageCodecInfo = nullptr;
+        Gdiplus::ImageCodecInfo* pImageCodecInfo = nullptr;
 
-        gdp::GetImageEncodersSize(&n, &size);
+        Gdiplus::GetImageEncodersSize(&n, &size);
         //if the encoder size is not provided
         if (size == NULL)
         {
@@ -174,7 +172,7 @@ void Surface::SaveFile(const std::wstring& filename) const
             throw Exception(__LINE__, WFILE, wss.str());
         }
         //allocate dynamic memory to store image codec information
-        pImageCodecInfo = (gdp::ImageCodecInfo*)(malloc(size));
+        pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
         if (pImageCodecInfo == nullptr)
         {
             std::wstringstream wss;
@@ -208,9 +206,9 @@ void Surface::SaveFile(const std::wstring& filename) const
     GetEncoderClsid(L"image/bmp", &bmpID);
 
 
-    gdp::Bitmap bitmap(width, height, width * sizeof(Colour), PixelFormat32bppARGB, (BYTE*)pBuffer.get());
+    Gdiplus::Bitmap bitmap(width, height, width * sizeof(Colour), PixelFormat32bppARGB, (BYTE*)pBuffer.get());
     //if the error status is negative
-    if (bitmap.Save(filename.c_str(), &bmpID, nullptr) != gdp::Status::Ok)
+    if (bitmap.Save(filename.c_str(), &bmpID, nullptr) != Gdiplus::Status::Ok)
     {
         std::wstringstream wss;
         wss << L"Saving surface to [" << filename << L"]: failed to save.";

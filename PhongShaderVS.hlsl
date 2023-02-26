@@ -1,10 +1,10 @@
-cbuffer CBuf
+cbuffer ConstBuffer
 {
 	matrix modelView;
 	matrix modelViewProj;
 };
 
-struct VSOut
+struct VertexShaderOutput
 {
 	float3 view_position : Position;
 	float3 normal : Normal;
@@ -12,10 +12,10 @@ struct VSOut
 	float4 pos : SV_Position;
 };
 
-VSOut main(float3 pos : Position, float3 n : Normal, float2 texture_coordinates : Texcoord)
+VertexShaderOutput main(float3 pos : Position, float3 n : Normal, float2 texture_coordinates : Texcoord)
 {
 	//create VSOUT type
-	VSOut v_shaderoutput;
+	VertexShaderOutput v_shaderoutput;
 	//set world position to be the position multiplied by the view (model view)
 	v_shaderoutput.view_position = (float3) mul(float4(pos, 1.0f), modelView);
 	// set normal to the normal multiplied by the 3x3 modelview

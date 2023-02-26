@@ -41,9 +41,9 @@ std::wstring ExceptionHandler::FetchErrorWString() const noexcept
 	std::wstringstream wss;
 
 	wss
-		<< L"{File: " << fName << L" }" 
+		<< L"{File: " << fName << L"}" 
 		<< std::endl
-		<< L"{Line: " << curLine << L" }";
+		<< L"{Line: " << curLine << L"}";
 	return wss.str();
 
 }

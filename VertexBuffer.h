@@ -9,17 +9,20 @@ namespace Bind
 
 	struct VertexBuffer : public isBinded
 	{
+		//constructors
 		VertexBuffer(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer);
 		VertexBuffer(Graphics& gfx, const DynamicVertex::VertexBuffer& vertexBuffer);
+		//members
 		void Bind(Graphics& gfx) noexcept override;
 		static std::shared_ptr<VertexBuffer> Store(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer);
 		template<typename...Remainder>
 		static std::wstring ConstructUID(const std::wstring& tag, Remainder&&...remainder); // takes the remainder out of ConstructUID_
 		std::wstring FetchUID() const noexcept override;
 		static std::wstring ConstructUID_(const std::wstring& tag);
+		//protected attributes
 	protected:
 		std::wstring tag;
-		UINT stride;
+		UINT32 pitch;
 		ComPtr<ID3D11Buffer> pVertexBuffer; //comptr -> shared_ptr for COM objects
 	};
 	template<typename ...Remainder>

@@ -8,7 +8,6 @@
 
 TexturedPlane::TexturedPlane(Graphics& gfx, float size, std::wstring texture, std::optional<std::wstring> normal)
 {
-	using namespace Bind;
 	IndexedTriangleList plane = Plane::Create_Textured();
 	plane.Transform(DirectX::XMMatrixScaling(size, size, 1.f));
 	const std::wstring geometry_tag = L"$plane. " + convert::make_wstring( std::to_string(size).c_str() );

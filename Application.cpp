@@ -25,14 +25,14 @@ Application::Application()
 {
 	//wall.SetTransformation(DirectX::XMMatrixTranslation(-1.5f,0.f,0.f));
 	//plane.ApplyPos({ 1.f,-5.f,10.f });
-	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 40.0f));
-	//window.Mouse_DisableIcon();
+	//set perspective projection 
+	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 200.0f));
 }
 
 void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
-	window.grfx().ClearBuffer(1.0f, 0.0f, 0.f);
+	window.grfx().ClearBuffer(0.0f, 0.0f, .0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Update(window.grfx(), camera.FetchMatrix());
 

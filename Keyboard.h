@@ -64,7 +64,7 @@ private:
 	std::queue<Event> KeyBuffer;
 	std::queue<char> CharBuffer;
 	template<typename T>
-	static void Buffer_ReduceSize(std::queue<T>& b) noexcept;
+	static void Buffer_AdjustSize(std::queue<T>& b) noexcept;
 
 public:
 	void AutoRepeat_Enable() noexcept;

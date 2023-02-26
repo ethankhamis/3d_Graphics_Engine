@@ -125,7 +125,7 @@ namespace Bind
 		//remap constant buffer
 		size_t size = sizeof(constants);
 		//copy the memory from the constants to the subresource
-		memcpy(MappedSubRes.pData, &constants, sizeof(constants));
+		memcpy(MappedSubRes.pData, &constants, size);
 		//unmap constant buffer
 		FetchDeviceContext(gfx)->Unmap(pConstBuffer.Get(), 0u);
 	}

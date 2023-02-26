@@ -41,6 +41,7 @@ namespace Bind
 			(
 				modelView *
 				gfx.FetchProjection()
+				// fetch projection is the correct camera projection (aapect ratio set in application constructor)
 			)
 		};
 	}

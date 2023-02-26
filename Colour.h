@@ -11,11 +11,11 @@ struct Colour
 	constexpr Colour(unsigned int dword) noexcept
 		:dword(dword){}
 
-	constexpr Colour (unsigned char x, unsigned char r, unsigned char g, unsigned char b) noexcept
-		: dword( (x<<24u)|(r<<16u)|(g<<8u)|b ){}
+	constexpr Colour (unsigned char a, unsigned char r, unsigned char g, unsigned char b) noexcept
+		: dword( (a<<24u)|(r<<16u)|(g<<8u)|b ){}
 
-	constexpr Colour(Colour c, unsigned char x) noexcept
-		: dword( x << 24u | c.dword){}
+	constexpr Colour(Colour c, unsigned char a) noexcept
+		: dword( a << 24u | c.dword){}
 
 	Colour& operator= (Colour c) noexcept
 	{
@@ -23,14 +23,9 @@ struct Colour
 		return *this;
 	}
 
-	constexpr unsigned char FetchX() const noexcept
-	{
-		return dword >> 24u;
-	}
-
 	constexpr unsigned char FetchA() const noexcept
 	{
-		return FetchX();
+		return dword >> 24u;
 	}
 
 	constexpr unsigned char FetchR() const noexcept
@@ -43,14 +38,9 @@ struct Colour
 		return dword & 255u;
 	}
 
-	void ApplyX(unsigned char x) noexcept
-	{
-		dword = (dword & 16777215u) | (x << 24u);
-	}
-
 	void ApplyA(unsigned char a) noexcept
 	{
-		ApplyX(a);
+		dword = (dword & 16777215u) | (a << 24u);
 	}
 
 	void ApplyR(unsigned char r) noexcept

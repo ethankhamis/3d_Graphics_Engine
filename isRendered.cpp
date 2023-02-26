@@ -19,7 +19,7 @@ void isRendered::ApplyBind(std::shared_ptr<Bind::isBinded> bind) noexcept_unless
 {
 	if (typeid(*bind) == typeid(IndexBuffer))
 	{
-		assert( "MUST USE FUNC 'ApplyIndexBuffer' when binding index buffer" && pIndexBuffer == nullptr );
+		assert( "index buffer already exists for mesh" && pIndexBuffer == nullptr );
 		pIndexBuffer = &static_cast<IndexBuffer&>(*bind);
 	}
 	allBinds.push_back(std::move(bind));

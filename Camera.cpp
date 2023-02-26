@@ -15,10 +15,10 @@ DirectX::XMMATRIX Camera::FetchMatrix() const noexcept
 		DirectX::XMMatrixRotationRollPitchYaw(pitch, yaw, 0.f)
 	);
 
-
+	float3 position_f3 = float3{ position.x, position.y, position.z };
 
 	//create vector type of position
-	const vector pos = DirectX::XMLoadFloat3(&position);
+	const vector pos = DirectX::XMLoadFloat3(&position_f3);
 	// create target/direction using the view and position
 	const vector target = pos + View;
 	//create a matrix with the left handed coordinate system factoring:

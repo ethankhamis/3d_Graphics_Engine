@@ -123,7 +123,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		WS_MAXIMIZEBOX,
 		FALSE)) == NULL)
 	{
-		throw WINDOW_LAST_EXCEPT();
+		throw THROW_WINDOW_LAST_EXCEPTION();
 	};
 	 
 	//initialise window CreateWindowExW
@@ -135,7 +135,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 		nullptr, nullptr, WndClass::FetchInstance(), this
 	);
 	if (hWnd == nullptr) { 
-		throw WINDOW_LAST_EXCEPT(); }
+		throw THROW_WINDOW_LAST_EXCEPTION(); }
 
 	//present window
 	ShowWindow(hWnd, SW_SHOWDEFAULT);
@@ -155,7 +155,7 @@ Wnd::Wnd(int width, int height, const wchar_t* name):width(width),height(height)
 	raw_input_device.hwndTarget = nullptr;
 	if (!RegisterRawInputDevices(&raw_input_device, 0x01, sizeof(raw_input_device))) // if not registering
 	{
-		throw WINDOW_LAST_EXCEPT();
+		throw THROW_WINDOW_LAST_EXCEPTION();
 	}
 
 }
@@ -170,7 +170,7 @@ void Wnd::ApplyTitle(const std::wstring& t)
 {
 	if(SetWindowTextW(hWnd, t.c_str()) == NULL)
 	{
-		throw WINDOW_LAST_EXCEPT();
+		throw THROW_WINDOW_LAST_EXCEPTION();
 	}
 }
 
@@ -210,57 +210,66 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 		}break;
 
 	case WM_CHAR:
-		kbd.Char_OnPress(static_cast<unsigned char>(wParam));
-		if (io.WantCaptureKeyboard) { break; }
+		if (io.WantCaptureKeyboard) { break; } // when imgui is using keyboard inputs
+		kbd.Char_OnPress(static_cast<unsigned char>(wParam));//  add the keycode to the buffer
 		break;
 
-	case WM_KEYUP:
+	case WM_KEYUP: //key release messages
 	case WM_SYSKEYUP:
-		if (io.WantCaptureKeyboard) { break; }
-		kbd.Key_OnRelease(static_cast<unsigned char>(wParam));
+		if (io.WantCaptureKeyboard) { break; } // when imgui is using keyboard inputs
+		kbd.Key_OnRelease(static_cast<unsigned char>(wParam));//  add the keycode to the buffer
 		break;
 
-	case WM_KEYDOWN:
+	case WM_KEYDOWN: //key press messages
 	case WM_SYSKEYDOWN:
 		if (io.WantCaptureMouse) { break; }
 		if (!(kbd.AutoRepeat_State || lParam & 0x40000000 /*bit 30*/)) {
-			kbd.Key_onPress(static_cast<unsigned char>(wParam));
+			kbd.Key_onPress(static_cast<unsigned char>(wParam)); //  add the keycode to the buffer
 		}
 		break;
 		//End of Windows Kbd Messages
 		//Start of Windows Mouse Messages
 	case WM_MOUSEMOVE:
 	{
-		if (!Mouse_Icon_IsEnabled)
+		if (!Mouse_Icon_IsEnabled) // if mouse icon is disabled
 		{
-			if (!mouse.Inside_Window_Check())
+			if (!mouse.Inside_Window_Check()) // and mouse is outside of window
 			{
-				SetCapture(hWnd);
-				mouse.Mouse_Inside();
-				Mouse_HideIcon();
+				SetCapture(hWnd); // capture input to the window
+				mouse.Mouse_Inside(); // set the mouse boolean to be inside
+				Mouse_HideIcon(); // hide the mouse icon
 			}break;
 		}
-		SetForegroundWindow(hWnd);
+		SetForegroundWindow(hWnd); // capture all input from the window and activate it
 		if (io.WantCaptureMouse) { break; }
-		const POINTS pt = MAKEPOINTS(lParam);
+		const POINTS pt = MAKEPOINTS(lParam); // find dimensions for the mouse position
 		if(pt.y<height && pt.y >=0 && pt.x>=0 && pt.x < width)
-		{
+		{ // check if the current mouse position is inside of the screen
 			mouse.Mouse_Pos_Change(pt.x, pt.y);
+			// if the boolean hasnt been updated
 			if (!mouse.Inside_Window_Check())
 			{
+				//set the capture to the window
 				SetCapture(hWnd);
+				//flip the boolean to be true
 				mouse.Mouse_Inside();
 			}
 		}
+		//if the mouse position is outside of the screen
 		else
 		{
+			//check if the left, right or middle buttons are being pressed
+			//(wparam holds this data)
 			if (wParam & (MK_LBUTTON | MK_RBUTTON | MK_MBUTTON))
 			{
+				//if they are, change the mouse position
 				mouse.Mouse_Pos_Change(pt.x, pt.y);
 			}
 			else
 			{
+				//if not, the window should not be in focus
 				ReleaseCapture();
+				//the boolean should state that the mouse is outside (false)
 				mouse.Mouse_Outside();
 			}
 		}
@@ -377,7 +386,7 @@ LRESULT Wnd::MsgHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) noexc
 			break;
 		}
 
-		auto& raw_input = reinterpret_cast<const RAWINPUT&>(*Raw_Buffer.data());
+		const RAWINPUT& raw_input = reinterpret_cast<const RAWINPUT&>(*Raw_Buffer.data());
 		if (raw_input.header.dwType == RIM_TYPEMOUSE && (raw_input.data.mouse.lLastX != 0 || raw_input.data.mouse.lLastY != 0))
 		{
 			mouse.ApplyRawDelta(raw_input.data.mouse.lLastX, raw_input.data.mouse.lLastY);
@@ -493,8 +502,9 @@ const wchar_t* Wnd::HResultException::whatw() const noexcept
 		<< L"{Error Code of: "
 		<< FetchErrorCode() << L" }"
 		<< std::endl
-		<< L"{Error Description: "
-		<< FetchErrorWString() << L" }"
+		<< L"Error Description: "
+		<< FetchErrorDescription()
+		<< std::endl
 		<< FetchErrorWString();
 
 	buffer_w = wss.str().c_str();

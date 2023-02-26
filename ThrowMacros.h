@@ -17,15 +17,15 @@
 #define GFX_THROW_INFO_ONLY(call) infomanager.Apply(); (call); {auto m = infomanager.FetchMessages(); if(!m.empty()) {throw Graphics::InfoException( __LINE__,WFILE,m);}}
 #else
 #define GFX_EXCEPT(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
-#define GFX_THROW_INFO(hrcall) GFX_THROW_NOINFO(hrcall)
+#define GFX_THROW_INFO(hrcall) THROW_GFX_EXCEPTION_NO_DXINFOMANAGER(hrcall)
 #define GFX_DEVICE_REMOVED_EXCEPT(hr) Graphics::DeviceRemovedException( __LINE__,WFILE,(hr) )
 #define GFX_THROW_INFO_ONLY(call) (call)
 #endif
 // HRESULT must exist in scope macros to work
 #define GFX_EXCEPT_NOINFO(hr) Graphics::HResultException( __LINE__,WFILE,(hr) )
-#define GFX_THROW_NOINFO(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,WFILE,hr )
+#define THROW_GFX_EXCEPTION_NO_DXINFOMANAGER(hrcall) if( FAILED( hr = (hrcall) ) ) throw Graphics::HResultException( __LINE__,WFILE,hr )
 
 // macro for throwing windows exceptions
 #define WINDOW_EXCEPT( hr ) Wnd::HResultException( __LINE__,WFILE,(hr) )
-#define WINDOW_LAST_EXCEPT() Wnd::HResultException( __LINE__,WFILE,GetLastError() )
+#define THROW_WINDOW_LAST_EXCEPTION() Wnd::HResultException( __LINE__,WFILE,GetLastError() )
 #define WINDOW_NOGFX_EXCEPT() Wnd::NoGfxException(__LINE__, WFILE)

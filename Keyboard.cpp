@@ -62,20 +62,20 @@ void Keyboard::Key_onPress(unsigned char keycode) noexcept
 {
 	keyStates[keycode] = true;
 	KeyBuffer.push(Keyboard::Event(Keyboard::Event::TypeName::Press, keycode));
-	Buffer_ReduceSize(KeyBuffer);
+	Buffer_AdjustSize(KeyBuffer);
 }
 
 void Keyboard::Key_OnRelease(unsigned char keycode) noexcept
 {
 	keyStates[keycode] = false;
 	KeyBuffer.push(Keyboard::Event(Keyboard::Event::TypeName::Release, keycode));
-	Buffer_ReduceSize(KeyBuffer);
+	Buffer_AdjustSize(KeyBuffer);
 }
 
 void Keyboard::Char_OnPress(char character) noexcept
 {
 	CharBuffer.push(character);
-	Buffer_ReduceSize(CharBuffer);
+	Buffer_AdjustSize(CharBuffer);
 }
 
 void Keyboard::State_Clear() noexcept
@@ -99,7 +99,7 @@ bool Keyboard::AutoRepeatState() const noexcept
 }
 
 template<typename T>
-void Keyboard::Buffer_ReduceSize(std::queue<T>& b) noexcept
+void Keyboard::Buffer_AdjustSize(std::queue<T>& b) noexcept
 {
 	while (b.size() > bufferSize) { b.pop(); }
 }

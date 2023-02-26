@@ -1,6 +1,7 @@
 #pragma once
 #include "Graphics.h"
 #include "Math.cpp"
+#include "TypeDecl.h"
 
 struct Camera
 {
@@ -11,7 +12,7 @@ struct Camera
 	void Rotate_by(float delta_x, float delta_y) noexcept; // rotate camera matrix
 	void Translate_by(float3 translation) noexcept; // alter matrix position
 private:
-	float3 position;
+	object_variables::position position;
 	float pitch, yaw;
 	static constexpr float travel_speed = 12.f, rotation_speed = 0.004f;
 };

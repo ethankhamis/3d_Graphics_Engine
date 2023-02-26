@@ -209,7 +209,7 @@ namespace DynamicVertex {
 		};
 	public:
 		template<MemberType elem_t>
-		const Member& Store() const noexcept_unless
+		const Member& FetchMemberRef() const noexcept_unless
 		{
 			for (const VertexLayout::Member& e : elements)
 			{
@@ -218,10 +218,10 @@ namespace DynamicVertex {
 					return e;
 				}
 			}
-			assert("Could not resolve element type" && false);
+			assert("Could not find element type" && false);
 			return elements.front();
 		}
-		const Member& ResolveByIndex(unsigned int idx) const noexcept_unless
+		const Member& FindByIndex(unsigned int idx) const noexcept_unless
 		{
 			return elements[idx];
 		}
@@ -405,14 +405,14 @@ namespace DynamicVertex {
 	template<VertexLayout::MemberType elem_t>
 	inline auto& Vertex::Attribute() noexcept_unless
 	{
-		auto pAttribute = pVertexData + layout.Store<elem_t>().FetchOffset();
+		auto pAttribute = pVertexData + layout.FetchMemberRef<elem_t>().FetchOffset();
 		return *reinterpret_cast<typename VertexLayout::Map<elem_t>::data_type*>(pAttribute);
 	}
 
 	template<typename T>
 	inline void Vertex::SetAttributeByIndex(unsigned int idx, T&& val)/*universal ref*/ noexcept_unless
 	{
-		const auto& member = layout.ResolveByIndex(idx);
+		const auto& member = layout.FindByIndex(idx);
 		auto pAttribute = pVertexData + member.FetchOffset();
 		// find type and apply it depending on its case
 		switch (member.FetchType())

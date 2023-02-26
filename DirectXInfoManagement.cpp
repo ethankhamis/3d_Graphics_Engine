@@ -13,41 +13,34 @@
 
 DxGfxInfoMng::DxGfxInfoMng()
 {
-	// define function signature of DXGIGetDebugInterface
+	// taken from
+	// https://github.com/FFmpeg/FFmpeg/blob/master/libavutil/hwcontext_d3d11va.c
 	typedef HRESULT(WINAPI* DXGIGetDebugInterface)(REFIID, void**);
 
-	// load the dll that contains the function DXGIGetDebugInterface
-	const auto hModDxgiDebug = LoadLibraryExW(L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
-	if (hModDxgiDebug == nullptr)
-	{
-		throw WINDOW_LAST_EXCEPT();
-	}
-	
+	// call LoadLibraryExW on the dll storing the DXGIGetDebugInterface function
+	const HMODULE hModDxgiDebug = LoadLibraryExW(L"dxgidebug.dll", nullptr, LOAD_LIBRARY_SEARCH_SYSTEM32);
+	if (hModDxgiDebug == nullptr){throw THROW_WINDOW_LAST_EXCEPTION();}
 	// fetch address of DXGIGetDebugInterface in dll
-	const auto DxgiGetDebugInterface = reinterpret_cast<DXGIGetDebugInterface>(
+	const DXGIGetDebugInterface DxgiGetDebugInterface = 
+		reinterpret_cast<DXGIGetDebugInterface>(
 		reinterpret_cast<void*>(GetProcAddress(hModDxgiDebug, "DXGIGetDebugInterface"))
 		);
-	if (DxgiGetDebugInterface == nullptr)
-	{
-		throw WINDOW_LAST_EXCEPT();
-	}
-	
+	if (DxgiGetDebugInterface == nullptr){throw THROW_WINDOW_LAST_EXCEPTION();}
 	HRESULT hr;
 	// store info using the debug interface
-	GFX_THROW_NOINFO(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pIDxGfxInfoQueue));
+	THROW_GFX_EXCEPTION_NO_DXINFOMANAGER(DxgiGetDebugInterface(__uuidof(IDXGIInfoQueue), &pIDxGfxInfoQueue));
 	
 }
 
 void DxGfxInfoMng::Apply() noexcept
 {
-	// store the number of messages using GUID type DXGI_DEBUG_ALL
+	// store the messages using GUID type DXGI_DEBUG_ALL
 	nextMsg = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 }
 
 std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 {
 	std::vector<std::string> messages;
-
 
 	const auto end = pIDxGfxInfoQueue->GetNumStoredMessages(DXGI_DEBUG_ALL);
 	// loop first messagee to last message
@@ -57,13 +50,13 @@ std::vector<std::string> DxGfxInfoMng::FetchMessages() const
 		SIZE_T messageLength;
 
 		// get size of message i in bytes
-		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
+		THROW_GFX_EXCEPTION_NO_DXINFOMANAGER(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, nullptr, &messageLength));
 		// allocate memory for message
-		std::unique_ptr bytes = std::make_unique<byte[]>(messageLength);
-		auto pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
+		std::unique_ptr<byte[], std::default_delete<byte[]>> bytes = std::make_unique<byte[]>(messageLength);
+		DXGI_INFO_QUEUE_MESSAGE* pMessage = reinterpret_cast<DXGI_INFO_QUEUE_MESSAGE*>(bytes.get());
 		// get the message
-		GFX_THROW_NOINFO(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
-		//describe description into std::vector
+		THROW_GFX_EXCEPTION_NO_DXINFOMANAGER(pIDxGfxInfoQueue->GetMessageW(DXGI_DEBUG_ALL, i, pMessage, &messageLength));
+		//emplace description into std::vector of messages
 		messages.emplace_back(pMessage->pDescription);
 	}
 	//return vector of messages

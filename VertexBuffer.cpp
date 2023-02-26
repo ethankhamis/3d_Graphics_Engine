@@ -7,7 +7,7 @@ namespace Bind
 	{}
 	VertexBuffer::VertexBuffer(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer)
 		:
-		stride(static_cast<uint32_t>(vertexBuffer.FetchLayout().size())),
+		pitch(static_cast<uint32_t>(vertexBuffer.FetchLayout().size())),
 		tag(tag)
 	{
 		DEF_INFOMANAGER(gfx);
@@ -18,7 +18,7 @@ namespace Bind
 		bufferDesc.CPUAccessFlags = 0u;
 		bufferDesc.MiscFlags = 0u;
 		bufferDesc.ByteWidth = UINT(vertexBuffer.size_bytes());
-		bufferDesc.StructureByteStride = stride;
+		bufferDesc.StructureByteStride = pitch;
 		// fill subresource data
 		D3D11_SUBRESOURCE_DATA SubresourceData = {};
 		SubresourceData.pSysMem = vertexBuffer.FetchData();
@@ -32,7 +32,7 @@ namespace Bind
 		//set the vertex buffers within the input assembler
 		FetchDeviceContext(gfx)
 			->
-			IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &stride, &offset);
+			IASetVertexBuffers(0u, 1u, pVertexBuffer.GetAddressOf(), &pitch, &offset);
 	}
 	std::shared_ptr<VertexBuffer> VertexBuffer::Store(Graphics& gfx, const std::wstring& tag, const DynamicVertex::VertexBuffer& vertexBuffer)
 	{

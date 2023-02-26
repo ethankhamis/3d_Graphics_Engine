@@ -77,6 +77,7 @@ public:
 	bool Inside_Window_Check() const noexcept;
 	bool Left_Pressed() const noexcept;
 	bool Right_Pressed() const noexcept;
+	bool Middle_Pressed() const noexcept;
 	std::optional<Mouse::Event> Read() noexcept;
 	bool Empty() const noexcept
 	{
@@ -102,7 +103,7 @@ private:
 	void Wheel_Down(int x, int y) noexcept;
 	void Wheel_Delta(int x, int y, int delta) noexcept;
 public:
-	void Buffer_ReduceSize() noexcept;
+	void Buffer_AdjustSize() noexcept;
 	void ApplyRawDelta(int delta_x, int delta_y) noexcept;
 	void RawBuffer_ReduceSize() noexcept;
 public:
