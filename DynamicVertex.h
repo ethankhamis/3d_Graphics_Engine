@@ -287,18 +287,21 @@ namespace DynamicVertex {
 			assert(pVertexData != nullptr);
 		}
 	private:
-		// helper to reduce code duplication in SetAttributeByIndex
 		template<VertexLayout::MemberType DestinationLayout_t, typename Source_t>
 		void ApplyNewAttribute(char* pAttribute, Source_t&& val) noexcept_unless
 		{
-			using Destination = typename VertexLayout::Map<DestinationLayout_t>::data_type;
-			if constexpr (std::is_assignable<Destination, Source_t>::value)
+			// template Dest to be the value type of the member
+			using Dest = typename VertexLayout::Map<DestinationLayout_t>::data_type;
+			//check that the data types in dest and the value match
+			if constexpr (std::is_assignable<Dest, Source_t>::value)
 			{
-				*reinterpret_cast<Destination*>(pAttribute) = val;
+				//reinterpret the attribute as the data type to assign the value at the offset
+				*reinterpret_cast<Dest*>(pAttribute) = val;
 			}
 			else
 			{
-				assert("mismatch of Parameter attribute type" && false);
+				//error
+				assert("Parameter attribute type does not match the destination" && false);
 			}
 		}
 		template<typename First, typename ...Others>

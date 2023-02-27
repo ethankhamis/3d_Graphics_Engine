@@ -443,8 +443,6 @@
     <None Include="assimp\include\assimp\quaternion.inl" />
     <None Include="assimp\include\assimp\vector2.inl" />
     <None Include="assimp\include\assimp\vector3.inl" />
-    <None Include="ClassDiagram.cd" />
-    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
