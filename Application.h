@@ -22,7 +22,7 @@ private:
 	Camera camera;
 private:
 	Spawn spawn;
-	Model goblin{ window.grfx(),"Models\\miles\\spmiles.obj" };
+	Model goblin{ window.grfx(),"Models\\abandoned\\rOOM.obj" };
 	//Model building{ window.grfx(), "Models\\nanosuit_textured\\nanosuit.obj"};
 	//Model wall{window.grfx(), "Models\\brickwall\\brickwall.obj"};
 private:

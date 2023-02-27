@@ -694,5 +694,7 @@
     <None Include="assimp\include\assimp\quaternion.inl">
       <Filter>Others\Header Files\Not Created by Me</Filter>
     </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>

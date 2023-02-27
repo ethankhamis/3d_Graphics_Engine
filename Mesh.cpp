@@ -243,7 +243,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 
 	using namespace std::string_literals;
 	std::vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
-	const std::wstring base = L"Models\\miles\\"s;
+	const std::wstring base = L"Models\\abandoned\\"s;
 
 
 	bool contains_specular = false;
@@ -572,7 +572,7 @@ const wchar_t* ModelException::whatw() const noexcept
 	std::wstringstream wss;
 	wss << ExceptionHandler::whatw() << std::endl
 		<< L"\n[Note]\n" << FetchNote();
-	std::wstring ws = wss.str();
+	std::wstring ws = wss.str().c_str();
 	return ws.c_str();
 }
 

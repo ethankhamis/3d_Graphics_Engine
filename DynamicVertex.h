@@ -8,6 +8,7 @@
 #include "Graphics.h"
 #include "debugdefs.h"
 
+
 namespace DynamicVertex {
 	typedef colours::BGRAColour BGRAColour;
 
@@ -417,7 +418,7 @@ namespace DynamicVertex {
 		// find type and apply it depending on its case
 		switch (member.FetchType())
 		{
-		case VertexLayout::Tangent:
+		case VertexLayout::Tangent :
 			ApplyNewAttribute<VertexLayout::Tangent>(pAttribute, std::forward<T>(val));
 			break;
 		case VertexLayout::Bitangent:
