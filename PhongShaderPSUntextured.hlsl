@@ -11,7 +11,7 @@ cbuffer LightCBuf
 
 cbuffer ObjectConstBuffer
 {
-    float3 materialColour;
+    float4 materialColour;
     float specularIntensity;
     float specularPower;
     float padding[2];
@@ -21,6 +21,7 @@ cbuffer ObjectConstBuffer
 
 float4 main(float3 view_position : Position, float3 n : Normal) : SV_Target
 {
+    n = normalize(n);
     // fragment to light vector data
     const float3 Vector_To_Light = lightPos - view_position;
     const float Distance_ofVector_To_Light = length(Vector_To_Light);
@@ -36,5 +37,5 @@ float4 main(float3 view_position : Position, float3 n : Normal) : SV_Target
     const float3 specular = attenuation * (diffuseColour * diffuseIntensity) * specularIntensity * pow(max(0.0f, dot(normalize(-r), normalize(view_position))), specularPower);
     // final Colour
     // does not account for specular highlight
-    return float4(saturate((diffuse + ambient) * materialColour +specular), 1.0f);
+    return float4(saturate((diffuse + ambient) * materialColour.rgb +specular), 1.0f);
 }

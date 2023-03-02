@@ -3,6 +3,8 @@
 #include "imgui/imgui.h"
 #include <sstream>
 #include "Surface.h"
+#include <filesystem>
+#include "Converter.h"
 Mesh::Mesh(Graphics& gfx, vector<std::shared_ptr<Bind::isBinded>> pBinds)
 {
 	
@@ -41,7 +43,7 @@ Node::Node(unsigned int id,const std::string& name, std::vector<Mesh*> pMeshes, 
 	DirectX::XMStoreFloat4x4(&transform_applied, DirectX::XMMatrixIdentity()); // store final transform *applied*
 }
 
-void Node::AddChild(unique_ptr<Node> pChild) noexcept_unless
+void Node::AppendChildNode(unique_ptr<Node> pChild) noexcept_unless
 {
 	assert(pChild);
 	pChildren.push_back(std::move(pChild));
@@ -65,19 +67,29 @@ void Node::Render(Graphics& gfx, DirectX::FXMMATRIX current_transform) const noe
 
 void Node::RenderTree(Node*& pNode_selected) const noexcept // recursively render child nodes
 {
-	const int idx_selected = (pNode_selected == nullptr) ? -1 : pNode_selected->Fetch_id();
+	int idx_selected = 0;
+	if (pNode_selected == nullptr)
+	{
+		  idx_selected = -1;
+	}
+	else { idx_selected = pNode_selected->Fetch_id(); }
+
+	int isselectedNode = NULL;
+	int isleafNode = NULL;
+
+	if (Fetch_id() == idx_selected) { isselectedNode = ImGuiTreeNodeFlags_Selected; }
+	if (pChildren.size() == NULL) { isleafNode = ImGuiTreeNodeFlags_Leaf; }
+
 
 	const int node_flags = ImGuiTreeNodeFlags_OpenOnArrow
-		| ((Fetch_id() == idx_selected) ? ImGuiTreeNodeFlags_Selected : 0)
-		| ((pChildren.size() == 0) ? ImGuiTreeNodeFlags_Leaf : 0);
+		| isselectedNode | isleafNode;
 
-	using namespace ImGui;
 	const auto expanded =
-		TreeNodeEx(
+		ImGui::TreeNodeEx(
 			(void*)(int)Fetch_id(), node_flags, name.c_str()
 		);
 
-	if (IsItemClicked())
+	if (ImGui::IsItemClicked())
 	{
 		pNode_selected = const_cast<Node*>(this);
 	}
@@ -87,7 +99,8 @@ void Node::RenderTree(Node*& pNode_selected) const noexcept // recursively rende
 		{
 			pChild->RenderTree( pNode_selected);
 		}
-		TreePop();
+		ImGui::TreePop(); // exit tree 
+		// TreePop is called once the tree is opened
 	}
 }
 
@@ -149,16 +162,19 @@ public:
 		int nodeidx = 0;
 		if (Begin(window))
 		{
-
+			//state three seperate columns for window
 			Columns(3, nullptr);
+			//render node of windows
 			root.RenderTree( pNode_selected);
 
-				NextColumn();
+				//if current node is selected
 				if (pNode_selected)
 				{
+					//access reference to the transformation data stored within hash map
 					auto& transform =
 						transform_map[pNode_selected->Fetch_id()];
-
+					//provide next column
+					NextColumn();
 					Text("Position");
 					SliderFloat("X", &transform.position.x, -20.0f, 20.0f);
 					SliderFloat("Y", &transform.position.y, -20.0f, 20.0f);
@@ -170,7 +186,7 @@ public:
 						transform.position.y = 0;
 						transform.position.z = 0;
 					}
-
+					//provide next column
 					NextColumn();
 
 					Text("Orientation");
@@ -185,21 +201,20 @@ public:
 						transform.orientation.yaw = 0;
 					}
 				}
-				
-			
 		}
+		//close window
 		End();
 	}
 };
 
-Model::Model(Graphics& gfx, const std::string fileName)
+Model::Model(Graphics& gfx, const std::string& fileName)
 :
 	pWnd (make_unique<ModelWnd>() )
 {
 	Assimp::Importer imp;
 	const aiScene* const pScene =
 		imp.ReadFile(
-			fileName.c_str(),
+			fileName,
 			aiProcess_Triangulate |
 			aiProcess_JoinIdenticalVertices |
 			aiProcess_ConvertToLeftHanded |
@@ -208,18 +223,16 @@ Model::Model(Graphics& gfx, const std::string fileName)
 		);
 	if (pScene == nullptr)
 	{
-		// Convert error string to wide
-		std::string  cs(imp.GetErrorString());
-		std::wstring ws;
-		copy(cs.begin(), cs.end(), back_inserter(ws));
+		std::wstring ws = convert::make_wstring(imp.GetErrorString());
 		throw ModelException(__LINE__, WFILE, ws);
 	}
+
 		for (size_t idx = 0; idx < pScene->mNumMeshes; ++idx)
 		{
-			pMeshes.push_back(ParseMesh(gfx, *pScene->mMeshes[idx],pScene->mMaterials));
+			pMeshes.push_back(AppendMesh(gfx, *pScene->mMeshes[idx],pScene->mMaterials, fileName));
 		}
 	unsigned int next_id = 0;
-	pRoot = ParseNode(next_id,*pScene->mRootNode);
+	pRoot = AppendNode(next_id,*pScene->mRootNode);
 }
 void Model::SetTransformation(matrix transform)
 {
@@ -237,19 +250,23 @@ void Model::Render(Graphics& gfx) const noexcept_unless
 	pRoot->Render(gfx, DirectX::XMMatrixIdentity());
 }
 
-unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials)
+unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials,const std::filesystem::path& fpath)
 {
 	using DynamicVertex::VertexLayout;
 
 	using namespace std::string_literals;
 	std::vector<std::shared_ptr<Bind::isBinded>> bindablePtrs;
-	const std::wstring base = L"Models\\abandoned\\"s;
+	const std::wstring root = fpath.parent_path().wstring() + L"\\";
 
 
 	bool contains_specular = false;
 	bool contains_normal = false;
 	bool contains_diffuse = false;
 	float shininess = 35.f;
+
+	float4 diffuse_colour = { .5, .5,.85, 1.f };
+	float4 specular_colour = { .2,.2,.2,1.f };
+
 	if (mesh.mMaterialIndex >= NULL)
 	{
 		auto& material = *pMaterials[mesh.mMaterialIndex];
@@ -259,29 +276,33 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 		{
 			std::string temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w));
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w));
 			texture_filename_w.clear();
 			contains_diffuse = true;
+		}
+		else
+		{
+			material.Get(AI_MATKEY_COLOR_DIFFUSE, reinterpret_cast<aiColor3D&>(diffuse_colour));
 		}
 
 		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
 			std::string temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 1));
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w, 1));
 			texture_filename_w.clear();
 			contains_specular = true;
 		}
 		else
 		{
-			material.Get(AI_MATKEY_SHININESS, shininess);
+			material.Get(AI_MATKEY_COLOR_SPECULAR, reinterpret_cast<aiColor3D&>(specular_colour));
 		}
 
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
 			std::string temp = texture_filename.C_Str();
 			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, base + texture_filename_w, 2));
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w, 2));
 			texture_filename_w.clear();
 			contains_normal = true;
 		}
@@ -291,7 +312,7 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 			bindablePtrs.push_back(Bind::Sampler::Store(gfx));
 		}
 	}
-	std::wstring mesh_name = base + L"%" + convert::make_wstring(mesh.mName.C_Str());
+	std::wstring mesh_name = convert::make_wstring(fpath.string().c_str()) + L"%" + convert::make_wstring(mesh.mName.C_Str());
 	const float scale = 6.f;
 
 	if (contains_diffuse && contains_normal && contains_specular)
@@ -400,14 +421,15 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 
 		struct PSMaterialConstant_Dn
 		{
-			float specularIntensity = 0.18f;
-			float specularPower;
+			float specular_intensity;
+			float specular_power;
 			int normal_map_state = 1;
 			float padding[1];
 		} pixelMatConstant;
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
-		pixelMatConstant.specularPower = shininess;
+		pixelMatConstant.specular_power = shininess;
+		pixelMatConstant.specular_intensity = (specular_colour.x + specular_colour.y + specular_colour.z) / 3.f;
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_Dn>::Store(gfx, pixelMatConstant, 1u));
 	}
 	else if (contains_diffuse)
@@ -456,13 +478,14 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 
 		struct PSMaterialConstant_D
 		{
-			float specularIntensity = 0.18f;
+			float specular_intensity = 0.18f;
 			float specularPower;
 			float padding[2];
 		} pixelMatConstant;
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
 		pixelMatConstant.specularPower = shininess;
+		pixelMatConstant.specular_intensity = (specular_colour.x  + specular_colour.y + specular_colour.z) / 3.f;
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_D>::Store(gfx, pixelMatConstant, 1u));
 	}
 
@@ -512,14 +535,16 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 
 		struct PSMaterialConstant_untextured
 		{
-			float4 colour = { 0.5,0.5,0.85,1.f };
-			float specularIntensity = 0.18f;
+			float4 colour;
+			float specularIntensity;
 			float specularPower;
 			float padding[2];
 		} pixelMatConstant;
 		// MUST BE ADDRESSED
 		//  + all meshes share the same material constant despite potentially having different specular power (based on material) in their material properties
 		pixelMatConstant.specularPower = shininess;
+		pixelMatConstant.colour = diffuse_colour;
+		pixelMatConstant.specularIntensity = (specular_colour.x + specular_colour.y + specular_colour.z) / 3.f;
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_untextured>::Store(gfx, pixelMatConstant, 1u));
 	}
 
@@ -531,27 +556,34 @@ unique_ptr<Mesh> Model::ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMat
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 
-unique_ptr<Node> Model::ParseNode(unsigned int& next_id,const aiNode& node) noexcept
+unique_ptr<Node> Model::AppendNode(unsigned int& next_id,const aiNode& node) noexcept
 {
-	namespace DirectX = DirectX;
+	//create transform converting assimp transform to row-major matrix
 	const matrix transform = DirectX::XMMatrixTranspose(
 		DirectX::XMLoadFloat4x4(
 			reinterpret_cast<const float4x4*>(&node.mTransformation)
 		)
 	);
-
+	// create a vector of mesh pointers for the current node to use
 	vector<Mesh*> curMeshPtrs;
+	//allocate stack memory for the vector
 	curMeshPtrs.reserve(node.mNumMeshes);
+	//loop through each mesh within the node
 	for (size_t idx = 0; idx < node.mNumMeshes; idx++)
 	{
+		//find the index to the mesh
 		const uint32_t meshIdx = node.mMeshes[idx];
+		//return reference to mesh at position meshIdx and emplace the mesh pointer to the vector of meshes for the node
 		curMeshPtrs.push_back(pMeshes.at(meshIdx).get());
 	}
-
+	// construct node using gathered data
 	std::unique_ptr<Node> pNode = make_unique<Node>(next_id++,node.mName.C_Str(), std::move(curMeshPtrs), transform);
+
+	//loop through nodes children
 	for (size_t idx = 0; idx < node.mNumChildren; idx++)
 	{
-		pNode->AddChild(ParseNode(next_id,*node.mChildren[idx]));
+		//recursively add child node
+		pNode->AppendChildNode(AppendNode(next_id,*node.mChildren[idx]));
 	}
 
 	return pNode;

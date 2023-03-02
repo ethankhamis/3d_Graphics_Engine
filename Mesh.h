@@ -7,6 +7,7 @@
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
 #include <optional>
+#include <filesystem>
 
 using std::unique_ptr;
 using std::make_unique;
@@ -43,7 +44,7 @@ public:
 	void RenderTree(
 		Node*& pNode_selected) const noexcept;
 private:
-	void AddChild(unique_ptr<Node> pChild) noexcept_unless;
+	void AppendChildNode(unique_ptr<Node> pChild) noexcept_unless;
 private:
 	unsigned int id;
 	vector<Mesh*> pMeshes;
@@ -55,12 +56,12 @@ private:
 
 struct Model
 {
-	Model(Graphics& gfx, const std::string fileName);
+	Model(Graphics& gfx, const std::string& fileName);
 	void Render(Graphics& gfx) const noexcept_unless;
 	void SetTransformation(const matrix transform);
 private:
-	static unique_ptr<Mesh> ParseMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials);
-	unique_ptr<Node> ParseNode(unsigned int& next_id,const aiNode& node) noexcept;
+	static unique_ptr<Mesh> AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMaterial* const* pMaterials,const std::filesystem::path& path);
+	unique_ptr<Node> AppendNode(unsigned int& next_id,const aiNode& node) noexcept;
 public:
 	void PresentWindow(const char* Window = nullptr) noexcept;
 	~Model() noexcept;

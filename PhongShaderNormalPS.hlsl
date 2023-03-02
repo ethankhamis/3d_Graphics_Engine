@@ -45,7 +45,7 @@ float4 main(float3 view_position : Position, float3 n : Normal,float3 tangent : 
         n = normalSample * 2.f - 1.f;
         n.y = -n.y;
        //n.z = n.z;
-        n = mul(n,tangent_to_view_space) ;
+        n = normalize(mul(n,tangent_to_view_space)) ;
     }
 // fragment to light vector data
 const float3 vToL = lightPos - view_position;

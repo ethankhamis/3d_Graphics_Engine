@@ -199,6 +199,9 @@
     <Filter Include="Shading\Phong Shading\Untextured">
       <UniqueIdentifier>{1ad6037d-315d-4500-8c21-69a7a3481dcb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shading\Phong Shading\helpers">
+      <UniqueIdentifier>{7865e9fb-a395-4bd0-a455-0b3178ab7803}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="WinMain.cpp">
@@ -693,6 +696,12 @@
     </None>
     <None Include="assimp\include\assimp\quaternion.inl">
       <Filter>Others\Header Files\Not Created by Me</Filter>
+    </None>
+    <None Include="pointlight_data.hlsli">
+      <Filter>Shading\Phong Shading\helpers</Filter>
+    </None>
+    <None Include="complex_operations.hlsli">
+      <Filter>Shading\Phong Shading\helpers</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -23,6 +23,7 @@ SamplerState splr;
 
 float4 main(float3 view_position : Position, float3 n : Normal, float2 tc : Texcoord) : SV_Target
 {
+    n = normalize(n);
     // fragment to light vector data
     const float3 Vector_To_Light = lightPos - view_position;
     const float Distance_ofVector_To_Light = length(Vector_To_Light);

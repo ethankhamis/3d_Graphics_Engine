@@ -12,6 +12,6 @@ std::string convert::make_string(const std::wstring ws)
 {
 	std::wstring  wide_s(ws);
 	std::string s;
-	copy(s.begin(), s.end(), back_inserter(wide_s));
+	copy(ws.begin(), ws.end(), back_inserter(s));
 	return s;
 }
