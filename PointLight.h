@@ -10,6 +10,9 @@ public:
 	PointLight(Graphics& gfx, float radius = 0.5f); //default radius
 	void ControlWnd() noexcept; // spawn control window
 	void Reset() noexcept; // reset all attributes
+	void ResetPos() noexcept;
+	void ResetAttenuation() noexcept;
+	void ResetColour() noexcept;
 	void Render(Graphics& gfx) const noexcept_unless; // remder light
 	void Update(Graphics& gfx, DirectX::FXMMATRIX view) const noexcept;
 private:

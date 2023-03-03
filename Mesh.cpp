@@ -207,14 +207,14 @@ public:
 	}
 };
 
-Model::Model(Graphics& gfx, const std::string& fileName)
+Model::Model(Graphics& gfx, const std::wstring& fileName)
 :
 	pWnd (make_unique<ModelWnd>() )
 {
 	Assimp::Importer imp;
 	const aiScene* const pScene =
 		imp.ReadFile(
-			fileName,
+			convert::make_string(fileName.c_str()),
 			aiProcess_Triangulate |
 			aiProcess_JoinIdenticalVertices |
 			aiProcess_ConvertToLeftHanded |
@@ -224,7 +224,7 @@ Model::Model(Graphics& gfx, const std::string& fileName)
 	if (pScene == nullptr)
 	{
 		std::wstring ws = convert::make_wstring(imp.GetErrorString());
-		throw ModelException(__LINE__, WFILE, ws);
+		throw ModelException(__LINE__, WFILE, ws.c_str());
 	}
 
 		for (size_t idx = 0; idx < pScene->mNumMeshes; ++idx)
@@ -267,17 +267,14 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 	float4 diffuse_colour = { .5, .5,.85, 1.f };
 	float4 specular_colour = { .2,.2,.2,1.f };
 
-	if (mesh.mMaterialIndex >= NULL)
+	if (mesh.mMaterialIndex >= NULL) // if  materials exist in the mesh
 	{
 		auto& material = *pMaterials[mesh.mMaterialIndex];
 		aiString texture_filename;
-		std::wstring texture_filename_w;
 		if (material.GetTexture(aiTextureType_DIFFUSE, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
-			std::string temp = texture_filename.C_Str();
-			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w));
-			texture_filename_w.clear();
+			//emplace texture bind as a shared_ptr
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + convert::make_wstring(texture_filename.C_Str())));
 			contains_diffuse = true;
 		}
 		else
@@ -287,10 +284,7 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 
 		if (material.GetTexture(aiTextureType_SPECULAR, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
-			std::string temp = texture_filename.C_Str();
-			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w, 1));
-			texture_filename_w.clear();
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + convert::make_wstring(texture_filename.C_Str()), 1));
 			contains_specular = true;
 		}
 		else
@@ -300,10 +294,7 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 
 		if (material.GetTexture(aiTextureType_NORMALS, 0, &texture_filename) == aiReturn_SUCCESS)
 		{
-			std::string temp = texture_filename.C_Str();
-			std::copy(temp.begin(), temp.end(), back_inserter(texture_filename_w));
-			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + texture_filename_w, 2));
-			texture_filename_w.clear();
+			bindablePtrs.push_back(Bind::Texture::Store(gfx, root + convert::make_wstring((texture_filename.C_Str())), 2));
 			contains_normal = true;
 		}
 
@@ -371,7 +362,6 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 		//extremely bad as all meshes will share the same material const
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PixelShaderMaterialConstant_dns>::Store(gfx, pixelmatconst, 1u));
 	}
-
 	else if (contains_diffuse && contains_normal)
 	{
 		DynamicVertex::VertexBuffer VertexBuf(
@@ -488,7 +478,6 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 		pixelMatConstant.specular_intensity = (specular_colour.x  + specular_colour.y + specular_colour.z) / 3.f;
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_D>::Store(gfx, pixelMatConstant, 1u));
 	}
-
 	else if (!contains_diffuse && !contains_normal && !contains_specular)
 	{
 
@@ -547,12 +536,10 @@ unique_ptr<Mesh> Model::AppendMesh(Graphics& gfx, const aiMesh& mesh, const aiMa
 		pixelMatConstant.specularIntensity = (specular_colour.x + specular_colour.y + specular_colour.z) / 3.f;
 		bindablePtrs.push_back(Bind::PixelConstantBuffer<PSMaterialConstant_untextured>::Store(gfx, pixelMatConstant, 1u));
 	}
-
 	else
 {
 	throw std::runtime_error("unusable textures");
 }
-
 	return std::make_unique<Mesh>(gfx, std::move(bindablePtrs));
 }
 
@@ -594,18 +581,18 @@ void Model::PresentWindow(const char* Window) noexcept
 	pWnd->Present(Window, *pRoot);
 }
 
-ModelException::ModelException(int line, const wchar_t* filename, std::wstring note) noexcept
+ModelException::ModelException(int line, const std::wstring filename, std::wstring note) noexcept
 :
-ExceptionHandler(line,filename), note(std::move(note))
+ExceptionHandler(line,filename.c_str()), note(std::move(note))
 {}
 
 const wchar_t* ModelException::whatw() const noexcept
 {
 	std::wstringstream wss;
 	wss << ExceptionHandler::whatw() << std::endl
-		<< L"\n[Note]\n" << FetchNote();
-	std::wstring ws = wss.str().c_str();
-	return ws.c_str();
+		<< L"\n[Note]\n" << FetchNote().c_str();
+	buffer_w = wss.str().c_str();
+	return buffer_w.c_str();
 }
 
 const wchar_t* ModelException::FetchErrorType() const noexcept

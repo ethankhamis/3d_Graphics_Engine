@@ -6,12 +6,15 @@ float3 apply_normal_map(const in float3 tangent,
 	uniform SamplerState sampler_
 )
 {
+	//create transformation matrix from tangent to view space
 	float3x3 tangent_to_view_space =
 		float3x3(
 			tangent, bitangent, n
 			);
+	//unpack the normal data from the texture sample
 	const float3 normal_sample = normal_map.Sample(sampler_, texcoord).xyz;
 	const float3 tanspace_n = normal_sample * 2.f - 1.f;
+	//return the normal from tangent to view space
 	return normalize(mul(tanspace_n, tangent_to_view_space));
 }
 

@@ -14,7 +14,7 @@
 
 namespace Bind
 {
-	struct isBinded;
+	struct isBinded; //madd iSbinded to scope
 }
 
 struct Graphics

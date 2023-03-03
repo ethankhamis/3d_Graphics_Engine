@@ -15,7 +15,7 @@ using std::vector;
 
 struct ModelException : public ExceptionHandler
 {
-	ModelException(int line, const wchar_t* filename, std::wstring note) noexcept;
+	ModelException(int line, const std::wstring filename, std::wstring note) noexcept;
 	const wchar_t* whatw() const noexcept override;
 	const wchar_t* FetchErrorType() const noexcept override;
 	const std::wstring& FetchNote() const noexcept;
@@ -56,7 +56,7 @@ private:
 
 struct Model
 {
-	Model(Graphics& gfx, const std::string& fileName);
+	Model(Graphics& gfx, const std::wstring& fileName);
 	void Render(Graphics& gfx) const noexcept_unless;
 	void SetTransformation(const matrix transform);
 private:

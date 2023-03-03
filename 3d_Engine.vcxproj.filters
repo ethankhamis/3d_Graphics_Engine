@@ -139,9 +139,6 @@
     <Filter Include="Tools\Timer">
       <UniqueIdentifier>{07d17780-79a6-4c46-b0f1-c3dcd6709b78}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Primatives + Binds\Test Cases">
-      <UniqueIdentifier>{b140d472-ad74-4a3b-99e8-2e52dba40f20}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Primatives + Binds\Binds">
       <UniqueIdentifier>{c838194b-e235-42d2-a51c-511cd122f46d}</UniqueIdentifier>
     </Filter>
@@ -302,9 +299,6 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Tools\Timer</Filter>
-    </ClCompile>
-    <ClCompile Include="randomTest.cpp">
-      <Filter>Primatives + Binds\Test Cases</Filter>
     </ClCompile>
     <ClCompile Include="Mesh.cpp">
       <Filter>Model</Filter>
@@ -467,14 +461,8 @@
     <ClInclude Include="Prism.h">
       <Filter>Primatives + Binds\Primative\Prism</Filter>
     </ClInclude>
-    <ClInclude Include="ObjTestCase.h">
-      <Filter>Primatives + Binds\Test Cases</Filter>
-    </ClInclude>
     <ClInclude Include="Timer.h">
       <Filter>Tools\Timer</Filter>
-    </ClInclude>
-    <ClInclude Include="randomTest.h">
-      <Filter>Primatives + Binds\Test Cases</Filter>
     </ClInclude>
     <ClInclude Include="DynamicVertex.h">
       <Filter>Dynamics</Filter>

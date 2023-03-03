@@ -23,8 +23,6 @@ Application::Application()
 	spawn(window.grfx())
 	//plane(window.grfx(), 20.f, L"Models\\brickwall\\brickwall.jpg", L"Models\\brickwall\\brickwall_normal.jpg"),
 {
-	//wall.SetTransformation(DirectX::XMMatrixTranslation(-1.5f,0.f,0.f));
-	//plane.ApplyPos({ 1.f,-5.f,10.f });
 	//set perspective projection 
 	window.grfx().ApplyProjection(DirectX::XMMatrixPerspectiveLH(1.0f, 9.0f / 16.0f, 0.5f, 300.0f));
 }
@@ -32,14 +30,14 @@ Application::Application()
 void Application::ExecFrame()
 {
 	float delta = timer.MarkTime() * speed;
-	window.grfx().ClearBuffer(.62f, 0.12f, .94f);
+	window.grfx().ClearBuffer(.02f, 0.02f, .0f);
 	window.grfx().SetCameraMat(camera.FetchMatrix());
 	spawn.FetchLight()->Update(window.grfx(), camera.FetchMatrix());
 
 	//building.Render(window.grfx());
 	spawn.FetchLight()->Render(window.grfx());
 	//wall.Render(window.grfx());
-	goblin.Render(window.grfx());
+	model.Render(window.grfx());
 
 	while (const std::optional<Keyboard::Event> key = window.kbd.Key_Read())
 	{
@@ -62,7 +60,6 @@ void Application::ExecFrame()
 			}break;
 		}
 	}
-
 	if (!window.Cursor_Status())
 	{
 		if (window.kbd.Key_Pressed('W'))
@@ -101,12 +98,7 @@ void Application::ExecFrame()
 
 	camera.ConstructControlWindow();
 	spawn.FetchLight()->ControlWnd();
-
-	goblin.PresentWindow();
-	//wall.PresentWindow("Wall");
-	//building.PresentWindow("Model 1");
-	//plane.Open_Window(window.grfx());
-	//cube.Open_Window(window.grfx());
+	model.PresentWindow();
 
 	//ImGui::End();
 	
